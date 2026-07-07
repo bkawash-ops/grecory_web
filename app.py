@@ -248,7 +248,12 @@ def seller():
         "seller.html",
         products=products
     )
+@app.route("/logout")
+def logout():
 
+    session.clear()
+
+    return redirect(url_for("login"))
 
 # ---------------- تشغيل ----------------
 
