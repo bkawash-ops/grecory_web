@@ -4,6 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "grocery-secret-key"
+
 DB = "supermarket.db"
 
 
@@ -13,21 +14,11 @@ def db():
     return conn
 
 
-# فحص مؤقت لهيكل قاعدة البيانات
-conn = db()
-
-print("DATABASE TABLE:")
-columns = conn.execute("PRAGMA table_info(products)").fetchall()
-
-print("PRODUCT COLUMNS:")
-for col in columns:
-    print(dict(col))
-
-conn.close()
 # ---------------- الصفحة الرئيسية ----------------
 
 @app.route("/")
 def index():
+
     conn = db()
 
     products = conn.execute("""
@@ -40,14 +31,15 @@ def index():
         ORDER BY name
     """).fetchall()
 
+    conn.close()
+
     return render_template(
-    "index.html",
-    products=products,
-    cart=session.get("cart", [])
-)
+        "index.html",
+        products=products
+    )
 
 
-# ---------------- إضافة منتج ----------------
+# ---------------- إضافة منتج للمخزون ----------------
 
 @app.route("/add_product", methods=["POST"])
 def add_product():
@@ -62,7 +54,8 @@ def add_product():
         INSERT INTO products
         (name, purchase_price, sale_price, quantity, barcode)
         VALUES (?, ?, ?, ?, ?)
-    """, (
+    """,
+    (
         name,
         price,
         price,
@@ -75,84 +68,7 @@ def add_product():
 
     return redirect(url_for("index"))
 
-# ---------------- إضافة للسلة ----------------
 
-@app.route("/add_to_cart", methods=["POST"])
-def add_to_cart():
-
-    product_id = request.form["product_id"]
-    qty = float(request.form["qty"])
-
-    conn = db()
-
-    product = conn.execute("""
-        SELECT *
-        FROM products
-        WHERE id=?
-    """,(product_id,)).fetchone()
-
-    conn.close()
-
-    if product is None:
-        return "Product not found"
-
-
-    cart = session.get("cart", [])
-
-    cart.append({
-        "id": product["id"],
-        "name": product["name"],
-        "price": product["sale_price"],
-        "qty": qty,
-        "total": qty * product["sale_price"]
-    })
-
-
-    session["cart"] = cart
-
-    return redirect(url_for("index"))
-# ---------------- إنشاء فاتورة ----------------
-
-@app.route("/create_invoice", methods=["POST"])
-def create_invoice():
-
-    product_id = request.form["product_id"]
-    qty = float(request.form["qty"])
-
-    conn = db()
-
-    product = conn.execute("""
-        SELECT *
-        FROM products
-        WHERE id=?
-    """, (product_id,)).fetchone()
-
-    if product is None:
-        conn.close()
-        return "Product not found"
-
-    if qty > product["quantity"]:
-        conn.close()
-        return "Not enough stock"
-
-    total = qty * product["sale_price"]
-
-    conn.execute("""
-        UPDATE products
-        SET quantity = quantity - ?
-        WHERE id=?
-    """, (qty, product_id))
-
-    conn.commit()
-    conn.close()
-
-    return render_template(
-        "invoice.html",
-        product=product,
-        qty=qty,
-        total=total,
-        time=datetime.now()
-    )
 
 # ---------------- إضافة للسلة ----------------
 
@@ -162,18 +78,21 @@ def add_to_cart():
     product_id = request.form["product_id"]
     qty = float(request.form["qty"])
 
+
     conn = db()
 
     product = conn.execute("""
-        SELECT id,name,sale_price,quantity
+        SELECT *
         FROM products
         WHERE id=?
-    """,(product_id,)).fetchone()
+    """,
+    (product_id,)
+    ).fetchone()
 
 
     if product is None:
         conn.close()
-        return "Product not found"
+        return "المنتج غير موجود"
 
 
     if qty > product["quantity"]:
@@ -185,19 +104,23 @@ def add_to_cart():
 
 
     cart.append({
+
         "id": product["id"],
         "name": product["name"],
         "price": product["sale_price"],
         "qty": qty,
         "total": qty * product["sale_price"]
+
     })
 
 
     session["cart"] = cart
 
+
     conn.close()
 
-    return redirect(url_for("index"))
+
+    return redirect(url_for("cart"))
 
 
 
@@ -208,12 +131,75 @@ def cart():
 
     items = session.get("cart", [])
 
-    total = sum(item["total"] for item in items)
+
+    total = sum(
+        item["total"]
+        for item in items
+    )
+
 
     return render_template(
         "cart.html",
         items=items,
         total=total
     )
+
+
+
+# ---------------- إتمام البيع وطباعة الفاتورة ----------------
+
+@app.route("/checkout")
+def checkout():
+
+    items = session.get("cart", [])
+
+
+    if not items:
+        return "السلة فارغة"
+
+
+    conn = db()
+
+
+    # خصم الكميات
+
+    for item in items:
+
+        conn.execute("""
+            UPDATE products
+            SET quantity = quantity - ?
+            WHERE id=?
+        """,
+        (
+            item["qty"],
+            item["id"]
+        ))
+
+
+    conn.commit()
+    conn.close()
+
+
+    total = sum(
+        item["total"]
+        for item in items
+    )
+
+
+    session.pop("cart", None)
+
+
+    return render_template(
+        "invoice.html",
+        items=items,
+        total=total,
+        time=datetime.now()
+    )
+
+
+
+# ---------------- تشغيل ----------------
+
 if __name__ == "__main__":
+
     app.run(debug=True)
