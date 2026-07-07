@@ -13,11 +13,42 @@ def db():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
 
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # مؤقتاً للتجربة
+        if username == "admin" and password == "1234":
+
+            session["user"] = "admin"
+            return redirect(url_for("index"))
+
+
+        elif username == "seller" and password == "1234":
+
+            session["user"] = "seller"
+            return redirect(url_for("seller"))
+
+
+        else:
+            return "اسم المستخدم أو كلمة المرور غير صحيحة"
+
+
+    return render_template("login.html")
 # ---------------- الصفحة الرئيسية ----------------
 
 @app.route("/")
 def index():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if session["user"] == "seller":
+        return redirect(url_for("seller"))
 
     conn = db()
 
@@ -193,7 +224,30 @@ def checkout():
         total=total,
         time=datetime.now()
     )
+@app.route("/seller")
+def seller():
 
+    if session.get("user") != "seller":
+        return redirect(url_for("login"))
+
+    conn = db()
+
+    products = conn.execute("""
+        SELECT 
+            id,
+            name,
+            sale_price AS price,
+            quantity AS qty
+        FROM products
+        ORDER BY name
+    """).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "seller.html",
+        products=products
+    )
 
 
 # ---------------- تشغيل ----------------
