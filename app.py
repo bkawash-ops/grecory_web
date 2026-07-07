@@ -16,7 +16,11 @@ def db():
 conn = db()
 
 print("DATABASE TABLE:")
-print(conn.execute("PRAGMA table_info(products)").fetchall())
+columns = conn.execute("PRAGMA table_info(products)").fetchall()
+
+print("PRODUCT COLUMNS:")
+for col in columns:
+    print(dict(col))
 
 conn.close()
 # ---------------- الصفحة الرئيسية ----------------
