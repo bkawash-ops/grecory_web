@@ -1,1 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+
+<meta charset="UTF-8">
+
+<title>سلة البيع</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f5f5f5;
+    padding:20px;
+}
+
+
+.card{
+
+    background:white;
+    padding:20px;
+    border-radius:10px;
+
+}
+
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+
+th{
+
+    background:#222;
+    color:white;
+
+}
+
+
+th,td{
+
+    padding:12px;
+    text-align:center;
+    border:1px solid #ddd;
+
+}
+
+
+
+.total{
+
+    font-size:22px;
+    font-weight:bold;
+    margin-top:20px;
+
+}
+
+
+
+.checkout{
+
+    background:#16a34a;
+    color:white;
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+
+}
+
+
+.back{
+
+    display:inline-block;
+    margin-top:20px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h2>🛒 السلة الحالية</h2>
+
+
+<div class="card">
+
+
+{% if items %}
+
+
+<table>
+
+
+<tr>
+
+<th>
+المنتج
+</th>
+
+
+<th>
+السعر
+</th>
+
+
+<th>
+الكمية
+</th>
+
+
+<th>
+المجموع
+</th>
+
+
+</tr>
+
+
+
+{% for item in items %}
+
+
+<tr>
+
+<td>
+{{ item.name }}
+</td>
+
+
+<td>
+{{ item.price }} JOD
+</td>
+
+
+<td>
+{{ item.qty }}
+</td>
+
+
+<td>
+{{ item.total }} JOD
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+
+<div class="total">
+
+الإجمالي:
+{{ total }} JOD
+
+</div>
+
+
+
+<br>
+
+
+<a href="/checkout">
+
+<button class="checkout">
+
+🧾 إصدار فاتورة
+
+</button>
+
+</a>
+
+
+
+{% else %}
+
+
+<h3>
+السلة فارغة
+</h3>
+
+
+{% endif %}
+
+
+
+<br>
+
+<a class="back" href="/">
+
+⬅ العودة للبيع
+
+</a>
+
+
+</div>
+
+
+
+</body>
+
+</html>
