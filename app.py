@@ -30,17 +30,14 @@ def index():
     conn = db()
 
     products = conn.execute("""
-        SELECT
+        SELECT 
             id,
             name,
-            sale_price,
-            quantity,
-            barcode
+            sale_price AS price,
+            quantity AS qty
         FROM products
         ORDER BY name
     """).fetchall()
-
-    conn.close()
 
     return render_template("index.html", products=products)
 
