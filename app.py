@@ -147,13 +147,11 @@ def cart():
 
 @app.route("/checkout", methods=["POST"])
 def checkout():
-    print("BEFORE CLEAR:")
-    print(items)
-    print("CHECKOUT CART:")
-    print(session.get("cart"))
 
     items = session.get("cart", [])
 
+    print("CHECKOUT CART:")
+    print(items)
 
     if not items:
         return "السلة فارغة"
@@ -161,8 +159,6 @@ def checkout():
 
     conn = db()
 
-
-    # خصم الكميات
 
     for item in items:
 
@@ -186,9 +182,9 @@ def checkout():
         for item in items
     )
 
-    print("BEFORE CLEAR:")
-    print(items)
-    session.pop("cart", None)
+
+    print("TOTAL:")
+    print(total)
 
 
     return render_template(
