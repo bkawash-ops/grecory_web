@@ -147,7 +147,8 @@ def cart():
 
 @app.route("/checkout", methods=["POST"])
 def checkout():
-
+    print("BEFORE CLEAR:")
+    print(items)
     print("CHECKOUT CART:")
     print(session.get("cart"))
 
@@ -185,7 +186,8 @@ def checkout():
         for item in items
     )
 
-
+    print("BEFORE CLEAR:")
+    print(items)
     session.pop("cart", None)
 
 
