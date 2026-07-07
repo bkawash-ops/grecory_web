@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from datetime import datetime
 
 app = Flask(__name__)
 DB = "supermarket.db"
-
+app.secret_key = "grocery-secret-key"
 
 def db():
     conn = sqlite3.connect(DB)
@@ -39,7 +39,11 @@ def index():
         ORDER BY name
     """).fetchall()
 
-    return render_template("index.html", products=products)
+    return render_template(
+    "index.html",
+    products=products,
+    cart=session.get("cart", [])
+)
 
 
 # ---------------- إضافة منتج ----------------
@@ -70,7 +74,42 @@ def add_product():
 
     return redirect(url_for("index"))
 
+# ---------------- إضافة للسلة ----------------
 
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+
+    product_id = request.form["product_id"]
+    qty = float(request.form["qty"])
+
+    conn = db()
+
+    product = conn.execute("""
+        SELECT *
+        FROM products
+        WHERE id=?
+    """,(product_id,)).fetchone()
+
+    conn.close()
+
+    if product is None:
+        return "Product not found"
+
+
+    cart = session.get("cart", [])
+
+    cart.append({
+        "id": product["id"],
+        "name": product["name"],
+        "price": product["sale_price"],
+        "qty": qty,
+        "total": qty * product["sale_price"]
+    })
+
+
+    session["cart"] = cart
+
+    return redirect(url_for("index"))
 # ---------------- إنشاء فاتورة ----------------
 
 @app.route("/create_invoice", methods=["POST"])
