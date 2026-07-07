@@ -1,77 +1,214 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <title>POS بقالة</title>
 <link rel="stylesheet" href="/static/style.css">
+
+<style>
+body{
+    font-family: Arial;
+    background:#f5f5f5;
+    padding:20px;
+}
+
+table{
+    width:100%;
+    background:white;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#222;
+    color:white;
+}
+
+button{
+    padding:10px 15px;
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+}
+
+.add{
+    background:#16a34a;
+    color:white;
+}
+
+.cart{
+    background:#2563eb;
+    color:white;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+}
+</style>
+
 </head>
+
 
 <body>
 
-<h2>🛒 نظام البيع</h2>
 
-<h3>إضافة منتج</h3>
+<h2>🛒 نظام البقالة POS</h2>
+
+
+<div class="card">
+
+<h3>➕ إضافة منتج للمخزون</h3>
+
 <form method="POST" action="/add_product">
-    <input name="name" placeholder="اسم المنتج">
-    <input name="price" placeholder="السعر">
-    <input name="qty" placeholder="الكمية">
-    <button>إضافة</button>
+
+<input name="name" placeholder="اسم المنتج" required>
+
+<input name="price" placeholder="السعر" required>
+
+<input name="qty" placeholder="الكمية" required>
+
+<button class="add">
+إضافة
+</button>
+
 </form>
 
-<hr>
+</div>
 
-<h3>المنتجات</h3>
+
+
+<div class="card">
+
+<h3>📦 المخزون</h3>
+
+
 <table border="1">
+
 <tr>
-<th>اسم</th>
-<th>سعر</th>
-<th>كمية</th>
+
+<th>المنتج</th>
+<th>السعر</th>
+<th>الكمية</th>
+
 </tr>
+
 
 {% for p in products %}
+
 <tr>
-<td>{{ p.name }}</td>
-<td>{{ p.price }}</td>
-<td>{{ p.qty }}</td>
+
+<td>{{p.name}}</td>
+
+<td>{{p.price}} JOD</td>
+
+<td>{{p.qty}}</td>
+
 </tr>
+
 {% endfor %}
+
+
 </table>
 
-<hr>
 
-<h3>🧾 بيع منتج</h3>
+</div>
 
-<form method="POST" action="/create_invoice">
 
-    <label>المنتج</label>
-    <select name="product_id" required>
-        <option value="">اختر المنتج</option>
-        {% for p in products %}
-            <option value="{{ p.id }}">
-                {{ p.name }} - {{ p.price }} JOD (المتوفر: {{ p.qty }})
-            </option>
-        {% endfor %}
-    </select>
 
-    <br>
 
-    <label>الكمية</label>
-    <input name="qty" type="number" step="0.1" placeholder="أدخل الكمية" required>
+<div class="card">
 
-    <br><br>
 
-    <button type="submit" style="
-        background:#16a34a;
-        color:white;
-        padding:10px;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-    ">
-        🧾 إصدار فاتورة
-    </button>
+<h3>🛒 الكاشير</h3>
+
+
+<form method="POST" action="/add_to_cart">
+
+
+<label>
+اختيار المنتج
+</label>
+
+
+<select name="product_id" required>
+
+
+<option value="">
+اختر المنتج
+</option>
+
+
+{% for p in products %}
+
+<option value="{{p.id}}">
+
+{{p.name}} - {{p.price}} JOD
+(المتوفر {{p.qty}})
+
+</option>
+
+
+{% endfor %}
+
+
+</select>
+
+
+
+<br><br>
+
+
+
+<label>
+الكمية
+</label>
+
+
+<input 
+name="qty"
+type="number"
+step="0.1"
+value="1"
+required>
+
+
+
+<br><br>
+
+
+<button class="cart">
+
+🛒 إضافة للسلة
+
+</button>
+
 
 </form>
 
+
+
+<br>
+
+
+<a href="/cart">
+
+🧾 عرض الفاتورة الحالية
+
+</a>
+
+
+</div>
+
+
+
 </body>
+
 </html>
