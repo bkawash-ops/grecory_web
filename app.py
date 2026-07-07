@@ -185,8 +185,8 @@ def checkout():
 
     print("TOTAL:")
     print(total)
-
-
+    total = sum(item["total"] for item in items)
+    session["cart"] = []
     return render_template(
         "invoice.html",
         items=items,
