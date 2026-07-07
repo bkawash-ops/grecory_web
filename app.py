@@ -12,6 +12,13 @@ def db():
     return conn
 
 
+# فحص مؤقت لهيكل قاعدة البيانات
+conn = db()
+
+print("DATABASE TABLE:")
+print(conn.execute("PRAGMA table_info(products)").fetchall())
+
+conn.close()
 # ---------------- الصفحة الرئيسية ----------------
 
 @app.route("/")
