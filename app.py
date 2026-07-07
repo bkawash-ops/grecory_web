@@ -3,8 +3,9 @@ import sqlite3
 from datetime import datetime
 
 app = Flask(__name__)
-DB = "supermarket.db"
 app.secret_key = "grocery-secret-key"
+DB = "supermarket.db"
+
 
 def db():
     conn = sqlite3.connect(DB)
@@ -153,6 +154,66 @@ def create_invoice():
         time=datetime.now()
     )
 
+# ---------------- إضافة للسلة ----------------
 
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+
+    product_id = request.form["product_id"]
+    qty = float(request.form["qty"])
+
+    conn = db()
+
+    product = conn.execute("""
+        SELECT id,name,sale_price,quantity
+        FROM products
+        WHERE id=?
+    """,(product_id,)).fetchone()
+
+
+    if product is None:
+        conn.close()
+        return "Product not found"
+
+
+    if qty > product["quantity"]:
+        conn.close()
+        return "الكمية غير متوفرة"
+
+
+    cart = session.get("cart", [])
+
+
+    cart.append({
+        "id": product["id"],
+        "name": product["name"],
+        "price": product["sale_price"],
+        "qty": qty,
+        "total": qty * product["sale_price"]
+    })
+
+
+    session["cart"] = cart
+
+    conn.close()
+
+    return redirect(url_for("index"))
+
+
+
+# ---------------- عرض السلة ----------------
+
+@app.route("/cart")
+def cart():
+
+    items = session.get("cart", [])
+
+    total = sum(item["total"] for item in items)
+
+    return render_template(
+        "cart.html",
+        items=items,
+        total=total
+    )
 if __name__ == "__main__":
     app.run(debug=True)
