@@ -79,24 +79,31 @@ button{
 <select name="product_id" required>
 
 
+<select id="product_id" name="product_id" required onchange="showProductInfo()">
+
 <option value="">
 اختر المنتج
 </option>
 
-
 {% for p in products %}
 
-<option value="{{p.id}}">
+<option 
+value="{{p.id}}"
+data-price="{{p.price}}"
+data-qty="{{p.qty}}">
 
-{{p.name}} - {{p.price}} JOD (المتوفر: {{p.qty}})
+{{p.name}}
 
 </option>
 
-
 {% endfor %}
 
-
 </select>
+
+
+<div id="info" style="margin-top:15px;font-weight:bold;">
+
+</div>
 
 
 <br><br>
@@ -108,11 +115,13 @@ button{
 
 
 <input 
+id="qty"
 name="qty"
 type="number"
 step="0.1"
 value="1"
-required>
+required
+oninput="checkQty()">
 
 
 <br><br>
@@ -148,7 +157,61 @@ required>
 
 
 </div>
+<script>
 
+let availableQty = 0;
+
+
+function showProductInfo(){
+
+    let select = document.getElementById("product_id");
+
+    let option = select.options[select.selectedIndex];
+
+
+    if(option.value){
+
+        let price = option.dataset.price;
+
+        availableQty = parseFloat(option.dataset.qty);
+
+
+        document.getElementById("info").innerHTML =
+        "💰 السعر: " + price + " JOD<br>" +
+        "📦 المتوفر: " + availableQty;
+
+
+    }else{
+
+        document.getElementById("info").innerHTML="";
+
+    }
+
+}
+
+
+
+function checkQty(){
+
+    let qty = parseFloat(
+        document.getElementById("qty").value
+    );
+
+
+    if(qty > availableQty){
+
+        alert(
+        "⚠️ الكمية المطلوبة أكبر من المخزون المتوفر"
+        );
+
+
+        document.getElementById("qty").value = availableQty;
+
+    }
+
+}
+
+</script>
 
 </body>
 
