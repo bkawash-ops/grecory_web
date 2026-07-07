@@ -131,12 +131,10 @@ def cart():
 
     items = session.get("cart", [])
 
+    print("CART DATA:")
+    print(items)
 
-    total = sum(
-        item["total"]
-        for item in items
-    )
-
+    total = sum(item["total"] for item in items)
 
     return render_template(
         "cart.html",
@@ -145,11 +143,13 @@ def cart():
     )
 
 
-
 # ---------------- إتمام البيع وطباعة الفاتورة ----------------
 
 @app.route("/checkout", methods=["POST"])
 def checkout():
+
+    print("CHECKOUT CART:")
+    print(session.get("cart"))
 
     items = session.get("cart", [])
 
