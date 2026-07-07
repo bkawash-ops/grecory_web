@@ -148,7 +148,7 @@ def cart():
 
 # ---------------- إتمام البيع وطباعة الفاتورة ----------------
 
-@app.route("/checkout")
+@app.route("/checkout", methods=["POST"])
 def checkout():
 
     items = session.get("cart", [])
