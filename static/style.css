@@ -1,8 +1,10 @@
 body {
     font-family: Arial;
-    background: #f4f6f8;
+    background: #f4f4f4;
+    padding: 20px;
 }
 
-.container {
-    padding: 20px;
+input, button {
+    padding: 8px;
+    margin: 5px;
 }

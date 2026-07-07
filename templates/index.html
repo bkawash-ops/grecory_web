@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>POS بقالة</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<h2>🛒 نظام البيع</h2>
+
+<h3>إضافة منتج</h3>
+<form method="POST" action="/add_product">
+    <input name="name" placeholder="اسم المنتج">
+    <input name="price" placeholder="السعر">
+    <input name="qty" placeholder="الكمية">
+    <button>إضافة</button>
+</form>
+
+<hr>
+
+<h3>المنتجات</h3>
+<table border="1">
+<tr>
+<th>اسم</th>
+<th>سعر</th>
+<th>كمية</th>
+</tr>
+
+{% for p in products %}
+<tr>
+<td>{{ p.name }}</td>
+<td>{{ p.price }}</td>
+<td>{{ p.qty }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<hr>
+
+<h3>🧾 بيع منتج</h3>
+
+<form method="POST" action="/create_invoice">
+
+    <label>المنتج</label>
+    <select name="product_id" required>
+        <option value="">اختر المنتج</option>
+        {% for p in products %}
+            <option value="{{ p.id }}">
+                {{ p.name }} - {{ p.price }} JOD (المتوفر: {{ p.qty }})
+            </option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label>الكمية</label>
+    <input name="qty" type="number" step="0.1" placeholder="أدخل الكمية" required>
+
+    <br><br>
+
+    <button type="submit" style="
+        background:#16a34a;
+        color:white;
+        padding:10px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+    ">
+        🧾 إصدار فاتورة
+    </button>
+
+</form>
+
+</body>
+</html>

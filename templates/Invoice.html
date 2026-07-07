@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>فاتورة</title>
+</head>
+
+<body>
+
+<h2>🧾 فاتورة بيع</h2>
+
+<p>المنتج: {{ product.name }}</p>
+<p>الكمية: {{ qty }}</p>
+<p>السعر: {{ product.price }}</p>
+<p><b>الإجمالي: {{ total }}</b></p>
+<p>الوقت: {{ time }}</p>
+
+<button onclick="window.print()">🖨 طباعة</button>
+
+</body>
+</html>
