@@ -334,11 +334,74 @@ def checkout():
         return "السلة فارغة"
 
 
+    total = sum(
+        item["total"]
+        for item in items
+    )
+
+
     conn = db()
 
     cur = conn.cursor()
 
+
+    # إنشاء رقم فاتورة جديد
+    cur.execute("""
+        SELECT COALESCE(MAX(invoice_number),1000)+1
+        FROM sales
+    """)
+
+    invoice_number = cur.fetchone()[0]
+
+
+    # حفظ رأس الفاتورة
+    cur.execute("""
+        INSERT INTO sales
+        (
+            invoice_number,
+            username,
+            total
+        )
+        VALUES (%s,%s,%s)
+        RETURNING id
+    """,
+    (
+        invoice_number,
+        session.get("user"),
+        total
+    ))
+
+
+    sale_id = cur.fetchone()[0]
+
+
+    # حفظ تفاصيل الفاتورة + خصم المخزون
+
     for item in items:
+
+
+        cur.execute("""
+            INSERT INTO sale_items
+            (
+                sale_id,
+                product_id,
+                product_name,
+                quantity,
+                sale_price,
+                total
+            )
+            VALUES (%s,%s,%s,%s,%s,%s)
+        """,
+        (
+            sale_id,
+            item["id"],
+            item["name"],
+            item["qty"],
+            item["price"],
+            item["total"]
+        ))
+
+
 
         cur.execute("""
             UPDATE products
@@ -350,27 +413,25 @@ def checkout():
             item["id"]
         ))
 
+
+
     conn.commit()
+
 
     cur.close()
     conn.close()
 
 
-    total = sum(
-        item["total"]
-        for item in items
-    )
 
-
-    print("TOTAL:")
-    print(total)
-    total = sum(item["total"] for item in items)
     session["cart"] = []
+
+
     return render_template(
         "invoice.html",
         items=items,
         total=total,
-        time=datetime.now()
+        time=datetime.now(),
+        invoice_number=invoice_number
     )
 @app.route("/seller")
 def seller():
