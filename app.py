@@ -11,7 +11,29 @@ DATABASE_URL = os.environ.get(
     "DATABASE_URL",
     "postgresql://grocery_user:YOUR_PASSWORD@dpg-d96j1p7avr4c739jf2s0-a.ohio-postgres.render.com/grocery_4nr4"
 )
+# TEMP: add active column once
+try:
+    conn = psycopg2.connect(
+        DATABASE_URL,
+        sslmode="require"
+    )
 
+    cur = conn.cursor()
+
+    cur.execute("""
+    ALTER TABLE products
+    ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE;
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    print("ACTIVE COLUMN CHECK DONE")
+
+except Exception as e:
+    print(e)
 
 def db():
 
