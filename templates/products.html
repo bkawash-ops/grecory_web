@@ -34,8 +34,9 @@
 
 &nbsp;
 
-<href="/delete_product/{{p.id}}"
-🚫 حذف
+<a href="/delete_product/{{p.id}}"
+   onclick="return confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')">
+🗑️ حذف
 </a>
 
 </td>
