@@ -108,9 +108,69 @@ def products():
     cur.close()
     conn.close()
 
-    return render_template(
+        return render_template(
         "products.html",
         products=products
+    )
+
+
+@app.route("/edit_product/<int:id>", methods=["GET", "POST"])
+def edit_product(id):
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        price = request.form["price"]
+        qty = request.form["qty"]
+
+        cur.execute("""
+            UPDATE products
+            SET name=%s,
+                sale_price=%s,
+                quantity=%s
+            WHERE id=%s
+        """,
+        (
+            name,
+            price,
+            qty,
+            id
+        ))
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return redirect(url_for("products"))
+
+
+    cur.execute("""
+        SELECT
+            id,
+            name,
+            sale_price AS price,
+            quantity AS qty
+        FROM products
+        WHERE id=%s
+    """,
+    (id,)
+    )
+
+    product = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "edit_product.html",
+        product=product
     )
 # ---------------- إضافة منتج للمخزون ----------------
 
