@@ -386,6 +386,7 @@ def seller():
         SELECT 
             id,
             name,
+            barcode,
             sale_price AS price,
             quantity AS qty
         FROM products
