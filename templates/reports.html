@@ -18,7 +18,29 @@ border-radius:10px;
 margin-bottom:20px;
 font-size:20px;
 ">
+<form method="GET" action="/reports">
 
+من تاريخ
+
+<input
+type="date"
+name="from_date"
+value="{{from_date or ''}}">
+
+إلى تاريخ
+
+<input
+type="date"
+name="to_date"
+value="{{to_date or ''}}">
+
+<button type="submit">
+🔍 عرض التقرير
+</button>
+
+</form>
+
+<br>
 <p>
 🧾 عدد الفواتير:
 {{summary.invoices_count}}
