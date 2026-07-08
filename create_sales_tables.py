@@ -26,7 +26,27 @@ CREATE TABLE IF NOT EXISTS sales (
 
 );
 """)
+cur.execute("""
+CREATE TABLE IF NOT EXISTS sale_items (
 
+    id SERIAL PRIMARY KEY,
+
+    sale_id INTEGER REFERENCES sales(id),
+
+    product_id INTEGER,
+
+    product_name TEXT,
+
+    quantity REAL,
+
+    purchase_price REAL,
+
+    sale_price REAL,
+
+    total REAL
+
+);
+""")
 
 conn.commit()
 cur.execute("""
