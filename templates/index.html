@@ -247,10 +247,9 @@ placeholder="الباركود (اختياري)">
 
 <tr>
 
-<th>المنتج</th>
-
-<th>السعر</th>
-
+<<th>المنتج</th>
+<th>سعر الشراء</th>
+<th>سعر البيع</th>
 <th>الكمية</th>
 
 </tr>
@@ -259,9 +258,7 @@ placeholder="الباركود (اختياري)">
 
 {% for p in products %}
 
-
 <tr>
-
 
 <td>
 {{p.name}}
@@ -269,27 +266,23 @@ placeholder="الباركود (اختياري)">
 
 
 <td>
-
-{{ "%.2f"|format(p.price) }}
-
- JOD
-
+{{ "%.2f"|format(p.purchase_price) }}
+JOD
 </td>
 
 
 <td>
-
-
-{{p.qty}}
-
-
+{{ "%.2f"|format(p.sale_price) }}
+JOD
 </td>
 
 
+<td>
+{{p.qty}}
+</td>
+
 
 </tr>
-
-
 
 {% endfor %}
 
