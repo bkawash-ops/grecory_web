@@ -202,21 +202,22 @@ def add_product():
 
     name = request.form["name"]
 
-purchase_price = float(
-    request.form["purchase_price"]
-)
+    purchase_price = float(
+        request.form["purchase_price"]
+    )
 
-sale_price = float(
-    request.form["sale_price"]
-)
+    sale_price = float(
+        request.form["sale_price"]
+    )
 
-qty = float(
-    request.form["qty"]
-)
+    qty = float(
+        request.form["qty"]
+    )
 
-barcode = request.form.get("barcode", "")
+    barcode = request.form.get("barcode", "")
 
-conn = db()
+
+    conn = db()
 
     cur = conn.cursor()
 
