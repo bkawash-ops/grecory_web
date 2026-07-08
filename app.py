@@ -218,7 +218,7 @@ def checkout():
         cur.execute("""
             UPDATE products
             SET quantity = quantity - %s
-            WHERE id=%s
+            WHERE id = %s
         """,
         (
             item["qty"],
