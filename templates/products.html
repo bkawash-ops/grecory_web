@@ -16,6 +16,7 @@
 <th>المنتج</th>
 <th>السعر</th>
 <th>الكمية</th>
+<th>الإجراء</th>
 </tr>
 
 {% for p in products %}
@@ -24,6 +25,15 @@
 <td>{{p.name}}</td>
 <td>{{p.price}}</td>
 <td>{{p.qty}}</td>
+
+<td>
+
+<a href="/edit_product/{{p.id}}">
+✏️ تعديل
+</a>
+
+</td>
+
 </tr>
 
 {% endfor %}
