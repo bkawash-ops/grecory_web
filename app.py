@@ -96,7 +96,7 @@ def reports():
 
     if from_date and to_date:
 
-       cur.execute("""
+        cur.execute("""
             SELECT
                 invoice_number,
                 sale_date AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Amman' AS sale_date,
@@ -106,7 +106,7 @@ def reports():
             ORDER BY id DESC
         """)
 
-            sales = cur.fetchall()
+        sales = cur.fetchall()
 
         cur.execute("""
             SELECT
