@@ -205,8 +205,7 @@ def disable_product(id):
     cur = conn.cursor()
 
     cur.execute("""
-        UPDATE products
-        SET active = FALSE
+        DELETE FROM products
         WHERE id = %s
     """,
     (id,))
