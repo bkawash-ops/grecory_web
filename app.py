@@ -103,13 +103,21 @@ def reports():
     """)
 
     sales = cur.fetchall()
+    cur.execute("""
+        SELECT
+            COUNT(*) AS invoices_count,
+            COALESCE(SUM(total),0) AS total_sales
+        FROM sales
+    """)
 
+    summary = cur.fetchone()
     cur.close()
     conn.close()
 
     return render_template(
         "reports.html",
-        sales=sales
+        sales=sales,
+        summary=summary
     )
 @app.route("/products")
 def products():
