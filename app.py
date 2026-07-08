@@ -88,36 +88,67 @@ def reports():
     if session.get("user") != "admin":
         return redirect(url_for("login"))
 
-    conn = db()
+    from_date = request.args.get("from_date")
+    to_date = request.args.get("to_date")
 
+    conn = db()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("""
-        SELECT
-            invoice_number,
-            sale_date,
-            username,
-            total
-        FROM sales
-        ORDER BY id DESC
-    """)
+    if from_date and to_date:
 
-    sales = cur.fetchall()
-    cur.execute("""
-        SELECT
-            COUNT(*) AS invoices_count,
-            COALESCE(SUM(total),0) AS total_sales
-        FROM sales
-    """)
+        cur.execute("""
+            SELECT
+                invoice_number,
+                sale_date,
+                username,
+                total
+            FROM sales
+            WHERE DATE(sale_date) BETWEEN %s AND %s
+            ORDER BY id DESC
+        """, (from_date, to_date))
+
+        sales = cur.fetchall()
+
+        cur.execute("""
+            SELECT
+                COUNT(*) AS invoices_count,
+                COALESCE(SUM(total),0) AS total_sales
+            FROM sales
+            WHERE DATE(sale_date) BETWEEN %s AND %s
+        """, (from_date, to_date))
+
+    else:
+
+        cur.execute("""
+            SELECT
+                invoice_number,
+                sale_date,
+                username,
+                total
+            FROM sales
+            ORDER BY id DESC
+        """)
+
+        sales = cur.fetchall()
+
+        cur.execute("""
+            SELECT
+                COUNT(*) AS invoices_count,
+                COALESCE(SUM(total),0) AS total_sales
+            FROM sales
+        """)
 
     summary = cur.fetchone()
+
     cur.close()
     conn.close()
 
     return render_template(
         "reports.html",
         sales=sales,
-        summary=summary
+        summary=summary,
+        from_date=from_date,
+        to_date=to_date
     )
 @app.route("/products")
 def products():
