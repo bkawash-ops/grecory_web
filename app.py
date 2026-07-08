@@ -82,7 +82,35 @@ def index():
         "index.html",
         products=products
     )
+@app.route("/reports")
+def reports():
 
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            invoice_number,
+            sale_date,
+            username,
+            total
+        FROM sales
+        ORDER BY id DESC
+    """)
+
+    sales = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "reports.html",
+        sales=sales
+    )
 @app.route("/products")
 def products():
 
