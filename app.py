@@ -194,6 +194,29 @@ def toggle_product(id):
     conn.close()
 
     return redirect(url_for("products"))
+
+@app.route("/disable_product/<int:id>")
+def disable_product(id):
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE products
+        SET active = FALSE
+        WHERE id = %s
+    """,
+    (id,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("products"))
 # ---------------- إضافة منتج للمخزون ----------------
 
 @app.route("/add_product", methods=["POST"])
