@@ -4,54 +4,131 @@
 <head>
 <meta charset="UTF-8">
 <title>إدارة المنتجات</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f3f4f6;
+    padding:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#1f2937;
+    color:white;
+}
+
+td, th{
+    padding:12px;
+    text-align:center;
+    border:1px solid #ccc;
+}
+
+a{
+    text-decoration:none;
+    padding:6px 10px;
+    border-radius:5px;
+}
+
+.edit{
+    background:#2563eb;
+    color:white;
+}
+
+.delete{
+    background:#dc2626;
+    color:white;
+}
+
+.back{
+    display:inline-block;
+    margin-top:20px;
+    background:#16a34a;
+    color:white;
+    padding:10px 20px;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
 <h2>📦 إدارة المنتجات</h2>
 
-<table border="1" width="100%">
+
+<table>
 
 <tr>
 <th>المنتج</th>
-<th>السعر</th>
+<th>سعر الشراء</th>
+<th>سعر البيع</th>
 <th>الكمية</th>
-<th>الإجراء</th>
+<th>إجراء</th>
 </tr>
+
 
 {% for p in products %}
 
 <tr>
-<td>{{p.name}}</td>
-<td>{{p.price}}</td>
-<td>{{p.qty}}</td>
+
+<td>
+{{p.name}}
+</td>
+
+
+<td>
+{{ "%.2f"|format(p.purchase_price) }} JOD
+</td>
+
+
+<td>
+{{ "%.2f"|format(p.sale_price) }} JOD
+</td>
+
+
+<td>
+{{p.qty}}
+</td>
+
 
 <td>
 
-<a href="/edit_product/{{p.id}}">
+<a class="edit" href="/edit_product/{{p.id}}">
 ✏️ تعديل
 </a>
 
 &nbsp;
 
-<a href="/delete_product/{{p.id}}"
-   onclick="return confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')">
+<a class="delete"
+href="/delete_product/{{p.id}}"
+onclick="return confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')">
 🗑️ حذف
 </a>
 
 </td>
 
+
 </tr>
+
 
 {% endfor %}
 
+
 </table>
 
-<br>
 
-<a href="/">
+<a class="back" href="/">
 ⬅ العودة للأدمن
 </a>
+
 
 </body>
 
