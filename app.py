@@ -83,7 +83,35 @@ def index():
         products=products
     )
 
+@app.route("/products")
+def products():
 
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            id,
+            name,
+            sale_price AS price,
+            quantity AS qty
+        FROM products
+        ORDER BY name
+    """)
+
+    products = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "products.html",
+        products=products
+    )
 # ---------------- إضافة منتج للمخزون ----------------
 
 @app.route("/add_product", methods=["POST"])
