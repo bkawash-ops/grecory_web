@@ -82,7 +82,19 @@ select,input{
 
 <h2>🛒 شاشة البيع</h2>
 
-
+<input 
+type="text"
+id="barcodeSearch"
+placeholder="🔍 بحث عن منتج..."
+onkeyup="searchProduct()"
+style="
+width:300px;
+padding:12px;
+font-size:18px;
+border-radius:8px;
+border:1px solid #ccc;
+margin-bottom:15px;
+">
 
 <div class="card">
 
@@ -224,7 +236,43 @@ oninput="checkQty()"
 
 
 let availableQty = 0;
+function searchProduct(){
 
+    let search = document
+    .getElementById("barcodeSearch")
+    .value
+    .toLowerCase();
+
+
+    let select = document
+    .getElementById("product_id");
+
+
+    let options = select
+    .getElementsByTagName("option");
+
+
+    for(let i = 1; i < options.length; i++){
+
+        let text = options[i]
+        .textContent
+        .toLowerCase();
+
+
+        if(text.includes(search)){
+
+            options[i].style.display = "";
+
+        }
+        else{
+
+            options[i].style.display = "none";
+
+        }
+
+    }
+
+}
 
 
 function showProductInfo(){
