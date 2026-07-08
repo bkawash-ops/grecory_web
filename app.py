@@ -130,13 +130,16 @@ def add_to_cart():
 
     conn = db()
 
-    product = conn.execute("""
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
         SELECT *
         FROM products
         WHERE id=%s
     """,
-    (product_id,)
-    ).fetchone()
+    (product_id,))
+
+    product = cur.fetchone()
 
 
     if product is None:
@@ -165,7 +168,7 @@ def add_to_cart():
 
     session["cart"] = cart
 
-
+    cur.close()
     conn.close()
 
 
