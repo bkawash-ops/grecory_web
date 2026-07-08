@@ -119,7 +119,7 @@ button{
 
 <div class="no-print">
 
-<a href="/seller" 
+<a href="{{ url_for('seller') if session.get('user') == 'seller' else url_for('index') }}" 
 style="
 background:#2563eb;
 color:white;
