@@ -117,6 +117,18 @@ button{
 <h2>
 🛒 نظام البقالة POS
 </h2>
+    <input 
+type="text" 
+id="search"
+placeholder="🔍 ابحث عن منتج..."
+onkeyup="searchProduct()"
+style="
+width:300px;
+padding:12px;
+font-size:18px;
+border-radius:8px;
+border:1px solid #ccc;
+">
 <div class="card">
 
 <h3>
@@ -258,7 +270,7 @@ placeholder="الباركود (اختياري)">
 
 {% for p in products %}
 
-<tr>
+<tr class="product-row">
 
 <td>
 {{p.name}}
@@ -415,7 +427,40 @@ required>
 
 
 </div>
+<script>
 
+function searchProduct(){
+
+    let input = document.getElementById("search");
+
+    let filter = input.value.toLowerCase();
+
+    let rows = document.getElementsByClassName("product-row");
+
+
+    for(let i = 0; i < rows.length; i++){
+
+        let name = rows[i]
+        .getElementsByTagName("td")[0]
+        .innerText
+        .toLowerCase();
+
+
+        if(name.includes(filter)){
+
+            rows[i].style.display = "";
+
+        }else{
+
+            rows[i].style.display = "none";
+
+        }
+
+    }
+
+}
+
+</script>
 
 
 </body>
