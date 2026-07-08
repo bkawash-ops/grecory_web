@@ -1,6 +1,6 @@
 import psycopg2
 
-DATABASE_URL = "postgresql://grocery_user:YOUR_PASSWORD@dpg-d96j1p7avr4c739jf2s0-a.ohio-postgres.render.com/grocery_4nr4"
+DATABASE_URL = "postgresql://grocery_user:QzcYfUT5il61gzI8tdaihu1NvfGVjJ0S@dpg-d96j1p7avr4c739jf2s0-a.ohio-postgres.render.com/grocery_4nr4"
 
 
 conn = psycopg2.connect(
