@@ -108,7 +108,7 @@ def products():
     cur.close()
     conn.close()
 
-        return render_template(
+    return render_template(
         "products.html",
         products=products
     )
