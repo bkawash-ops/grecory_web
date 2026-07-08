@@ -61,7 +61,9 @@ def index():
 
     conn = db()
 
-    products = conn.execute("""
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
         SELECT 
             id,
             name,
@@ -69,8 +71,11 @@ def index():
             quantity AS qty
         FROM products
         ORDER BY name
-    """).fetchall()
+    """)
 
+    products = cur.fetchall()
+
+    cur.close()
     conn.close()
 
     return render_template(
