@@ -201,8 +201,20 @@ def delete_product(id):
 def add_product():
 
     name = request.form["name"]
-    price = float(request.form["price"])
-    qty = float(request.form["qty"])
+
+purchase_price = float(
+    request.form["purchase_price"]
+)
+
+sale_price = float(
+    request.form["sale_price"]
+)
+
+qty = float(
+    request.form["qty"]
+)
+
+barcode = request.form.get("barcode", "")
 
     conn = db()
 
@@ -215,10 +227,10 @@ def add_product():
     """,
     (
         name,
-        price,
-        price,
+        purchase_price,
+        sale_price,
         qty,
-        ""
+        barcode
     ))
 
     conn.commit()
