@@ -431,7 +431,8 @@ def checkout():
         items=items,
         total=total,
         time=datetime.now(),
-        invoice_number=invoice_number
+        invoice_number=invoice_number,
+        username=session.get("user")
     )
 @app.route("/seller")
 def seller():
