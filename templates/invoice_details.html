@@ -85,6 +85,14 @@ button,a{
         display:none;
     }
 
+    body{
+        background:white;
+    }
+
+    .card{
+        box-shadow:none;
+    }
+
 }
 
 
@@ -96,11 +104,20 @@ button,a{
 <body>
 
 
-<div class="card">
+<div class="card" style="text-align:center;">
 
+<h1>
+🛒 زاد البيت
+</h1>
+
+<h3>
+ZAD AL BAYT MARKET
+</h3>
+
+<hr>
 
 <h2>
-🛒 فاتورة رقم: {{sale.invoice_number}}
+🧾 فاتورة مبيعات رقم: {{sale.invoice_number}}
 </h2>
 
 
@@ -188,7 +205,17 @@ JOD
 
 </div>
 
+<div class="card" style="text-align:center;">
 
+<h3>
+شكراً لتسوقكم معنا 🌹
+</h3>
+
+<p>
+نتمنى لكم يوماً سعيداً
+</p>
+
+</div>
 
 <div class="no-print">
 
