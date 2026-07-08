@@ -195,8 +195,8 @@ def toggle_product(id):
 
     return redirect(url_for("products"))
 
-@app.route("/disable_product/<int:id>")
-def disable_product(id):
+@app.route("/delete_product/<int:id>")
+def delete_product(id):
 
     if session.get("user") != "admin":
         return redirect(url_for("login"))
