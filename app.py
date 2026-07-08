@@ -64,15 +64,15 @@ def index():
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     cur.execute("""
-        SELECT 
+        SELECT
             id,
             name,
-            sale_price AS price,
+            purchase_price,
+            sale_price,
             quantity AS qty
         FROM products
         ORDER BY name
     """)
-
     products = cur.fetchall()
 
     cur.close()
