@@ -1,16 +1,26 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import sqlite3
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import os
 from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "grocery-secret-key"
 
-DB = "supermarket.db"
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL",
+    "postgresql://grocery_user:YOUR_PASSWORD@dpg-d96j1p7avr4c739jf2s0-a.ohio-postgres.render.com/grocery_4nr4"
+)
 
 
 def db():
-    conn = sqlite3.connect(DB)
-    conn.row_factory = sqlite3.Row
+
+    conn = psycopg2.connect(
+        DATABASE_URL,
+        sslmode="require",
+        cursor_factory=RealDictCursor
+    )
+
     return conn
 
 @app.route("/login", methods=["GET", "POST"])
@@ -81,10 +91,12 @@ def add_product():
 
     conn = db()
 
-    conn.execute("""
+    cur = conn.cursor()
+
+    cur.execute("""
         INSERT INTO products
         (name, purchase_price, sale_price, quantity, barcode)
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s)
     """,
     (
         name,
@@ -95,6 +107,8 @@ def add_product():
     ))
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
     return redirect(url_for("index"))
@@ -115,7 +129,7 @@ def add_to_cart():
     product = conn.execute("""
         SELECT *
         FROM products
-        WHERE id=?
+        WHERE id=%s
     """,
     (product_id,)
     ).fetchone()
@@ -190,21 +204,23 @@ def checkout():
 
     conn = db()
 
+    cur = conn.cursor()
 
     for item in items:
 
-        conn.execute("""
+        cur.execute("""
             UPDATE products
-            SET quantity = quantity - ?
-            WHERE id=?
+            SET quantity = quantity - %s
+            WHERE id=%s
         """,
         (
             item["qty"],
             item["id"]
         ))
 
-
     conn.commit()
+
+    cur.close()
     conn.close()
 
 
