@@ -216,7 +216,7 @@ qty = float(
 
 barcode = request.form.get("barcode", "")
 
-    conn = db()
+conn = db()
 
     cur = conn.cursor()
 
