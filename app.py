@@ -106,7 +106,7 @@ def reports():
             ORDER BY id DESC
         """)
 
-        sales = cur.fetchall()
+            sales = cur.fetchall()
 
         cur.execute("""
             SELECT
