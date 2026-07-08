@@ -172,6 +172,28 @@ def edit_product(id):
         "edit_product.html",
         product=product
     )
+
+@app.route("/toggle_product/<int:id>")
+def toggle_product(id):
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE products
+        SET active = NOT active
+        WHERE id = %s
+    """, (id,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("products"))
 # ---------------- إضافة منتج للمخزون ----------------
 
 @app.route("/add_product", methods=["POST"])
