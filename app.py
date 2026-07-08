@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
 from datetime import datetime
-
+from zoneinfo import ZoneInfo
 app = Flask(__name__)
 app.secret_key = "grocery-secret-key"
 
@@ -406,7 +406,7 @@ def checkout():
         for item in items
     )
 
-
+    sale_time = datetime.now(ZoneInfo("Asia/Amman"))
     conn = db()
 
     cur = conn.cursor()
@@ -427,15 +427,17 @@ def checkout():
         (
             invoice_number,
             username,
-            total
+            total,
+            sale_date
         )
-        VALUES (%s,%s,%s)
+        VALUES (%s,%s,%s,%s)
         RETURNING id
     """,
     (
         invoice_number,
         session.get("user"),
-        total
+        total,
+        sale_time
     ))
 
 
@@ -497,7 +499,7 @@ def checkout():
         "invoice.html",
         items=items,
         total=total,
-        time=datetime.now(),
+        time=datetime.now(ZoneInfo("Asia/Amman")),
         invoice_number=invoice_number,
         username=session.get("user")
     )
