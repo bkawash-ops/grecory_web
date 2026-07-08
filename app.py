@@ -17,8 +17,7 @@ def db():
 
     conn = psycopg2.connect(
         DATABASE_URL,
-        sslmode="require",
-        cursor_factory=RealDictCursor
+        sslmode="require"
     )
 
     return conn
@@ -248,7 +247,9 @@ def seller():
 
     conn = db()
 
-    products = conn.execute("""
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
         SELECT 
             id,
             name,
@@ -256,8 +257,11 @@ def seller():
             quantity AS qty
         FROM products
         ORDER BY name
-    """).fetchall()
+    """)
 
+    products = cur.fetchall()
+
+    cur.close()
     conn.close()
 
     return render_template(
