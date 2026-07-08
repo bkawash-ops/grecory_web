@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+
+<title>التقارير</title>
+
+</head>
+
+<body>
+
+<h2>📊 تقارير المبيعات</h2>
+
+
+<table border="1" width="100%">
+
+<tr>
+
+<th>رقم الفاتورة</th>
+<th>التاريخ</th>
+<th>البائع</th>
+<th>الإجمالي</th>
+
+</tr>
+
+
+{% for s in sales %}
+
+<tr>
+
+<td>{{s.invoice_number}}</td>
+
+<td>{{s.sale_date}}</td>
+
+<td>{{s.username}}</td>
+
+<td>{{s.total}} JOD</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+<br>
+
+<a href="/">
+⬅ العودة
+</a>
+
+
+</body>
+
+</html>
