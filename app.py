@@ -531,6 +531,53 @@ def seller():
         "seller.html",
         products=products
     )
+
+@app.route("/invoice/<int:invoice_number>")
+def invoice_details(invoice_number):
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            invoice_number,
+            sale_date,
+            username,
+            total,
+            id
+        FROM sales
+        WHERE invoice_number=%s
+    """,
+    (invoice_number,)
+    )
+
+    sale = cur.fetchone()
+
+    cur.execute("""
+        SELECT
+            product_name,
+            quantity,
+            sale_price,
+            total
+        FROM sale_items
+        WHERE sale_id=%s
+    """,
+    (sale["id"],)
+    )
+
+    items = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "invoice_details.html",
+        sale=sale,
+        items=items
+    )
 @app.route("/logout")
 def logout():
 
