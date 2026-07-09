@@ -1,10 +1,10 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, session
 from io import BytesIO
 from flask import send_file
 from reportlab.pdfgen import canvas
 import psycopg2
 from psycopg2.extras import RealDictCursor
-import os
 from datetime import datetime 
 from zoneinfo import ZoneInfo
 from io import BytesIO
@@ -665,10 +665,17 @@ def reports_pdf():
     pdf = BytesIO()
 
 
+    font_path = os.path.join(
+    app.root_path,
+    "fonts",
+    "DejaVuSans.ttf"
+    )
+
+
     pdfmetrics.registerFont(
         TTFont(
             "Arabic",
-            "fonts/DejaVuSans.ttf"
+            font_path
         )
     )
 
