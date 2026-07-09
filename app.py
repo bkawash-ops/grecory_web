@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from io import BytesIO
+from flask import send_file
+from reportlab.pdfgen import canvas
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
@@ -589,6 +592,141 @@ def invoice_details(invoice_number):
         "invoice_details.html",
         sale=sale,
         items=items
+    )
+
+@app.route("/reports/pdf")
+def reports_pdf():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    from_date = request.args.get("from_date")
+    to_date = request.args.get("to_date")
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                invoice_number,
+                sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman' AS sale_date,
+                username,
+                total
+            FROM sales
+            WHERE DATE(
+                sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+            BETWEEN %s AND %s
+            ORDER BY id DESC
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+
+    else:
+
+        cur.execute("""
+            SELECT
+                invoice_number,
+                sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman' AS sale_date,
+                username,
+                total
+            FROM sales
+            ORDER BY id DESC
+        """)
+
+
+    sales = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+
+    pdf = BytesIO()
+
+    p = canvas.Canvas(pdf)
+
+
+    y = 800
+
+
+    p.setFont(
+        "Helvetica",
+        14
+    )
+
+
+    p.drawString(
+        350,
+        y,
+        "ZAD AL BAYT MARKET"
+    )
+
+
+    y -= 40
+
+
+    p.drawString(
+        350,
+        y,
+        "Sales Report"
+    )
+
+
+    y -= 50
+
+
+
+    for s in sales:
+
+
+        text = (
+            f"Invoice: {s['invoice_number']}   "
+            f"User: {s['username']}   "
+            f"Total: {s['total']} JOD"
+        )
+
+
+        p.drawString(
+            50,
+            y,
+            text
+        )
+
+
+        y -= 25
+
+
+        if y < 50:
+
+            p.showPage()
+            y = 800
+
+
+
+    p.save()
+
+
+    pdf.seek(0)
+
+
+    return send_file(
+        pdf,
+        download_name="sales_report.pdf",
+        as_attachment=True
     )
 @app.route("/logout")
 def logout():
