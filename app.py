@@ -506,6 +506,7 @@ def checkout():
             item["id"],
             item["name"],
             item["qty"],
+            item["purchase_price"],
             item["price"],
             item["total"]
         ))
