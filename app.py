@@ -223,7 +223,58 @@ def profit_report():
     if session.get("user") != "admin":
         return redirect(url_for("login"))
 
-    return render_template("profit_report.html")
+
+    from_date = request.args.get("from_date")
+    to_date = request.args.get("to_date")
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    total_sales = 0
+
+
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(total),0) AS total_sales
+
+            FROM sales
+
+            WHERE DATE(
+                sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+
+            BETWEEN %s AND %s
+
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+
+        result = cur.fetchone()
+
+        total_sales = result["total_sales"]
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "profit_report.html",
+        from_date=from_date,
+        to_date=to_date,
+        total_sales= "%.2f" % total_sales,
+        total_cost="0.00",
+        total_profit="0.00"
+    )
 @app.route("/products")
 def products():
 
