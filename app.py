@@ -100,7 +100,15 @@ def reports_menu():
     if session.get("user") != "admin":
         return redirect(url_for("login"))
 
-    return render_template("reports_menu.html")    
+    return render_template("reports_menu.html")   
+
+@app.route("/backup_page")
+def backup_page():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    return render_template("backup.html")
 @app.route("/reports")
 def reports():
 
