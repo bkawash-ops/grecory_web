@@ -339,7 +339,7 @@ def profit_report():
         total_sales= "%.2f" % total_sales,
         total_cost="%.2f" % total_cost,
         total_profit="%.2f" % total_profit,
-        profit_details=profit_details,
+        profit_details=profit_details
     )
 @app.route("/products")
 def products():
