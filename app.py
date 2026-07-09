@@ -94,6 +94,13 @@ def index():
         "index.html",
         products=products
     )
+@app.route("/reports_menu")
+def reports_menu():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    return render_template("reports_menu.html")    
 @app.route("/reports")
 def reports():
 
