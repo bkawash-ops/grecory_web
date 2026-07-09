@@ -72,8 +72,11 @@ def index():
         return redirect(url_for("seller"))
 
     conn = db()
-
     cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    profit = {
+        "total_profit": 0
+    }
 
     cur.execute("""
         SELECT
