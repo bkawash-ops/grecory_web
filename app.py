@@ -1,4 +1,5 @@
 import os
+import subprocess
 from flask import Flask, render_template, request, redirect, url_for, session
 from io import BytesIO
 from flask import send_file
@@ -1060,6 +1061,46 @@ def reports_pdf():
         download_name="تقرير_المبيعات.pdf",
         as_attachment=True
     )
+
+@app.route("/backup")
+def backup():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    backup_file = "grocery_backup.sql"
+
+
+    database_url = DATABASE_URL
+
+
+    command = [
+        "pg_dump",
+        database_url,
+        "-f",
+        backup_file
+    ]
+
+
+    try:
+
+        subprocess.run(
+            command,
+            check=True
+        )
+
+
+        return send_file(
+            backup_file,
+            as_attachment=True,
+            download_name="grocery_backup.sql"
+        )
+
+
+    except Exception as e:
+
+        return f"حدث خطأ أثناء النسخ الاحتياطي: {e}"
 @app.route("/logout")
 def logout():
 
