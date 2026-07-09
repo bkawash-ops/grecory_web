@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<title>POS بقالة</title>
+<title>لوحة الإدارة - زاد البيت</title>
 
 <link rel="stylesheet" href="/static/style.css">
 
@@ -15,78 +15,26 @@
 body{
     font-family: Arial;
     background:#f3f4f6;
-    padding:20px;
+    padding:30px;
 }
 
 
 .card{
 
     background:white;
-    padding:20px;
+    padding:30px;
     margin-bottom:20px;
     border-radius:12px;
-    box-shadow:0 2px 5px #ccc;
-
-}
-
-
-table{
-
-    width:100%;
-    background:white;
-    border-collapse:collapse;
-
-}
-
-
-th{
-
-    background:#1f2937;
-    color:white;
-
-}
-
-
-td,th{
-
-    padding:10px;
+    box-shadow:0 2px 6px #ccc;
     text-align:center;
 
 }
 
 
-input,select{
+h2{
 
-    padding:10px;
-    margin:5px;
-    border-radius:6px;
-    border:1px solid #ccc;
-
-}
-
-
-button{
-
-    padding:10px 18px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-
-}
-
-
-.add{
-
-    background:#16a34a;
-    color:white;
-
-}
-
-
-.cart{
-
-    background:#2563eb;
-    color:white;
+    text-align:center;
+    margin-bottom:30px;
 
 }
 
@@ -94,13 +42,78 @@ button{
 .invoice{
 
     display:block;
-    margin-top:15px;
-    background:#dc2626;
+    margin:15px auto;
+    width:300px;
+
+    background:#2563eb;
     color:white;
-    padding:12px;
+
+    padding:15px;
+
     text-align:center;
-    border-radius:6px;
+
+    border-radius:10px;
+
     text-decoration:none;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+
+.invoice:hover{
+
+    background:#1d4ed8;
+
+}
+
+
+/* زر الخروج */
+
+.logout {
+
+    position: absolute;
+
+    left: 20px;
+
+    top: 20px;
+
+
+    background-color: #dc3545;
+
+    color: white;
+
+    padding: 12px 25px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+
+    display: inline-block;
+
+    cursor: pointer;
+
+
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    transition: 0.3s;
+
+}
+
+
+.logout:hover {
+
+    background-color: #b02a37;
+
+    transform: scale(1.05);
 
 }
 
@@ -115,352 +128,71 @@ button{
 
 
 <h2>
-🛒 نظام البقالة POS
+🛒 زاد البيت POS
 </h2>
-    <input 
-type="text" 
-id="search"
-placeholder="🔍 ابحث عن منتج..."
-onkeyup="searchProduct()"
-style="
-width:300px;
-padding:12px;
-font-size:18px;
-border-radius:8px;
-border:1px solid #ccc;
-">
+
+
+
 <div class="card">
+
 
 <h3>
 ⚙️ لوحة الإدارة
 </h3>
 
+
+
 <a href="/products" class="invoice">
+
 📦 إدارة المنتجات
+
 </a>
+
+
 
 <a href="/reports_menu" class="invoice">
+
 📊 التقارير
+
 </a>
 
+
+
 <a href="#" class="invoice">
+
 💾 النسخ الاحتياطي
+
 </a>
+
+
 
 <a href="#" class="invoice">
-👥 المستخدمين
+
+👥 المستخدمون
+
 </a>
 
+
+
+<a href="#" class="invoice">
+
+⚙️ الإعدادات
+
+</a>
+
+
+
 </div>
+
+
+
+
 <a href="/logout" class="logout">
-    🚪 خروج
-</a>
 
-<style>
-.logout {
-    position: absolute;
-    left: 20px;
-    top: 20px;
-
-    background-color: #dc3545;
-    color: white;
-    padding: 12px 25px;
-    font-size: 20px;
-    font-weight: bold;
-
-    text-decoration: none;
-    border-radius: 10px;
-    border: none;
-
-    display: inline-block;
-    cursor: pointer;
-
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-.logout:hover {
-    background-color: #b02a37;
-    transform: scale(1.05);
-}
-</style>
-
-<div class="card">
-
-
-<h3>
-➕ إضافة منتج
-</h3>
-
-
-<form method="POST" action="/add_product">
-
-
-<input 
-name="name"
-placeholder="اسم المنتج"
-required>
-
-
-<input 
-name="purchase_price"
-type="number"
-step="0.01"
-placeholder="سعر الشراء"
-required>
-
-
-<input 
-name="sale_price"
-type="number"
-step="0.01"
-placeholder="سعر البيع"
-required>
-
-
-<input 
-name="qty"
-type="number"
-step="0.1"
-placeholder="الكمية"
-required>
-
-
-<input 
-name="barcode"
-placeholder="الباركود (اختياري)">
-
-
-<button class="add">
-
-إضافة
-
-</button>
-
-
-</form>
-
-
-</div>
-
-
-
-
-<div class="card">
-
-
-<h3>
-📦 المخزون
-</h3>
-
-
-<table border="1">
-
-
-<tr>
-
-<<th>المنتج</th>
-<th>سعر الشراء</th>
-<th>سعر البيع</th>
-<th>الكمية</th>
-
-</tr>
-
-
-
-{% for p in products %}
-
-<tr class="product-row">
-
-<td>
-{{p.name}}
-</td>
-
-
-<td>
-{{ "%.2f"|format(p.purchase_price) }}
-JOD
-</td>
-
-
-<td>
-{{ "%.2f"|format(p.sale_price) }}
-JOD
-</td>
-
-
-<td>
-{{p.qty}}
-</td>
-
-
-</tr>
-
-{% endfor %}
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h3>
-🧾 الكاشير
-</h3>
-
-
-
-<form method="POST" action="/add_to_cart">
-
-
-
-<label>
-اختر الصنف:
-</label>
-
-
-
-<select name="product_id" required>
-
-
-<option value="">
--- اختر المنتج --
-</option>
-
-
-
-{% for p in products %}
-
-
-
-<option value="{{p.id}}">
-
-
-{{p.name}}
-
--
-
-{{ "%.2f"|format(p.sale_price) }}
-
-JOD
-
--
-
-المتوفر:
-
-{{p.qty}}
-
-
-
-</option>
-
-
-
-{% endfor %}
-
-
-
-</select>
-
-
-
-
-<br>
-
-
-
-<label>
-الكمية:
-</label>
-
-
-<input
-
-name="qty"
-
-type="number"
-
-step="0.1"
-
-min="1"
-
-value="1"
-
-required>
-
-
-
-<br><br>
-
-
-
-
-<button class="cart">
-
-🛒 إضافة للسلة
-
-</button>
-
-
-
-
-</form>
-
-
-
-
-
-<a href="/cart" class="invoice">
-
-🧾 فتح الفاتورة الحالية
+🚪 خروج
 
 </a>
 
-
-
-</div>
-<script>
-
-function searchProduct(){
-
-    let input = document.getElementById("search");
-
-    let filter = input.value.toLowerCase();
-
-    let rows = document.getElementsByClassName("product-row");
-
-
-    for(let i = 0; i < rows.length; i++){
-
-        let name = rows[i]
-        .getElementsByTagName("td")[0]
-        .innerText
-        .toLowerCase();
-
-
-        if(name.includes(filter)){
-
-            rows[i].style.display = "";
-
-        }else{
-
-            rows[i].style.display = "none";
-
-        }
-
-    }
-
-}
-
-</script>
 
 
 </body>
