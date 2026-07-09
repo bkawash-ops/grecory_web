@@ -160,41 +160,35 @@ JOD
 
 <div class="card">
 
-<table>
+<table border="1" width="100%">
+
+<tr>
+<th>المنتج</th>
+<th>الكمية</th>
+<th>المبيعات</th>
+<th>التكلفة</th>
+<th>الربح</th>
+</tr>
+
+
+{% for p in profit_details %}
 
 <tr>
 
-<th>
+<td>{{p.product_name}}</td>
 
-المنتج
+<td>{{p.qty}}</td>
 
-</th>
+<td>{{"%.2f"|format(p.sales)}} JOD</td>
 
-<th>
+<td>{{"%.2f"|format(p.cost)}} JOD</td>
 
-الكمية
-
-</th>
-
-<th>
-
-المبيعات
-
-</th>
-
-<th>
-
-التكلفة
-
-</th>
-
-<th>
-
-الربح
-
-</th>
+<td>{{"%.2f"|format(p.profit)}} JOD</td>
 
 </tr>
+
+{% endfor %}
+
 
 </table>
 
