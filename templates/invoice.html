@@ -8,7 +8,18 @@
 <title>فاتورة بيع - زاد البيت</title>
 
 <style>
+<style>
 
+@page {
+    size: A4 portrait;
+    margin: 15mm;
+}
+
+body{
+    font-family:Arial;
+    background:#f3f4f6;
+    padding:20px;
+}
 body{
     font-family:Arial;
     background:#f3f4f6;
@@ -92,18 +103,26 @@ button,a{
 
 @media print{
 
+    @page {
+        size: A4 portrait;
+        margin: 15mm;
+    }
+
+
     .no-print{
-        display:none;
+        display:none !important;
     }
 
 
     body{
         background:white;
+        padding:0;
     }
 
 
     .card{
         box-shadow:none;
+        border:none;
     }
 
 }
