@@ -177,6 +177,7 @@ def reports():
         "reports.html",
         sales=sales,
         summary=summary,
+        profit=profit,
         from_date=from_date,
         to_date=to_date
     )
