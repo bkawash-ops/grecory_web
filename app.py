@@ -290,8 +290,9 @@ def profit_report():
 
         result = cur.fetchone()
 
-        total_cost = result["total_cost"]            
-        total_profit = total_sales - total_cost
+        total_cost = result["total_cost"]    
+        
+    total_profit = total_sales - total_cost
     profit_details = []
 
     if from_date and to_date:
