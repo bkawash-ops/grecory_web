@@ -7,6 +7,15 @@ from psycopg2.extras import RealDictCursor
 import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from io import BytesIO
+from flask import send_file
+
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+import arabic_reshaper
+from bidi.algorithm import get_display
 app = Flask(__name__)
 app.secret_key = "grocery-secret-key"
 
@@ -606,7 +615,6 @@ def reports_pdf():
 
 
     conn = db()
-
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
@@ -632,7 +640,6 @@ def reports_pdf():
             to_date
         ))
 
-
     else:
 
         cur.execute("""
@@ -657,32 +664,89 @@ def reports_pdf():
 
     pdf = BytesIO()
 
-    p = canvas.Canvas(pdf)
 
-
-    y = 800
-
-
-    p.setFont(
-        "Helvetica",
-        14
+    pdfmetrics.registerFont(
+        TTFont(
+            "Arabic",
+            "fonts/DejaVuSans.ttf"
+        )
     )
 
 
-    p.drawString(
-        350,
+    c = canvas.Canvas(pdf)
+
+
+    width, height = c._pagesize
+
+
+    y = height - 50
+
+
+
+    c.setFont(
+        "Arabic",
+        18
+    )
+
+
+    title = "زاد البيت - تقرير المبيعات"
+
+
+    c.drawRightString(
+        width-50,
         y,
-        "ZAD AL BAYT MARKET"
+        title
     )
 
 
     y -= 40
 
 
-    p.drawString(
-        350,
+    c.setFont(
+        "Arabic",
+        12
+    )
+
+
+    if from_date and to_date:
+
+        period = f"الفترة من {from_date} الى {to_date}"
+
+        period = get_display(
+            arabic_reshaper.reshape(period)
+        )
+
+        c.drawRightString(
+            width-50,
+            y,
+            period
+        )
+
+        y -= 30
+
+
+
+    count = len(sales)
+
+
+    total_sales = sum(
+        float(s["total"])
+        for s in sales
+    )
+
+
+    text = f"عدد الفواتير: {count}     إجمالي المبيعات: {total_sales:.2f} JOD"
+
+
+    text = get_display(
+        arabic_reshaper.reshape(text)
+    )
+
+
+    c.drawRightString(
+        width-50,
         y,
-        "Sales Report"
+        text
     )
 
 
@@ -690,34 +754,107 @@ def reports_pdf():
 
 
 
+    # عناوين الجدول
+
+    headers = [
+        "رقم الفاتورة",
+        "التاريخ",
+        "البائع",
+        "المبلغ"
+    ]
+
+
+    x_positions = [
+        60,
+        180,
+        350,
+        480
+    ]
+
+
+    c.setFont(
+        "Arabic",
+        11
+    )
+
+
+    for i,h in enumerate(headers):
+
+        c.drawString(
+            x_positions[i],
+            y,
+            h
+        )
+
+
+    y -= 25
+
+
+
     for s in sales:
 
 
-        text = (
-            f"Invoice: {s['invoice_number']}   "
-            f"User: {s['username']}   "
-            f"Total: {s['total']} JOD"
+        date = s["sale_date"].strftime(
+            "%Y-%m-%d %H:%M"
         )
 
 
-        p.drawString(
-            50,
-            y,
-            text
-        )
+        row = [
+
+            str(s["invoice_number"]),
+            date,
+            s["username"],
+            f"{float(s['total']):.2f} JOD"
+
+        ]
 
 
-        y -= 25
+        for i,value in enumerate(row):
+
+            c.drawString(
+                x_positions[i],
+                y,
+                str(value)
+            )
+
+
+        y -= 22
+
 
 
         if y < 50:
 
-            p.showPage()
-            y = 800
+            c.showPage()
+
+            y = height - 50
 
 
 
-    p.save()
+    y -= 30
+
+
+    footer = "شكراً لتسوقكم معنا 🌹"
+
+
+    footer = get_display(
+        arabic_reshaper.reshape(footer)
+    )
+
+
+    c.setFont(
+        "Arabic",
+        12
+    )
+
+
+    c.drawCentredString(
+        width/2,
+        y,
+        footer
+    )
+
+
+    c.save()
 
 
     pdf.seek(0)
@@ -725,7 +862,7 @@ def reports_pdf():
 
     return send_file(
         pdf,
-        download_name="sales_report.pdf",
+        download_name="تقرير_المبيعات.pdf",
         as_attachment=True
     )
 @app.route("/logout")
