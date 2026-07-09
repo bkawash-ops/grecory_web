@@ -198,7 +198,10 @@ def reports():
 
 
     profit = cur.fetchone()
-    
+    if profit is None:
+    profit = {
+        "total_profit": 0
+    }
 
         # تقرير الأرباح التفصيلي
 
