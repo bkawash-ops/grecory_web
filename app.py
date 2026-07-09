@@ -499,7 +499,7 @@ def checkout():
                 sale_price,
                 total
             )
-            VALUES (%s,%s,%s,%s,%s,%s)
+            VALUES (%s,%s,%s,%s,%s,%s,%s)
         """,
         (
             sale_id,
