@@ -495,6 +495,7 @@ def checkout():
                 product_id,
                 product_name,
                 quantity,
+                purchase_price,
                 sale_price,
                 total
             )
