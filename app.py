@@ -103,8 +103,14 @@ def reports():
                 username,
                 total
             FROM sales
+            WHERE DATE(sale_date AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Amman')
+                  BETWEEN %s AND %s
             ORDER BY id DESC
-        """)
+        """,
+        (
+            from_date,
+            to_date
+        ))
 
         sales = cur.fetchall()
 
