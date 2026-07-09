@@ -66,6 +66,11 @@ value="{{to_date or ''}}">
 {{ "%.2f"|format(summary.total_sales) }}
 JOD
 </p>
+<p>
+📈 صافي الربح:
+{{ "%.2f"|format(profit.total_profit) }}
+JOD
+</p>
 <div class="no-print">
 
 <button onclick="window.print()"
