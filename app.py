@@ -383,6 +383,7 @@ def add_to_cart():
         "id": product["id"],
         "name": product["name"],
         "price": product["sale_price"],
+        "purchase_price": product["purchase_price"],
         "qty": qty,
         "total": qty * product["sale_price"]
 
