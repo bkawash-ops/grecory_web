@@ -234,6 +234,8 @@ def profit_report():
 
 
     total_sales = 0
+    total_cost = 0
+    total_profit = 0
 
 
     if from_date and to_date:
@@ -261,19 +263,46 @@ def profit_report():
         result = cur.fetchone()
 
         total_sales = result["total_sales"]
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(
+                    purchase_price * quantity
+                ),0) AS total_cost
+
+            FROM sale_items si
+
+            JOIN sales s
+            ON si.sale_id = s.id
+
+            WHERE DATE(
+                s.sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+
+            BETWEEN %s AND %s
+
+        """,
+        (
+            from_date,
+            to_date
+        ))
 
 
+        result = cur.fetchone()
+
+        total_cost = result["total_cost"]            
+        total_profit = total_sales - total_cost
     cur.close()
     conn.close()
 
-
+    
     return render_template(
         "profit_report.html",
         from_date=from_date,
         to_date=to_date,
         total_sales= "%.2f" % total_sales,
-        total_cost="0.00",
-        total_profit="0.00"
+        total_cost="%.2f" % total_cost,
+        total_profit="%.2f" % total_profit
     )
 @app.route("/products")
 def products():
