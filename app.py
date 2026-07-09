@@ -161,13 +161,41 @@ def reports():
         """)
 
     summary = cur.fetchone()
-    cur.execute("""
-        SELECT
-            COALESCE(SUM(
-                (sale_price - purchase_price) * quantity
-            ),0) AS total_profit
-        FROM sale_items
-    """)
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(
+                    (si.sale_price - si.purchase_price) * si.quantity
+                ),0) AS total_profit
+
+            FROM sale_items si
+
+            JOIN sales s
+            ON si.sale_id = s.id
+
+            WHERE DATE(
+                s.sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+            BETWEEN %s AND %s
+
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+    else:
+
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(
+                    (sale_price - purchase_price) * quantity
+                ),0) AS total_profit
+            FROM sale_items
+        """)
+
 
     profit = cur.fetchone()
     cur.close()
