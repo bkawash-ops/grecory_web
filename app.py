@@ -201,11 +201,82 @@ def reports():
     cur.close()
     conn.close()
 
+        # تقرير الأرباح التفصيلي
+
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                si.product_name,
+
+                SUM(si.quantity) AS qty,
+
+                SUM(si.sale_price * si.quantity) AS sales,
+
+                SUM(si.purchase_price * si.quantity) AS cost,
+
+                SUM(
+                    (si.sale_price - si.purchase_price)
+                    * si.quantity
+                ) AS profit
+
+
+            FROM sale_items si
+
+
+            JOIN sales s
+            ON si.sale_id = s.id
+
+
+            WHERE DATE(
+                s.sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+            BETWEEN %s AND %s
+
+
+            GROUP BY si.product_name
+
+            ORDER BY profit DESC
+
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+    else:
+
+        cur.execute("""
+            SELECT
+                product_name,
+
+                SUM(quantity) AS qty,
+
+                SUM(sale_price * quantity) AS sales,
+
+                SUM(purchase_price * quantity) AS cost,
+
+                SUM(
+                    (sale_price - purchase_price)
+                    * quantity
+                ) AS profit
+
+            FROM sale_items
+
+            GROUP BY product_name
+
+            ORDER BY profit DESC
+
+        """)
+
+
+    profit_details = cur.fetchall()
     return render_template(
         "reports.html",
         sales=sales,
         summary=summary,
-        profit=profit,
+        profit_details=profit_details,
         from_date=from_date,
         to_date=to_date
     )
