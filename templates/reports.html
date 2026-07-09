@@ -71,6 +71,56 @@ JOD
 {{ "%.2f"|format(profit.total_profit) }}
 JOD
 </p>
+<h2>
+📈 تقرير الأرباح التفصيلي
+</h2>
+
+
+<table border="1" width="100%">
+
+<tr>
+
+<th>المنتج</th>
+<th>الكمية</th>
+<th>المبيعات</th>
+<th>التكلفة</th>
+<th>الربح</th>
+
+</tr>
+
+
+{% for p in profit_details %}
+
+<tr>
+
+<td>{{p.product_name}}</td>
+
+<td>
+{{p.qty}}
+</td>
+
+
+<td>
+{{"%.2f"|format(p.sales)}} JOD
+</td>
+
+
+<td>
+{{"%.2f"|format(p.cost)}} JOD
+</td>
+
+
+<td>
+{{"%.2f"|format(p.profit)}} JOD
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+</table>
+  
 <div class="no-print">
 
 <button onclick="window.print()"
