@@ -216,6 +216,14 @@ def reports():
         from_date=from_date,
         to_date=to_date
     )
+
+@app.route("/profit_report")
+def profit_report():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    return render_template("profit_report.html")
 @app.route("/products")
 def products():
 
