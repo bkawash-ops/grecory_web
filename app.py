@@ -161,7 +161,15 @@ def reports():
         """)
 
     summary = cur.fetchone()
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(
+                (sale_price - purchase_price) * quantity
+            ),0) AS total_profit
+        FROM sale_items
+    """)
 
+    profit = cur.fetchone()
     cur.close()
     conn.close()
 
