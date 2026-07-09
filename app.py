@@ -119,9 +119,14 @@ def reports():
                 COUNT(*) AS invoices_count,
                 COALESCE(SUM(total),0) AS total_sales
             FROM sales
-            WHERE DATE(sale_date) BETWEEN %s AND %s
-        """, (from_date, to_date))
-
+            WHERE DATE(
+                sale_date AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Amman'
+            ) BETWEEN %s AND %s
+        """,
+        (
+            from_date,
+            to_date
+        ))
     else:
 
         cur.execute("""
