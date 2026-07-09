@@ -292,6 +292,42 @@ def profit_report():
 
         total_cost = result["total_cost"]            
         total_profit = total_sales - total_cost
+    profit_details = []
+
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                si.product_name,
+                SUM(si.quantity) AS qty,
+                SUM(si.total) AS sales,
+                SUM(si.purchase_price * si.quantity) AS cost,
+                SUM(
+                    (si.sale_price - si.purchase_price) * si.quantity
+                ) AS profit
+
+            FROM sale_items si
+
+            JOIN sales s
+            ON si.sale_id = s.id
+
+            WHERE DATE(
+                s.sale_date AT TIME ZONE 'UTC'
+                AT TIME ZONE 'Asia/Amman'
+            )
+            BETWEEN %s AND %s
+
+            GROUP BY si.product_name
+
+            ORDER BY profit DESC
+
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+        profit_details = cur.fetchall()
     cur.close()
     conn.close()
 
@@ -303,6 +339,7 @@ def profit_report():
         total_sales= "%.2f" % total_sales,
         total_cost="%.2f" % total_cost,
         total_profit="%.2f" % total_profit
+        profit_details=profit_details,
     )
 @app.route("/products")
 def products():
