@@ -354,40 +354,41 @@ onkeyup="searchProduct()">
 <tr>
 
 <th>
-المنتج
+#
 </th>
 
+<th>
+المنتج
+</th>
 
 <th>
 سعر الشراء
 </th>
 
-
 <th>
 سعر البيع
 </th>
-
 
 <th>
 الكمية
 </th>
 
-
 <th class="no-print">
 الإجراء
 </th>
 
-
 </tr>
 
 
-
 {% for p in products %}
-
+{% set number = loop.index %}
 
 
 <tr class="product-row">
 
+<td>
+{{loop.index}}
+</td>
 
 <td>
 
