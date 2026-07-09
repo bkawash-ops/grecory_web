@@ -431,7 +431,14 @@ def checkout():
     if not items:
         return "السلة فارغة"
 
+    print("ITEM DATA:")
+    print(items)
 
+
+    total = sum(
+        item["total"]
+        for item in items
+    )
     total = sum(
         item["total"]
         for item in items
