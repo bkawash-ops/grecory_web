@@ -198,8 +198,7 @@ def reports():
 
 
     profit = cur.fetchone()
-    cur.close()
-    conn.close()
+    
 
         # تقرير الأرباح التفصيلي
 
@@ -272,6 +271,8 @@ def reports():
 
 
     profit_details = cur.fetchall()
+    cur.close()
+    conn.close()
     return render_template(
         "reports.html",
         sales=sales,
