@@ -10,45 +10,52 @@
 <style>
 
 body{
-
     font-family:Arial;
     background:#f3f4f6;
-    text-align:center;
-    padding:40px;
-
+    padding:30px;
 }
 
 .card{
 
     background:white;
-
-    width:700px;
-
-    margin:auto;
-
-    padding:30px;
-
+    padding:20px;
     border-radius:12px;
+    box-shadow:0 2px 6px #ccc;
+    margin-bottom:20px;
 
-    box-shadow:0 3px 10px #ccc;
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+th{
+
+    background:#1f2937;
+    color:white;
+
+}
+
+td,th{
+
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+
+}
+
+button{
+
+    padding:10px 20px;
 
 }
 
 a{
 
-    display:inline-block;
-
-    margin-top:30px;
-
-    padding:12px 25px;
-
-    background:#2563eb;
-
-    color:white;
-
     text-decoration:none;
-
-    border-radius:8px;
 
 }
 
@@ -58,27 +65,148 @@ a{
 
 <body>
 
-<div class="card">
-
-<h1>
+<h2>
 
 💰 تقرير الأرباح
 
-</h1>
+</h2>
+
+
+<div class="card">
+
+<form method="GET" action="/profit_report">
+
+من تاريخ
+
+<input
+type="date"
+name="from_date"
+value="{{from_date or ''}}">
+
+إلى تاريخ
+
+<input
+type="date"
+name="to_date"
+value="{{to_date or ''}}">
+
+<button>
+
+🔍 عرض التقرير
+
+</button>
+
+</form>
+
+</div>
+
+
+<div class="card">
 
 <h3>
 
-🚧 سيتم بناء هذا التقرير في الخطوة القادمة
+💰 إجمالي المبيعات
 
 </h3>
+
+<h2>
+
+{{total_sales}}
+
+JOD
+
+</h2>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+
+📦 تكلفة البضاعة
+
+</h3>
+
+<h2>
+
+{{total_cost}}
+
+JOD
+
+</h2>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+
+📈 صافي الربح
+
+</h3>
+
+<h2>
+
+{{total_profit}}
+
+JOD
+
+</h2>
+
+</div>
+
+
+<div class="card">
+
+<table>
+
+<tr>
+
+<th>
+
+المنتج
+
+</th>
+
+<th>
+
+الكمية
+
+</th>
+
+<th>
+
+المبيعات
+
+</th>
+
+<th>
+
+التكلفة
+
+</th>
+
+<th>
+
+الربح
+
+</th>
+
+</tr>
+
+</table>
+
+</div>
+
+<br>
 
 <a href="/reports_menu">
 
 ⬅ العودة
 
 </a>
-
-</div>
 
 </body>
 
