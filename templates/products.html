@@ -9,7 +9,19 @@
 
 
 <style>
+@media print {
+body{
+    background:white;
+}
 
+.card{
+    box-shadow:none;
+}
+    .no-print {
+        display: none !important;
+    }
+
+}
 body{
 
     font-family:Arial;
@@ -197,6 +209,8 @@ td,th{
 <h2>
 📦 إدارة المنتجات
 </h2>
+<div class="no-print">
+
 <button onclick="window.print()" 
 style="
 background:#7c3aed;
@@ -213,8 +227,10 @@ margin-bottom:15px;
 
 </button>
 
+</div>
 
-<div class="card">
+
+<div class="card no-print">
 
 
 <h3>
@@ -304,7 +320,7 @@ placeholder="الباركود (اختياري)">
 
 
 
-<div class="card">
+<div class="card no-print">
 
 
 
@@ -312,7 +328,7 @@ placeholder="الباركود (اختياري)">
 🔍 البحث
 </h3>
 
-
+<div class="no-print">
 <input 
 
 type="text"
@@ -366,7 +382,7 @@ onkeyup="searchProduct()">
 </th>
 
 
-<th>
+<th class="no-print">
 الإجراء
 </th>
 
@@ -414,7 +430,7 @@ JOD
 </td>
 
 
-<td>
+<td class="no-print">
 
 
 <a class="edit"
@@ -459,7 +475,7 @@ onclick="return confirm('هل أنت متأكد من حذف المنتج؟')">
 
 
 
-<a class="back" href="/">
+<a class="back no-print" href="/">
 
 ⬅ العودة للوحة الإدارة
 
