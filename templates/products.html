@@ -477,26 +477,19 @@ onclick="return confirm('هل أنت متأكد من حذف المنتج؟')">
 
 
 
-<script>
-
 
 <script>
 function searchProduct() {
 
-    let input = document.getElementById("search");
-    let filter = input.value.trim().toLowerCase();
+    let filter = document.getElementById("search").value.toLowerCase();
 
     let rows = document.querySelectorAll(".product-row");
 
     rows.forEach(function(row){
 
-        let productCell = row.cells[1];   // إذا كان العمود الأول هو الترقيم
+        let productName = row.cells[1].innerText.toLowerCase();
 
-        if (!productCell) return;
-
-        let text = productCell.textContent.trim().toLowerCase();
-
-        if (text.includes(filter)) {
+        if (productName.indexOf(filter) > -1) {
             row.style.display = "";
         } else {
             row.style.display = "none";
@@ -505,8 +498,6 @@ function searchProduct() {
     });
 
 }
-</script>
-
 </script>
 
 
