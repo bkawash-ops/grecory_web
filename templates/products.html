@@ -480,48 +480,30 @@ onclick="return confirm('هل أنت متأكد من حذف المنتج؟')">
 <script>
 
 
-function searchProduct(){
+function searchProduct() {
 
+    let input = document.getElementById("search");
+    let filter = input.value.trim().toLowerCase();
 
-let input = document.getElementById("search");
+    let rows = document.querySelectorAll(".product-row");
 
+    rows.forEach(function(row){
 
-let filter = input.value.toLowerCase();
+        let productCell = row.cells[1];   // إذا كان العمود الأول هو الترقيم
 
+        if (!productCell) return;
 
-let rows = document.getElementsByClassName("product-row");
+        let text = productCell.textContent.trim().toLowerCase();
 
+        if (text.includes(filter)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
 
-
-for(let i=0;i<rows.length;i++){
-
-
-llet name = rows[i]
-.getElementsByTagName("td")[1]
-.innerText
-.toLowerCase();
-
-
-if(name.includes(filter)){
-
-
-rows[i].style.display="";
-
-
-}else{
-
-
-rows[i].style.display="none";
-
+    });
 
 }
-
-
-}
-
-
-}
-
 
 
 </script>
