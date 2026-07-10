@@ -483,7 +483,10 @@ onclick="return confirm('هل أنت متأكد من حذف المنتج؟')">
 function searchProduct() {
 
     let input = document.getElementById("search");
-    let filter = input.value.trim().toLowerCase();
+    let filter = input.value
+        .replace(/[\u200E\u200F\u202A-\u202E]/g, "")
+        .trim()
+        .toLowerCase();
 
     let rows = document.querySelectorAll(".product-row");
 
@@ -493,7 +496,10 @@ function searchProduct() {
 
         if (!productCell) return;
 
-        let text = productCell.textContent.trim().toLowerCase();
+        let text = productCell.textContent
+            .replace(/[\u200E\u200F\u202A-\u202E]/g, "")
+            .trim()
+            .toLowerCase();
 
         if (text.includes(filter)) {
             row.style.display = "";
