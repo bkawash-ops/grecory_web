@@ -508,7 +508,7 @@ def add_product():
     cur.close()
     conn.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("products"))
 
 
 
