@@ -496,14 +496,10 @@ let rows = document.getElementsByClassName("product-row");
 for(let i=0;i<rows.length;i++){
 
 
-let name = rows[i]
-
-.getElementsByTagName("td")[0]
-
+llet name = rows[i]
+.getElementsByTagName("td")[1]
 .innerText
-
 .toLowerCase();
-
 
 
 if(name.includes(filter)){
