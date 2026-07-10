@@ -483,15 +483,20 @@ onclick="return confirm('هل أنت متأكد من حذف المنتج؟')">
 <script>
 function searchProduct() {
 
-    let filter = document.getElementById("search").value.toLowerCase();
+    let input = document.getElementById("search");
+    let filter = input.value.trim().toLowerCase();
 
     let rows = document.querySelectorAll(".product-row");
 
     rows.forEach(function(row){
 
-        let productName = row.cells[1].innerText.toLowerCase();
+        let productCell = row.cells[1];   // إذا كان العمود الأول هو الترقيم
 
-        if (productName.indexOf(filter) > -1) {
+        if (!productCell) return;
+
+        let text = productCell.textContent.trim().toLowerCase();
+
+        if (text.includes(filter)) {
             row.style.display = "";
         } else {
             row.style.display = "none";
