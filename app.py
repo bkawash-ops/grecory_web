@@ -239,8 +239,28 @@ def reports():
 @app.route("/notifications")
 def notifications():
 
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    # المنتجات الناقصة
+    cur.execute("""
+        SELECT *
+        FROM products
+        WHERE qty <= 5
+        ORDER BY qty ASC
+    """)
+
+    low_stock_products = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
     return render_template(
-        "notifications.html"
+        "notifications.html",
+        low_stock_products=low_stock_products
     )
 @app.route("/profit_report")
 def profit_report():
