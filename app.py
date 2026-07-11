@@ -232,7 +232,12 @@ def reports():
         from_date=from_date,
         to_date=to_date
     )
+@app.route("/notifications")
+def notifications():
 
+    return render_template(
+        "notifications.html"
+    )
 @app.route("/profit_report")
 def profit_report():
 
