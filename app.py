@@ -103,7 +103,7 @@ def index():
     return render_template(
         "index.html",
         products=products,
-        low_stock_count=low_stock_count
+        low_stock_count=low_stock_count,
         notification_count=notification_count
     )
 @app.route("/reports_menu")
