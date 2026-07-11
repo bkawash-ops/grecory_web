@@ -351,6 +351,65 @@ def profit_report():
         total_profit="%.2f" % total_profit,
         profit_details=profit_details
     )
+
+@app.route("/stock_report")
+def stock_report():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    cur.execute("""
+        SELECT
+            p.name,
+
+            p.quantity AS current_qty,
+
+            COALESCE(
+                SUM(si.quantity),
+                0
+            ) AS sold_qty,
+
+            COALESCE(
+                SUM(si.total),
+                0
+            ) AS sales_value
+
+
+        FROM products p
+
+
+        LEFT JOIN sale_items si
+
+        ON p.id = si.product_id
+
+
+        GROUP BY
+            p.id
+
+
+        ORDER BY
+            p.name
+
+    """)
+
+
+    products = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "stock_report.html",
+        products=products
+    )
 @app.route("/products")
 def products():
 
