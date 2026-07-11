@@ -239,7 +239,7 @@ def reports():
 @app.route("/notifications")
 def notifications():
 
-    conn = get_db()
+    conn = db()
     cur = conn.cursor()
 
 
