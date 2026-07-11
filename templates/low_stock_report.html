@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>المنتجات الناقصة</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f3f4f6;
+    padding:20px;
+}
+
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+
+}
+
+
+th{
+
+    background:#1f2937;
+    color:white;
+
+}
+
+
+td,th{
+
+    padding:12px;
+    border:1px solid #ccc;
+    text-align:center;
+
+}
+
+
+.no-print{
+
+    text-align:center;
+    margin-bottom:20px;
+
+}
+
+
+@media print{
+
+    .no-print{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h2>
+⚠️ تقرير المنتجات الناقصة
+</h2>
+
+
+<div class="no-print">
+
+
+<button onclick="window.print()"
+style="
+background:#7c3aed;
+color:white;
+padding:12px 25px;
+border:none;
+border-radius:8px;
+font-size:18px;
+">
+
+🖨️ طباعة التقرير
+
+</button>
+
+
+<a href="/reports_menu"
+style="
+background:#6b7280;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+text-decoration:none;
+margin-right:10px;
+">
+
+⬅ العودة
+
+</a>
+
+
+</div>
+
+
+
+<table>
+
+
+<tr>
+
+<th>
+#
+</th>
+
+<th>
+المنتج
+</th>
+
+<th>
+الكمية الحالية
+</th>
+
+<th>
+الحالة
+</th>
+
+
+</tr>
+
+
+
+{% for p in products %}
+
+
+<tr>
+
+<td>
+{{loop.index}}
+</td>
+
+
+<td>
+{{p.name}}
+</td>
+
+
+<td>
+{{p.quantity}}
+</td>
+
+
+<td>
+⚠️ يحتاج طلب
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+
+</body>
+
+</html>
