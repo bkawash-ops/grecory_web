@@ -139,7 +139,46 @@ h2{
 <h3>
 ⚙️ لوحة الإدارة
 </h3>
+{% if low_stock_count > 0 %}
 
+<div style="
+background:#fff3cd;
+border:2px solid #f59e0b;
+border-radius:10px;
+padding:20px;
+margin:20px 0;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+">
+
+🔴 يوجد
+
+<span style="color:red;font-size:30px;">
+{{low_stock_count}}
+</span>
+
+منتج يحتاج إعادة طلب
+
+<br><br>
+
+<a href="/low_stock_report"
+style="
+background:#dc2626;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+text-decoration:none;
+font-size:18px;
+">
+
+📦 عرض التقرير
+
+</a>
+
+</div>
+
+{% endif %}
 
 
 <a href="/products" class="invoice">
