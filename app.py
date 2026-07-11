@@ -87,13 +87,20 @@ def index():
         ORDER BY name
     """)
     products = cur.fetchall()
+    cur.execute("""
+        SELECT COUNT(*) AS low_stock_count
+        FROM products
+        WHERE quantity <= 5
+    """)
 
+    low_stock_count = cur.fetchone()["low_stock_count"]
     cur.close()
     conn.close()
 
     return render_template(
         "index.html",
-        products=products
+        products=products,
+        low_stock_count=low_stock_count
     )
 @app.route("/reports_menu")
 def reports_menu():
