@@ -507,8 +507,10 @@ def low_stock_report():
 
     return render_template(
         "low_stock_report.html",
-        products=products
+        products=products,
+        total_products=len(products)
     )
+   
 @app.route("/products")
 def products():
 
