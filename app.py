@@ -369,7 +369,7 @@ def stock_report():
             p.name,
 
             p.quantity AS current_qty,
-
+            (p.quantity * p.purchase_price) AS stock_value,
             COALESCE(
                 SUM(si.quantity),
                 0
