@@ -96,11 +96,15 @@ def index():
     low_stock_count = cur.fetchone()["low_stock_count"]
     cur.close()
     conn.close()
+    notification_count = 0
 
+    if low_stock_count > 0:
+        notification_count += 1
     return render_template(
         "index.html",
         products=products,
         low_stock_count=low_stock_count
+        notification_count=notification_count
     )
 @app.route("/reports_menu")
 def reports_menu():
