@@ -124,12 +124,61 @@ h2{
 <div class="card">
 
 
+{% if low_stock_products %}
+
 <div class="notification warning">
 
-⚠️ يوجد منتجات تحتاج إعادة طلب
+⚠️ يوجد 
+{{ low_stock_products|length }}
+منتجات تحتاج إعادة طلب
+
+<br><br>
+
+{% for p in low_stock_products %}
+
+<div style="
+background:white;
+padding:8px;
+margin:5px;
+border-radius:6px;
+">
+
+{{p.name}}
+
+-
+الكمية:
+{{p.qty}}
 
 </div>
 
+{% endfor %}
+
+<br>
+
+<a href="/low_stock_report"
+style="
+background:#dc2626;
+color:white;
+padding:10px 20px;
+border-radius:8px;
+text-decoration:none;
+">
+
+📦 فتح تقرير النقص
+
+</a>
+
+</div>
+
+{% else %}
+
+<div class="notification success">
+
+✅ المخزون جيد ولا يوجد منتجات ناقصة
+
+</div>
+
+{% endif %}
 
 
 <div class="notification info">
