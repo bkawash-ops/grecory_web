@@ -243,16 +243,15 @@ def notifications():
     cur = conn.cursor()
 
 
-    # المنتجات الناقصة
+   # المنتجات الناقصة
     cur.execute("""
         SELECT *
         FROM products
-        WHERE qty <= 5
-        ORDER BY qty ASC
+        WHERE quantity <= 5
+        ORDER BY quantity ASC
     """)
 
     low_stock_products = cur.fetchall()
-
 
     cur.close()
     conn.close()
