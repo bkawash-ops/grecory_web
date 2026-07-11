@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>تقرير حركة المخزون</title>
+
+</head>
+
+
+<body>
+
+<h2>
+📦 تقرير حركة المخزون
+</h2>
+
+
+<table border="1" width="100%">
+
+<tr>
+
+<th>
+المنتج
+</th>
+
+<th>
+المخزون الحالي
+</th>
+
+<th>
+الكمية المباعة
+</th>
+
+<th>
+قيمة المبيعات
+</th>
+
+</tr>
+
+
+{% for p in products %}
+
+<tr>
+
+<td>
+{{p.name}}
+</td>
+
+
+<td>
+{{p.current_qty}}
+</td>
+
+
+<td>
+{{p.sold_qty}}
+</td>
+
+
+<td>
+{{"%.2f"|format(p.sales_value)}}
+JOD
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+<br>
+
+
+<a href="/reports_menu">
+⬅ العودة
+</a>
+
+
+</body>
+
+</html>
