@@ -469,6 +469,46 @@ def top_products_report():
         "top_products_report.html",
         products=products
     )
+
+@app.route("/low_stock_report")
+def low_stock_report():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    cur.execute("""
+        SELECT
+
+            id,
+            name,
+            quantity
+
+        FROM products
+
+        WHERE quantity <= 5
+
+        ORDER BY quantity ASC
+
+    """)
+
+
+    products = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "low_stock_report.html",
+        products=products
+    )
 @app.route("/products")
 def products():
 
