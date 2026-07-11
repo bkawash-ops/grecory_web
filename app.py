@@ -410,6 +410,65 @@ def stock_report():
         "stock_report.html",
         products=products
     )
+
+@app.route("/top_products_report")
+def top_products_report():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    cur.execute("""
+        SELECT
+
+            si.product_name,
+
+            COALESCE(
+                SUM(si.quantity),
+                0
+            ) AS sold_qty,
+
+
+            COUNT(
+                DISTINCT si.sale_id
+            ) AS invoices_count,
+
+
+            COALESCE(
+                SUM(si.total),
+                0
+            ) AS sales_value
+
+
+        FROM sale_items si
+
+
+        GROUP BY
+            si.product_name
+
+
+        ORDER BY
+            sold_qty DESC
+
+    """)
+
+
+    products = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "top_products_report.html",
+        products=products
+    )
 @app.route("/products")
 def products():
 
