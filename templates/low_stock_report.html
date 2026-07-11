@@ -175,7 +175,37 @@ margin-right:10px;
 
 
 <td>
-⚠️ يحتاج طلب
+
+{% if p.quantity == 0 %}
+
+<span style="
+background:#dc2626;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+font-weight:bold;
+">
+
+🔴 نفد من المخزون
+
+</span>
+
+{% else %}
+
+<span style="
+background:#f59e0b;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+font-weight:bold;
+">
+
+🟠 يحتاج طلب
+
+</span>
+
+{% endif %}
+
 </td>
 
 
