@@ -7,234 +7,92 @@
 
 <title>تفاصيل الفاتورة</title>
 
-<style>
-
-body{
-    font-family:Arial;
-    background:#f3f4f6;
-    padding:20px;
-}
-
-
-.card{
-
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 5px #ccc;
-    margin-bottom:20px;
-
-}
-
-
-table{
-
-    width:100%;
-    border-collapse:collapse;
-
-}
-
-
-th{
-
-    background:#1f2937;
-    color:white;
-
-}
-
-
-td,th{
-
-    padding:10px;
-    text-align:center;
-    border:1px solid #ddd;
-
-}
-
-
-button,a{
-
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-    text-decoration:none;
-    cursor:pointer;
-
-}
-
-
-.print{
-
-    background:#2563eb;
-    color:white;
-
-}
-
-
-.back{
-
-    background:#6b7280;
-    color:white;
-
-}
-
-
-@media print{
-
-    .no-print{
-        display:none;
-    }
-
-    body{
-        background:white;
-    }
-
-    .card{
-        box-shadow:none;
-    }
-
-}
-
-
-</style>
-
 </head>
 
 
 <body>
 
 
-<div class="card" style="text-align:center;">
-
-<h1>
-🛒 زاد البيت
-</h1>
-
-<h3>
-ZAD AL BAYT MARKET
-</h3>
-
-<hr>
-
 <h2>
-🧾 فاتورة مبيعات رقم: {{sale.invoice_number}}
+🧾 فاتورة رقم {{invoice[0]}}
 </h2>
 
 
 <p>
-📅 التاريخ:
-{{sale.sale_date.strftime("%Y-%m-%d %H:%M")}}
+المستخدم: {{invoice[1]}}
 </p>
 
 
 <p>
-👤 البائع:
-{{sale.username}}
+التاريخ:
+{{invoice[3].strftime('%d-%m-%Y %H:%M')}}
 </p>
 
 
-</div>
-
-
-
-
-<div class="card">
-
-
-<table>
-
+<table border="1" width="100%">
 
 <tr>
 
-<th>المنتج</th>
+<th>
+الصنف
+</th>
 
-<th>الكمية</th>
+<th>
+الكمية
+</th>
 
-<th>السعر</th>
+<th>
+السعر
+</th>
 
-<th>المجموع</th>
+<th>
+المجموع
+</th>
 
 </tr>
-
 
 
 {% for item in items %}
 
 <tr>
 
-<td>{{item.product_name}}</td>
-
-<td>{{item.quantity}}</td>
+<td>
+{{item[0]}}
+</td>
 
 <td>
-{{"%.2f"|format(item.sale_price)}}
+{{item[1]}}
+</td>
+
+<td>
+{{"%.2f"|format(item[2])}}
 JOD
 </td>
 
 <td>
-{{"%.2f"|format(item.total)}}
+{{"%.2f"|format(item[3])}}
 JOD
 </td>
+
 
 </tr>
-
 
 {% endfor %}
-
-
-
-<tr>
-
-<th colspan="3">
-الإجمالي
-</th>
-
-<th>
-
-{{"%.2f"|format(sale.total)}}
-
-JOD
-
-</th>
-
-</tr>
 
 
 </table>
 
 
-</div>
-
-<div class="card" style="text-align:center;">
-
 <h3>
-شكراً لتسوقكم معنا 🌹
+الإجمالي:
+{{"%.2f"|format(invoice[2])}}
+JOD
 </h3>
 
-<p>
-نتمنى لكم يوماً سعيداً
-</p>
 
-</div>
-
-<div class="no-print">
-
-
-<button class="print" onclick="window.print()">
-
-🖨 طباعة
-
-</button>
-
-
-<a class="back" href="/reports">
-
-⬅ العودة للتقارير
-
+<a href="/invoices">
+⬅ العودة للفواتير
 </a>
-
-
-</div>
 
 
 </body>
