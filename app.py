@@ -237,7 +237,7 @@ def reports():
         to_date=to_date
     )
 
-@app.route("/report_sellers")
+@app.route("/report_sellers", methods=["GET"])
 def report_sellers():
 
     if session.get("user") != "admin":
@@ -249,7 +249,11 @@ def report_sellers():
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
-    cur.execute("""
+    from_date = request.args.get("from_date")
+    to_date = request.args.get("to_date")
+
+
+    query = """
         SELECT
             username,
             COUNT(*) AS invoice_count,
@@ -257,23 +261,66 @@ def report_sellers():
 
         FROM sales
 
+    """
+
+
+    params = []
+
+
+    if from_date and to_date:
+
+        query += """
+            WHERE sale_date::date BETWEEN %s AND %s
+        """
+
+        params.extend([
+            from_date,
+            to_date
+        ])
+
+
+    query += """
         GROUP BY username
-
         ORDER BY total_sales DESC
+    """
 
-    """)
+
+    cur.execute(
+        query,
+        params
+    )
 
 
     sellers = cur.fetchall()
+
+
+
+    # الإجماليات
+
+    total_invoices = sum(
+        s["invoice_count"]
+        for s in sellers
+    )
+
+
+    total_sales = sum(
+        float(s["total_sales"])
+        for s in sellers
+    )
 
 
     cur.close()
     conn.close()
 
 
+
     return render_template(
         "report_sellers.html",
-        sellers=sellers
+        sellers=sellers,
+        total_invoices=total_invoices,
+        total_sales=total_sales,
+        from_date=from_date,
+        to_date=to_date
     )
 @app.route("/notifications")
 def notifications():
