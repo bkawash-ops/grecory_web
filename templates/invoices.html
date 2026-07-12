@@ -37,7 +37,9 @@
 <th>
 التاريخ
 </th>
-
+<th>
+الإجراء
+</th>
 </tr>
 
 
@@ -60,7 +62,22 @@
 <td>
 {{ inv[4].strftime('%d-%m-%Y %H:%M') }}
 </td>
+<td>
 
+<a href="/invoice/{{inv[0]}}"
+style="
+background:#2563eb;
+color:white;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
+">
+
+👁️ عرض
+
+</a>
+
+</td>
 
 </tr>
 
