@@ -16,7 +16,19 @@
 <h2>
 🧾 سجل الفواتير
 </h2>
-
+<input 
+type="text"
+id="search"
+placeholder="🔍 ابحث برقم الفاتورة..."
+onkeyup="searchInvoice()"
+style="
+padding:10px;
+width:300px;
+margin-bottom:20px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+">
 
 <table border="1" width="100%">
 
@@ -45,7 +57,7 @@
 
 {% for inv in invoices %}
 
-<tr>
+<tr class="invoice-row">
 
 <td>
 {{inv[1]}}
@@ -62,21 +74,11 @@
 <td>
 {{ inv[4].strftime('%d-%m-%Y %H:%M') }}
 </td>
+
 <td>
 
-<a href="/invoice/{{inv[1]}}"
-style="
-background:#2563eb;
-color:white;
-padding:6px 12px;
-border-radius:6px;
-text-decoration:none;
-font-size:14px;
-display:inline-block;
-">
-
+<a href="/invoice/{{inv[1]}}">
 👁️ عرض
-
 </a>
 
 </td>
