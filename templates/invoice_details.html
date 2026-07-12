@@ -259,7 +259,56 @@ td,th{
 
 
 </table>
+{% if returns %}
 
+<h3 style="color:#dc2626;">
+🔄 المرتجعات
+</h3>
+
+
+<table border="1" width="100%">
+
+<tr>
+
+<th>
+الصنف
+</th>
+
+<th>
+الكمية المرتجعة
+</th>
+
+<th>
+القيمة
+</th>
+
+</tr>
+
+
+{% for r in returns %}
+
+<tr>
+
+<td>
+{{r[0]}}
+</td>
+
+<td>
+{{r[1]}}
+</td>
+
+<td>
+{{"%.2f"|format(r[2])}} JOD
+</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+{% endif %}
 
 
 <div class="total">
