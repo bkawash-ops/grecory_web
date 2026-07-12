@@ -1330,39 +1330,39 @@ def backup():
 def return_invoice(invoice_number):
     if request.method == "POST":
 
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+        conn = db()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    invoice_number = request.form["invoice_number"]
-    sale_id = request.form["sale_id"]
+        invoice_number = request.form["invoice_number"]
+        sale_id = request.form["sale_id"]
 
-    username = session.get("user")
-
-
-    # حساب قيمة المرتجع
-    return_total = 0
+        username = session.get("user")
 
 
-    # إنشاء رأس المرتجع
-    cur.execute("""
-        INSERT INTO returns
+        # حساب قيمة المرتجع
+        return_total = 0
+
+
+        # إنشاء رأس المرتجع
+        cur.execute("""
+            INSERT INTO returns
+            (
+                sale_id,
+                invoice_number,
+                username,
+                total
+            )
+            VALUES (%s,%s,%s,%s)
+            RETURNING id
+        """,
         (
             sale_id,
             invoice_number,
             username,
-            total
-        )
-        VALUES (%s,%s,%s,%s)
-        RETURNING id
-    """,
-    (
-        sale_id,
-        invoice_number,
-        username,
-        0
-    ))
+            0
+        ))
 
-    return_id = cur.fetchone()["id"]
+        return_id = cur.fetchone()["id"]
 
 
 
