@@ -12,18 +12,20 @@
 <style>
 
 body{
-    font-family:Arial;
-    background:#f3f4f6;
-    padding:30px;
+
+font-family:Arial;
+background:#f3f4f6;
+padding:30px;
+
 }
 
 
 .card{
 
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 2px 6px #ccc;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 6px #ccc;
 
 }
 
@@ -35,11 +37,39 @@ text-align:center;
 }
 
 
+.filter{
+
+background:#f9fafb;
+padding:15px;
+border-radius:10px;
+text-align:center;
+
+}
+
+
+input{
+
+padding:8px;
+margin:5px;
+
+}
+
+
+button{
+
+padding:10px 20px;
+background:#2563eb;
+color:white;
+border:0;
+border-radius:8px;
+
+}
+
+
 table{
 
 width:100%;
 border-collapse:collapse;
-
 margin-top:20px;
 
 }
@@ -62,19 +92,60 @@ text-align:center;
 }
 
 
-.back{
+.summary{
 
-display:inline-block;
 margin-top:20px;
+font-size:20px;
+font-weight:bold;
+background:#f3f4f6;
+padding:15px;
+border-radius:10px;
 
-background:#6b7280;
+}
+
+
+.print{
+
+display:block;
+background:#059669;
 color:white;
-
-padding:12px 25px;
-
+padding:12px;
+margin-top:20px;
+text-align:center;
+text-decoration:none;
 border-radius:8px;
 
+}
+
+
+.back{
+
+display:block;
+background:#6b7280;
+color:white;
+padding:12px;
+margin-top:10px;
+text-align:center;
 text-decoration:none;
+border-radius:8px;
+
+}
+
+
+
+@media print{
+
+.filter,.print,.back{
+
+display:none;
+
+}
+
+body{
+
+background:white;
+
+}
 
 }
 
@@ -94,6 +165,43 @@ text-decoration:none;
 <h2>
 👤 تقرير البائعين
 </h2>
+
+
+<div class="filter">
+
+
+<form method="get">
+
+
+من تاريخ:
+
+<input 
+type="date"
+name="from_date"
+value="{{from_date or ''}}"
+>
+
+
+إلى تاريخ:
+
+<input 
+type="date"
+name="to_date"
+value="{{to_date or ''}}"
+>
+
+
+<button>
+
+عرض التقرير
+
+</button>
+
+
+</form>
+
+
+</div>
 
 
 
@@ -116,16 +224,12 @@ text-decoration:none;
 إجمالي المبيعات
 </th>
 
-
 </tr>
-
 
 
 {% for s in sellers %}
 
-
 <tr>
-
 
 <td>
 {{s["username"]}}
@@ -144,11 +248,34 @@ text-decoration:none;
 
 </tr>
 
-
 {% endfor %}
 
 
 </table>
+
+
+
+<div class="summary">
+
+📋 إجمالي الفواتير:
+{{total_invoices}}
+
+<br><br>
+
+💰 إجمالي المبيعات:
+{{"%.2f"|format(total_sales)}} JOD
+
+</div>
+
+
+
+<a class="print"
+href="#"
+onclick="window.print();return false;">
+
+🖨️ طباعة التقرير
+
+</a>
 
 
 
