@@ -1326,9 +1326,11 @@ def backup():
 
         return f"حدث خطأ أثناء النسخ الاحتياطي: {e}"
 
-@app.route("/return_invoice/<int:invoice_number>")
+@app.route("/return_invoice/<int:invoice_number>", methods=["GET","POST"])
 def return_invoice(invoice_number):
+    if request.method == "POST":
 
+        return "تم إرسال المرتجع بنجاح - اختبار فقط"
     conn = db()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
