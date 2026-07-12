@@ -1414,8 +1414,29 @@ def return_invoice(invoice_number):
 
 
                     return_total += item_total
+                    # التأكد أن كمية المرتجع لا تتجاوز كمية الفاتورة
+
+                    cur.execute("""
+                        SELECT quantity
+                        FROM sale_items
+                        WHERE sale_id=%s
+                    AND product_id=%s
+                    """,
+                    (
+                        sale_id,
+                        product_id
+                    ))
+
+                    sold_item = cur.fetchone()
 
 
+                    if not sold_item or qty > sold_item["quantity"]:
+
+                        conn.rollback()
+
+                        return "كمية الإرجاع أكبر من الكمية المباعة"
+
+                    
 
                     # إعادة المخزون
                     cur.execute("""
