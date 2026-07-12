@@ -290,25 +290,20 @@ td,th{
 <tr>
 
 <td>
-{{r[0]}}
+{{r["product_name"]}}
 </td>
 
 <td>
-{{r[1]}}
+{{r["quantity"]}}
 </td>
 
 <td>
-{{"%.2f"|format(r[2])}} JOD
+{{"%.2f"|format(r["total"])}} JOD
 </td>
 
 </tr>
 
 {% endfor %}
-
-
-</table>
-
-{% endif %}
 
 
 <div class="total">
