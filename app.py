@@ -1326,7 +1326,49 @@ def backup():
 
         return f"حدث خطأ أثناء النسخ الاحتياطي: {e}"
 
+@app.route("/return_invoice/<int:invoice_number>")
+def return_invoice(invoice_number):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            id,
+            invoice_number,
+            username,
+            total,
+            sale_date
+        FROM sales
+        WHERE invoice_number=%s
+    """, (invoice_number,))
+
+    sale = cur.fetchone()
+
+
+    cur.execute("""
+        SELECT
+            product_id,
+            product_name,
+            quantity,
+            sale_price,
+            total
+        FROM sale_items
+        WHERE sale_id=%s
+    """, (sale["id"],))
+
+    items = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "return_invoice.html",
+        sale=sale,
+        items=items
+    )
 @app.route("/logout")
 def logout():
 
