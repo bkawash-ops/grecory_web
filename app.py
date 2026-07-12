@@ -1006,14 +1006,32 @@ def invoice_details(invoice_number):
     )
 
     items = cur.fetchall()
+    # جلب المرتجعات الخاصة بالفاتورة
 
+    cur.execute("""
+        SELECT
+            product_name,
+            quantity,
+            total
+        FROM return_items
+        WHERE return_id IN
+        (
+            SELECT id
+            FROM returns
+            WHERE invoice_number=%s
+        )
+    """,
+    (invoice_number,))
+
+    returns = cur.fetchall()
     cur.close()
     conn.close()
 
     return render_template(
-        "invoice_details.html",
-        sale=sale,
-        items=items
+    "invoice_details.html",
+    sale=sale,
+    items=items,
+    returns=returns
     )
 
 @app.route("/reports/pdf")
