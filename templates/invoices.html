@@ -96,7 +96,39 @@ font-size:16px;
 <a href="/">
 ⬅ العودة
 </a>
+<script>
 
+function searchInvoice(){
+
+    let filter =
+    document.getElementById("search").value.toLowerCase();
+
+
+    let rows =
+    document.querySelectorAll(".invoice-row");
+
+
+    rows.forEach(function(row){
+
+        let invoiceNumber =
+        row.cells[0].innerText.toLowerCase();
+
+
+        if(invoiceNumber.includes(filter)){
+
+            row.style.display="";
+
+        }else{
+
+            row.style.display="none";
+
+        }
+
+    });
+
+}
+
+</script>
 
 </body>
 
