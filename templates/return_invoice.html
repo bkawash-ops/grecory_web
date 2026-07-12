@@ -16,7 +16,7 @@
 <h3>
 اختر الأصناف المراد إرجاعها
 </h3>
-
+<form method="POST">
 
 <table border="1" width="100%">
 
@@ -43,6 +43,7 @@
 
 <input 
 type="number"
+name="return_qty_{{item['product_id']}}"
 min="0"
 max="{{item['quantity']}}"
 value="0">
@@ -59,9 +60,13 @@ value="0">
 
 <br>
 
+<form method="POST">
+
 <button>
 💾 حفظ المرتجع
 </button>
+
+</form>
 
 
 </body>
