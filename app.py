@@ -1335,7 +1335,7 @@ def return_invoice(invoice_number):
 
     # حفظ المرتجع
     if request.method == "POST":
-        print(request.form)
+       print("RETURN DATA:", dict(request.form), flush=True)
 
         sale_id = request.form["sale_id"]
 
