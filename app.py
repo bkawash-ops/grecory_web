@@ -1325,6 +1325,45 @@ def backup():
     except Exception as e:
 
         return f"حدث خطأ أثناء النسخ الاحتياطي: {e}"
+
+@app.route("/create_return_tables")
+def create_return_tables():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS returns (
+        id SERIAL PRIMARY KEY,
+        sale_id INTEGER,
+        invoice_number INTEGER,
+        username TEXT,
+        total NUMERIC(10,2),
+        return_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS return_items (
+        id SERIAL PRIMARY KEY,
+        return_id INTEGER,
+        product_id INTEGER,
+        product_name TEXT,
+        quantity NUMERIC,
+        sale_price NUMERIC(10,2),
+        total NUMERIC(10,2)
+    )
+    """)
+
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+
+    return "Return tables created successfully ✅"
 @app.route("/logout")
 def logout():
 
