@@ -17,7 +17,8 @@
 اختر الأصناف المراد إرجاعها
 </h3>
 <form method="POST">
-
+<input type="hidden" name="invoice_number" value="{{sale['invoice_number']}}">
+<input type="hidden" name="sale_id" value="{{sale['id']}}">
 <table border="1" width="100%">
 
 <tr>
