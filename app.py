@@ -1328,22 +1328,23 @@ def backup():
 
 @app.route("/return_invoice/<int:invoice_number>", methods=["GET","POST"])
 def return_invoice(invoice_number):
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    # حفظ المرتجع
     if request.method == "POST":
 
-        conn = db()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
 
-        invoice_number = request.form["invoice_number"]
         sale_id = request.form["sale_id"]
 
         username = session.get("user")
 
 
-        # حساب قيمة المرتجع
         return_total = 0
 
 
-        # إنشاء رأس المرتجع
         cur.execute("""
             INSERT INTO returns
             (
@@ -1366,102 +1367,102 @@ def return_invoice(invoice_number):
 
 
 
-    for key,value in request.form.items():
+        for key,value in request.form.items():
 
-        if key.startswith("return_qty_"):
-
-            product_id = key.replace("return_qty_","")
-
-            qty = float(value)
+            if key.startswith("return_qty_"):
 
 
-            if qty > 0:
+                product_id = key.replace("return_qty_","")
+
+                qty = float(value)
 
 
-                cur.execute("""
-                    SELECT
-                        name,
-                        sale_price
-                    FROM products
-                    WHERE id=%s
-                """,
-                (product_id,))
+                if qty > 0:
 
 
-                product = cur.fetchone()
+                    cur.execute("""
+                        SELECT
+                            name,
+                            sale_price
+                        FROM products
+                        WHERE id=%s
+                    """,
+                    (product_id,))
 
 
-                item_total = qty * float(product["sale_price"])
+                    product = cur.fetchone()
 
 
-                return_total += item_total
+                    item_total = qty * float(product["sale_price"])
 
 
-
-                # إعادة الكمية للمخزون
-                cur.execute("""
-                    UPDATE products
-                    SET quantity = quantity + %s
-                    WHERE id=%s
-                """,
-                (
-                    qty,
-                    product_id
-                ))
+                    return_total += item_total
 
 
 
-                # حفظ تفاصيل المرتجع
-                cur.execute("""
-                    INSERT INTO return_items
+                    # إعادة المخزون
+                    cur.execute("""
+                        UPDATE products
+                        SET quantity = quantity + %s
+                        WHERE id=%s
+                    """,
+                    (
+                        qty,
+                        product_id
+                    ))
+
+
+
+                    cur.execute("""
+                        INSERT INTO return_items
+                        (
+                            return_id,
+                            product_id,
+                            product_name,
+                            quantity,
+                            sale_price,
+                            total
+                        )
+                        VALUES (%s,%s,%s,%s,%s,%s)
+                    """,
                     (
                         return_id,
                         product_id,
-                        product_name,
-                        quantity,
-                        sale_price,
-                        total
-                    )
-                    VALUES (%s,%s,%s,%s,%s,%s)
-                """,
-                (
-                    return_id,
-                    product_id,
-                    product["name"],
-                    qty,
-                    product["sale_price"],
-                    item_total
-                ))
+                        product["name"],
+                        qty,
+                        product["sale_price"],
+                        item_total
+                    ))
 
 
 
-    # تحديث قيمة المرتجع
-    cur.execute("""
-        UPDATE returns
-        SET total=%s
-        WHERE id=%s
-    """,
-    (
-        return_total,
-        return_id
-    ))
+        cur.execute("""
+            UPDATE returns
+            SET total=%s
+            WHERE id=%s
+        """,
+        (
+            return_total,
+            return_id
+        ))
 
 
+        conn.commit()
 
-    conn.commit()
-
-    cur.close()
-    conn.close()
+        cur.close()
+        conn.close()
 
 
-    return redirect(
-        url_for(
-            "invoice_details",
-            invoice_number=invoice_number
+        return redirect(
+            url_for(
+                "invoice_details",
+                invoice_number=invoice_number
+            )
         )
-    )
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+
+    # عرض صفحة المرتجع (GET)
 
     cur.execute("""
         SELECT
@@ -1472,9 +1473,12 @@ def return_invoice(invoice_number):
             sale_date
         FROM sales
         WHERE invoice_number=%s
-    """, (invoice_number,))
+    """,
+    (invoice_number,))
+
 
     sale = cur.fetchone()
+
 
 
     cur.execute("""
@@ -1486,9 +1490,12 @@ def return_invoice(invoice_number):
             total
         FROM sale_items
         WHERE sale_id=%s
-    """, (sale["id"],))
+    """,
+    (sale["id"],))
+
 
     items = cur.fetchall()
+
 
 
     cur.close()
