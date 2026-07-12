@@ -909,6 +909,34 @@ def checkout():
         invoice_number=invoice_number,
         username=session.get("user")
     )
+
+@app.route("/invoices")
+def invoices():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            id,
+            invoice_number,
+            username,
+            total,
+            sale_date
+        FROM sales
+        ORDER BY id DESC
+    """)
+
+    invoices = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "invoices.html",
+        invoices=invoices
+    )
 @app.route("/seller")
 def seller():
 
