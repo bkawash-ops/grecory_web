@@ -236,6 +236,45 @@ def reports():
         from_date=from_date,
         to_date=to_date
     )
+
+@app.route("/report_sellers")
+def report_sellers():
+
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    cur.execute("""
+        SELECT
+            username,
+            COUNT(*) AS invoice_count,
+            SUM(total) AS total_sales
+
+        FROM sales
+
+        GROUP BY username
+
+        ORDER BY total_sales DESC
+
+    """)
+
+
+    sellers = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "report_sellers.html",
+        sellers=sellers
+    )
 @app.route("/notifications")
 def notifications():
 
