@@ -115,17 +115,32 @@ td,th{
 
 @media print{
 
+    body{
+        background:white;
+        padding:0;
+    }
+
+
+    .card{
+
+        box-shadow:none;
+        width:80mm;
+        margin:auto;
+
+    }
+
+
     .buttons{
         display:none;
     }
 
-    body{
-        background:white;
+
+    table{
+
+        font-size:12px;
+
     }
 
-    .card{
-        box-shadow:none;
-    }
 
 }
 
@@ -141,9 +156,27 @@ td,th{
 <div class="card">
 
 
+<div style="text-align:center">
+
 <h2>
-🧾 فاتورة رقم {{sale["invoice_number"]}}
+🛒 متجر البقالة
 </h2>
+
+<p>
+عمان - الأردن
+</p>
+
+<p>
+هاتف: 0790000000
+</p>
+
+<hr>
+
+<h3>
+🧾 فاتورة رقم {{sale["invoice_number"]}}
+</h3>
+
+</div>
 
 
 <div class="info">
