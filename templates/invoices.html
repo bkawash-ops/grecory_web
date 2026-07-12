@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>سجل الفواتير</title>
+
+</head>
+
+
+<body>
+
+
+<h2>
+🧾 سجل الفواتير
+</h2>
+
+
+<table border="1" width="100%">
+
+<tr>
+
+<th>
+رقم الفاتورة
+</th>
+
+<th>
+المستخدم
+</th>
+
+<th>
+المبلغ
+</th>
+
+<th>
+التاريخ
+</th>
+
+</tr>
+
+
+{% for inv in invoices %}
+
+<tr>
+
+<td>
+{{inv[1]}}
+</td>
+
+<td>
+{{inv[2]}}
+</td>
+
+<td>
+{{"%.2f"|format(inv[3])}} JOD
+</td>
+
+<td>
+{{inv[4]}}
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+<br>
+
+<a href="/">
+⬅ العودة
+</a>
+
+
+</body>
+
+</html>
