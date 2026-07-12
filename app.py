@@ -938,50 +938,6 @@ def invoices():
         invoices=invoices
     )
 
-@app.route("/invoice/<int:id>")
-def invoice_details(id):
-
-    conn = db()
-    cur = conn.cursor()
-
-    # جلب رأس الفاتورة
-    cur.execute("""
-        SELECT
-            invoice_number,
-            username,
-            total,
-            sale_date
-        FROM sales
-        WHERE id=%s
-    """, (id,))
-
-    invoice = cur.fetchone()
-
-
-    # جلب تفاصيل الفاتورة
-    cur.execute("""
-        SELECT
-            product_name,
-            quantity,
-            sale_price,
-            total
-        FROM sale_items
-        WHERE sale_id=%s
-    """, (id,))
-
-
-    items = cur.fetchall()
-
-
-    cur.close()
-    conn.close()
-
-
-    return render_template(
-        "invoice_details.html",
-        invoice=invoice,
-        items=items
-    )
 @app.route("/seller")
 def seller():
 
