@@ -1810,7 +1810,9 @@ def expenses():
 
 
         conn.commit()
+        conn.close()
 
+        return redirect("/expenses")
 
     cur.execute("""
         SELECT
