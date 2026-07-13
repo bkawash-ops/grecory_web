@@ -1031,16 +1031,40 @@ def add_to_cart():
     cart = session.get("cart", [])
 
 
-    cart.append({
+    # التحقق إذا كان المنتج موجوداً في السلة
 
-        "id": product["id"],
-        "name": product["name"],
-        "price": product["sale_price"],
-        "purchase_price": product["purchase_price"],
-        "qty": qty,
-        "total": qty * product["sale_price"]
+    found = False
 
-    })
+    for item in cart:
+
+        if item["id"] == product["id"]:
+
+            item["qty"] += qty
+
+            item["total"] = (
+                item["qty"] *
+                item["price"]
+            )
+
+            found = True
+            break
+
+
+
+    # إذا لم يكن موجوداً أضفه كسطر جديد
+
+    if not found:
+
+        cart.append({
+
+            "id": product["id"],
+            "name": product["name"],
+            "price": product["sale_price"],
+            "purchase_price": product["purchase_price"],
+            "qty": qty,
+            "total": qty * product["sale_price"]
+
+        })
 
 
     session["cart"] = cart
