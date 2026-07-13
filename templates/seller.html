@@ -82,19 +82,37 @@ select,input{
 
 <h2>🛒 شاشة البيع</h2>
 
-<input 
+<div style="margin-bottom:20px;">
+
+<input
 type="text"
-id="barcodeSearch"
-placeholder="🔍 بحث عن منتج..."
-onkeyup="searchProduct()"
+id="nameSearch"
+placeholder="🔍 البحث باسم المنتج"
+onkeyup="searchByName()"
 style="
 width:300px;
 padding:12px;
 font-size:18px;
 border-radius:8px;
 border:1px solid #ccc;
-margin-bottom:15px;
+margin-left:10px;
 ">
+
+
+<input
+type="text"
+id="barcodeSearch"
+placeholder="📦 البحث بالباركود"
+onkeyup="searchByBarcode()"
+style="
+width:250px;
+padding:12px;
+font-size:18px;
+border-radius:8px;
+border:1px solid #ccc;
+">
+
+</div>
 
 <div class="card">
 
@@ -126,6 +144,10 @@ onchange="showProductInfo()">
 <option
 
 value="{{p.id}}"
+
+data-name="{{p.name}}"
+
+data-barcode="{{p.barcode}}"
 
 data-price="{{p.price}}"
 
