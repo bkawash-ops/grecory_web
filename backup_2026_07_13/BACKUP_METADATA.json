@@ -1,0 +1,33 @@
+{
+  "backup_date": "2026-07-13T21:33:04Z",
+  "repository": "bkawash-ops/grecory_web",
+  "repository_url": "https://github.com/bkawash-ops/grecory_web",
+  "backup_branch_created": "backup-2026-07-13",
+  "backup_branch_url": "https://github.com/bkawash-ops/grecory_web/tree/backup-2026-07-13",
+  "latest_commit": "9cc3b74b73a43683d0d207ed65364eeccf0606f5",
+  "latest_commit_message": "Add files via upload",
+  "repo_size": "3.3 MB",
+  "language": "HTML",
+  "visibility": "public",
+  "files_backed_up": [
+    "app.py",
+    "requirements.txt",
+    "create_pg_tables.py",
+    "create_sales_tables.py",
+    "add_active_column.py",
+    "migrate_products.py",
+    "app_sqlite_backup.py",
+    "supermarket.db",
+    "templates/",
+    "static/",
+    "fonts/"
+  ],
+  "backup_type": "repository_export",
+  "backup_includes": [
+    "Full source code",
+    "All Python files",
+    "Database files",
+    "Configuration and requirements",
+    "All branches captured in backup-2026-07-13 branch"
+  ]
+}
