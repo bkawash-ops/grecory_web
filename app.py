@@ -1071,7 +1071,12 @@ def cart():
         total=total
     )
 
+@app.route("/clear_cart", methods=["POST"])
+def clear_cart():
 
+    session["cart"] = []
+
+    return redirect(url_for("seller"))
 # ---------------- إتمام البيع وطباعة الفاتورة ----------------
 
 @app.route("/checkout", methods=["POST"])
