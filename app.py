@@ -1084,19 +1084,54 @@ def update_cart_qty():
     cart = session.get("cart", [])
 
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    # جلب كمية المخزون الحالية
+    cur.execute("""
+        SELECT quantity
+        FROM products
+        WHERE id=%s
+    """,
+    (product_id,))
+
+
+    product = cur.fetchone()
+
+
+    cur.close()
+    conn.close()
+
+
+
     for item in cart:
+
 
         if item["id"] == product_id:
 
 
+
             if action == "plus":
+
+
+                # فحص المخزون قبل الزيادة
+                if item["qty"] + 1 > product["quantity"]:
+
+
+                    return redirect(url_for("seller"))
+
+
 
                 item["qty"] += 1
 
 
+
             elif action == "minus":
 
+
                 item["qty"] -= 1
+
 
 
                 if item["qty"] <= 0:
@@ -1104,6 +1139,7 @@ def update_cart_qty():
                     cart.remove(item)
 
                     break
+
 
 
             if item in cart:
@@ -1114,13 +1150,15 @@ def update_cart_qty():
                 )
 
 
+
             break
+
 
 
     session["cart"] = cart
 
-    return redirect(url_for("seller"))
 
+    return redirect(url_for("seller"))
 # ---------------- عرض السلة ----------------
 
 @app.route("/cart")
