@@ -1844,6 +1844,25 @@ def expenses():
         expenses=expenses_list,
         total_expenses=total_expenses
     )
+
+@app.route("/delete_expense/<int:id>")
+def delete_expense(id):
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        DELETE FROM expenses
+        WHERE id=%s
+    """,
+    (id,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect("/expenses")
 @app.route("/logout")
 def logout():
 
