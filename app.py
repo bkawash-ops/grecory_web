@@ -14,7 +14,6 @@ from datetime import timedelta
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-
 import arabic_reshaper
 from bidi.algorithm import get_display
 app = Flask(__name__)
