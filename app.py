@@ -1873,28 +1873,30 @@ def edit_expense(id):
 
     if request.method == "POST":
 
-        cur.execute("""
-            UPDATE expenses
-            SET
-            description=%s,
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE expenses
+        SET
+            title=%s,
             amount=%s,
             notes=%s
-            WHERE id=%s
-        """,
-        (
-            request.form["description"],
-            request.form["amount"],
-            request.form["notes"],
-            id
-        ))
+        WHERE id=%s
+    """,
+    (
+        request.form["title"],
+        request.form["amount"],
+        request.form["notes"],
+        id
+    ))
 
+    conn.commit()
 
-        conn.commit()
+    cur.close()
+    conn.close()
 
-        cur.close()
-        conn.close()
-
-        return redirect("/expenses")
+    return redirect("/expenses")
 
 
     cur.execute("""
