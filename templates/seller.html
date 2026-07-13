@@ -445,37 +445,33 @@ margin-right:10px;
 
 
 let availableQty = 0;
-function searchProduct(){
+function searchByName(){
 
     let search = document
-    .getElementById("barcodeSearch")
+    .getElementById("nameSearch")
     .value
     .toLowerCase();
 
 
-    let select = document
-    .getElementById("product_id");
+    let select = document.getElementById("product_id");
+
+    let options = select.options;
 
 
-    let options = select
-    .getElementsByTagName("option");
+    for(let i=1; i<options.length; i++){
 
-
-    for(let i = 1; i < options.length; i++){
-
-        let text = options[i]
-        .textContent
+        let name = options[i]
+        .dataset.name
         .toLowerCase();
 
 
-        if(text.includes(search)){
+        if(name.includes(search)){
 
-            options[i].style.display = "";
+            select.selectedIndex = i;
 
-        }
-        else{
+            showProductInfo();
 
-            options[i].style.display = "none";
+            break;
 
         }
 
@@ -483,6 +479,41 @@ function searchProduct(){
 
 }
 
+
+
+function searchByBarcode(){
+
+    let search = document
+    .getElementById("barcodeSearch")
+    .value
+    .toLowerCase();
+
+
+    let select = document.getElementById("product_id");
+
+    let options = select.options;
+
+
+    for(let i=1; i<options.length; i++){
+
+        let barcode = options[i]
+        .dataset.barcode
+        .toLowerCase();
+
+
+        if(barcode.includes(search)){
+
+            select.selectedIndex = i;
+
+            showProductInfo();
+
+            break;
+
+        }
+
+    }
+
+}
 
 function showProductInfo(){
 
