@@ -58,25 +58,74 @@ def expense_report():
     conn = db()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("""
-        SELECT
-            expense_date,
-            title,
-            amount,
-            username
-        FROM expenses
-        ORDER BY expense_date DESC
-    """)
+
+    from_date = None
+    to_date = None
+
+
+    if request.method == "POST":
+
+        from_date = request.form.get("from_date")
+        to_date = request.form.get("to_date")
+
+
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT
+                expense_date,
+                title,
+                amount,
+                username
+            FROM expenses
+            WHERE expense_date::date BETWEEN %s AND %s
+            ORDER BY expense_date DESC
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+    else:
+
+        cur.execute("""
+            SELECT
+                expense_date,
+                title,
+                amount,
+                username
+            FROM expenses
+            ORDER BY expense_date DESC
+        """)
+
 
     expenses = cur.fetchall()
 
 
-    cur.execute("""
-        SELECT COALESCE(SUM(amount),0)
-        FROM expenses
-    """)
 
-    total_expenses = cur.fetchone()["coalesce"]
+    if from_date and to_date:
+
+        cur.execute("""
+            SELECT COALESCE(SUM(amount),0) AS total
+            FROM expenses
+            WHERE expense_date::date BETWEEN %s AND %s
+        """,
+        (
+            from_date,
+            to_date
+        ))
+
+    else:
+
+        cur.execute("""
+            SELECT COALESCE(SUM(amount),0) AS total
+            FROM expenses
+        """)
+
+
+
+    total_expenses = cur.fetchone()["total"]
+
 
 
     cur.close()
