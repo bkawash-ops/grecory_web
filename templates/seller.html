@@ -591,7 +591,23 @@ function checkQty(){
 
 }
 
+function barcodeEnter(event){
 
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        let select = document.getElementById("product_id");
+
+        if(select.value){
+
+            document.getElementById("qty").focus();
+
+        }
+
+    }
+
+}
 
 </script>
 
