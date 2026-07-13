@@ -1901,13 +1901,10 @@ def edit_expense(id):
     """,
     (id,))
 
-
     expense = cur.fetchone()
-
 
     cur.close()
     conn.close()
-
 
     return render_template(
         "edit_expense.html",
