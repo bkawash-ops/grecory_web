@@ -52,7 +52,7 @@ def check_expenses_columns():
 
     return str(result)
 
-@app.route("/expense_report")
+@app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
 
     conn = db()
