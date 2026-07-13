@@ -138,7 +138,7 @@ def expense_report():
         "expense_report.html",
         expenses=expenses,
         total_expenses=total_expenses,
-        timedelta=timedelta
+        timedelta=timedelta,
         from_date=from_date,
         to_date=to_date
     )
