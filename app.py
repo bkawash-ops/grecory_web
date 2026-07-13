@@ -1049,7 +1049,7 @@ def add_to_cart():
     conn.close()
 
 
-    return redirect(url_for("cart"))
+    return redirect(url_for("seller"))
 
 
 
