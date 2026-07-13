@@ -54,6 +54,8 @@ def check_expenses_columns():
 
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
+    from_date = request.form.get("from_date", "")
+    to_date = request.form.get("to_date", "")
 
     conn = db()
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -137,6 +139,8 @@ def expense_report():
         expenses=expenses,
         total_expenses=total_expenses,
         timedelta=timedelta
+        from_date=from_date,
+        to_date=to_date
     )
 @app.route("/login", methods=["GET", "POST"])
 def login():
