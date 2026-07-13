@@ -209,10 +209,23 @@ margin:20px;
 
 
 <p>
-📊 صافي الحركة:
-{{net_movement}}
-</p>
+📊 صافي تأثير المخزون:
 
+{% if net_movement < 0 %}
+
+نقص {{ net_movement|abs }} قطعة
+
+{% elif net_movement > 0 %}
+
+زيادة {{ net_movement }} قطعة
+
+{% else %}
+
+لا يوجد تغيير
+
+{% endif %}
+
+</p>
 
 </div>
 
