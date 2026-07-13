@@ -1842,7 +1842,7 @@ def expenses():
     return render_template(
         "expenses.html",
         expenses=expenses_list,
-        total_expenses=total_expenses
+        total_expenses=total_expenses,
         timedelta=timedelta
     )
 
