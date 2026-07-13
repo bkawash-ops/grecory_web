@@ -973,7 +973,34 @@ def checkout():
             item["id"]
         ))
 
-
+        cur.execute("""
+        INSERT INTO stock_movements
+        (
+            product_id,
+            product_name,
+            movement_type,
+            quantity,
+            reference,
+            username
+        )
+        VALUES
+        (
+            %s,
+            %s,
+            %s,
+            %s,
+            %s,
+            %s
+        )
+    """,
+    (
+        item["id"],
+        item["name"],
+        "SALE",
+        -item["qty"],
+        f"Invoice #{invoice_number}",
+        username
+    ))
 
     conn.commit()
 
