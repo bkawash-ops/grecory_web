@@ -1557,34 +1557,34 @@ def return_invoice(invoice_number):
                         product_id
                     ))
 
-                   cur.execute("""
-                        INSERT INTO stock_movements
-                        (
-                            product_id,
-                            product_name,
-                            movement_type,
-                            quantity,
-                            reference,
-                            username
-                        )
-                        VALUES
-                        (
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            %s
-                        )
-                    """,
-                    (
-                        product_id,
-                        product["name"],
-                        "RETURN",
-                        qty,
-                        f"Invoice #{invoice_number}",
-                        username
-                    ))
+                    cur.execute("""
+                         INSERT INTO stock_movements
+                         (
+                             product_id,
+                             product_name,
+                             movement_type,
+                             quantity,
+                             reference,
+                             username
+                         )
+                         VALUES
+                         (
+                             %s,
+                             %s,
+                             %s,
+                             %s,
+                             %s,
+                             %s
+                         )
+                     """,
+                     (
+                         product_id,
+                         product["name"],
+                         "RETURN",
+                         qty,
+                         f"Invoice #{invoice_number}",
+                         username
+                     ))
 
                     cur.execute("""
                         INSERT INTO return_items
