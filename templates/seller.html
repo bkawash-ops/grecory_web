@@ -232,19 +232,127 @@ oninput="checkQty()"
 
 <div class="card">
 
-
 <h3>
 🧾 الفاتورة الحالية
 </h3>
 
 
+{% if session.get("cart") %}
 
-<a href="/cart">
 
-عرض السلة وإصدار الفاتورة
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+">
+
+<tr style="background:#2563eb;color:white;">
+
+<th style="padding:10px;">
+الصنف
+</th>
+
+<th style="padding:10px;">
+الكمية
+</th>
+
+<th style="padding:10px;">
+السعر
+</th>
+
+<th style="padding:10px;">
+المجموع
+</th>
+
+</tr>
+
+
+{% set total = namespace(value=0) %}
+
+
+{% for item in session.get("cart") %}
+
+
+<tr>
+
+<td style="padding:10px;border-bottom:1px solid #ddd;">
+{{item.name}}
+</td>
+
+
+<td style="padding:10px;border-bottom:1px solid #ddd;">
+{{item.qty}}
+</td>
+
+
+<td style="padding:10px;border-bottom:1px solid #ddd;">
+{{item.price}} JOD
+</td>
+
+
+<td style="padding:10px;border-bottom:1px solid #ddd;">
+{{item.total}} JOD
+</td>
+
+
+</tr>
+
+
+{% set total.value = total.value + item.total %}
+
+
+{% endfor %}
+
+
+</table>
+
+
+<h3>
+💰 الإجمالي:
+{{"%.2f"|format(total.value)}} JOD
+</h3>
+
+
+<a href="/checkout" 
+style="
+background:#059669;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+text-decoration:none;
+display:inline-block;
+">
+
+🧾 إصدار الفاتورة
 
 </a>
 
+
+<a href="/cart"
+style="
+background:#2563eb;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+text-decoration:none;
+display:inline-block;
+margin-right:10px;
+">
+
+⚙️ إدارة السلة
+
+</a>
+
+
+{% else %}
+
+
+<p>
+🛒 السلة فارغة
+</p>
+
+
+{% endif %}
 
 
 </div>
