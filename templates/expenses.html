@@ -173,7 +173,7 @@ placeholder="ملاحظات">
 <tr>
 
 <td>
-{{e.expense_date.strftime('%d-%m-%Y %H:%M')}}
+{{ (e.expense_date + timedelta(hours=3)).strftime('%d-%m-%Y %H:%M') }}
 </td>
 
 
