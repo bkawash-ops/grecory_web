@@ -1507,7 +1507,30 @@ def reports_pdf():
         download_name="تقرير_المبيعات.pdf",
         as_attachment=True
     )
+@app.route("/create_expenses_table")
+def create_expenses_table():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS expenses
+        (
+            id SERIAL PRIMARY KEY,
+            expense_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            title VARCHAR(200) NOT NULL,
+            amount NUMERIC(10,2) NOT NULL,
+            notes TEXT,
+            username VARCHAR(100)
+        )
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "Expenses table created successfully"
 @app.route("/backup")
 def backup():
 
