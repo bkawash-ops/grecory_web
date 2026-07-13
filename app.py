@@ -247,7 +247,7 @@ def stock_movement_report():
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
-    # جلب الأصناف للقائمة
+    # جلب الأصناف
     cur.execute("""
         SELECT id, name
         FROM products
@@ -259,6 +259,7 @@ def stock_movement_report():
 
     movements = []
     selected_product = None
+    current_stock = None
 
 
     if request.method == "POST":
@@ -266,31 +267,41 @@ def stock_movement_report():
         product_id = request.form["product_id"]
 
 
+        # بيانات الصنف
         cur.execute("""
-            SELECT *
+            SELECT
+                id,
+                name,
+                quantity
             FROM products
             WHERE id=%s
         """,
         (product_id,))
 
+
         selected_product = cur.fetchone()
 
 
-        cur.execute("""
-            SELECT
-                movement_date,
-                movement_type,
-                quantity,
-                reference,
-                username
-            FROM stock_movements
-            WHERE product_id=%s
-            ORDER BY movement_date DESC
-        """,
-        (product_id,))
+        if selected_product:
+
+            current_stock = selected_product["quantity"]
 
 
-        movements = cur.fetchall()
+            cur.execute("""
+                SELECT
+                    movement_date,
+                    movement_type,
+                    quantity,
+                    reference,
+                    username
+                FROM stock_movements
+                WHERE product_id=%s
+                ORDER BY movement_date DESC
+            """,
+            (product_id,))
+
+
+            movements = cur.fetchall()
 
 
 
