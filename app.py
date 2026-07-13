@@ -51,6 +51,44 @@ def check_expenses_columns():
     conn.close()
 
     return str(result)
+
+@app.route("/expense_report")
+def expense_report():
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            expense_date,
+            title,
+            amount,
+            username
+        FROM expenses
+        ORDER BY expense_date DESC
+    """)
+
+    expenses = cur.fetchall()
+
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount),0)
+        FROM expenses
+    """)
+
+    total_expenses = cur.fetchone()["coalesce"]
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "expense_report.html",
+        expenses=expenses,
+        total_expenses=total_expenses,
+        timedelta=timedelta
+    )
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
