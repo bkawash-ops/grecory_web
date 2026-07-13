@@ -10,7 +10,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from io import BytesIO
 from flask import send_file 
-
+from datetime import timedelta
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -302,7 +302,9 @@ def stock_movement_report():
         "stock_movement_report.html",
         products=products,
         movements=movements,
-        selected_product=selected_product
+        selected_product=selected_product,
+        current_stock=current_stock,
+        timedelta=timedelta
     )
 @app.route("/report_sellers", methods=["GET"])
 def report_sellers():
