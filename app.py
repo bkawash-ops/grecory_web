@@ -662,7 +662,48 @@ def products():
         "products.html",
         products=products
     )
+@app.route("/create_stock_table")
+def create_stock_table():
 
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+
+    cur = conn.cursor()
+
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS stock_movements
+        (
+            id SERIAL PRIMARY KEY,
+
+            product_id INTEGER,
+
+            product_name VARCHAR(255),
+
+            movement_type VARCHAR(50),
+
+            quantity NUMERIC,
+
+            reference VARCHAR(100),
+
+            username VARCHAR(100),
+
+            movement_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+
+    conn.commit()
+
+
+    cur.close()
+    conn.close()
+
+
+    return "✅ تم إنشاء جدول حركة المخزون بنجاح"
 
 @app.route("/edit_product/<int:id>", methods=["GET", "POST"])
 def edit_product(id):
