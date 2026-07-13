@@ -1843,6 +1843,7 @@ def expenses():
         "expenses.html",
         expenses=expenses_list,
         total_expenses=total_expenses
+        timedelta=timedelta
     )
 
 @app.route("/delete_expense/<int:id>")
