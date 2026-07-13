@@ -873,7 +873,7 @@ def cart():
 
 @app.route("/checkout", methods=["POST"])
 def checkout():
-
+    username = session.get("user")
     items = session.get("cart", [])
 
     print("CHECKOUT CART:")
@@ -890,11 +890,7 @@ def checkout():
         item["total"]
         for item in items
     )
-    total = sum(
-        item["total"]
-        for item in items
-    )
-
+    
     sale_time = datetime.now(ZoneInfo("Asia/Amman"))
     conn = db()
 
