@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>حركة صنف</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f3f4f6;
+    padding:40px;
+    text-align:center;
+}
+
+.card{
+
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    width:700px;
+    margin:auto;
+    box-shadow:0 3px 10px #ccc;
+
+}
+
+
+select,button{
+
+    padding:12px;
+    font-size:18px;
+
+}
+
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+
+}
+
+
+th{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+
+td,th{
+
+    padding:10px;
+    border:1px solid #ccc;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+
+<h2>
+📋 حركة صنف
+</h2>
+
+
+<form method="POST">
+
+
+<select name="product_id">
+
+
+{% for p in products %}
+
+<option value="{{p.id}}">
+
+{{p.name}}
+
+</option>
+
+{% endfor %}
+
+
+</select>
+
+
+<button type="submit">
+
+عرض
+
+</button>
+
+
+</form>
+
+
+
+{% if movements %}
+
+
+<h3>
+
+{{selected_product.name}}
+
+</h3>
+
+
+<table>
+
+
+<tr>
+
+<th>
+التاريخ
+</th>
+
+<th>
+الحركة
+</th>
+
+<th>
+الكمية
+</th>
+
+<th>
+المرجع
+</th>
+
+</tr>
+
+
+
+{% for m in movements %}
+
+<tr>
+
+<td>
+{{m.movement_date.strftime('%d-%m-%Y %H:%M')}}
+</td>
+
+
+<td>
+
+{% if m.movement_type=="SALE" %}
+
+🔴 بيع
+
+{% else %}
+
+🟢 مرتجع
+
+{% endif %}
+
+</td>
+
+
+<td>
+
+{{m.quantity}}
+
+</td>
+
+
+<td>
+
+{{m.reference}}
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+{% endif %}
+
+
+
+<br>
+
+<a href="/reports">
+
+⬅ العودة للتقارير
+
+</a>
+
+
+</div>
+
+
+</body>
+
+</html>
