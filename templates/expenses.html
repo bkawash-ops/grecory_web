@@ -161,7 +161,9 @@ placeholder="ملاحظات">
 <th>
 المستخدم
 </th>
-
+<th>
+إجراء
+</th>
 </tr>
 
 
@@ -188,7 +190,23 @@ placeholder="ملاحظات">
 <td>
 {{e.username}}
 </td>
+<td>
 
+<a href="/delete_expense/{{e.id}}"
+onclick="return confirm('هل تريد حذف هذا المصروف؟')"
+style="
+background:#dc2626;
+color:white;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
+">
+
+🗑️ حذف
+
+</a>
+
+</td>
 
 </tr>
 
