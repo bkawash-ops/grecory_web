@@ -1118,6 +1118,10 @@ def update_cart_qty():
                 # فحص المخزون قبل الزيادة
                 if item["qty"] + 1 > product["quantity"]:
 
+                    flash(
+                        "⚠️ لا توجد كمية كافية في المخزون",
+                        "warning"
+                    )
 
                     return redirect(url_for("seller"))
 
