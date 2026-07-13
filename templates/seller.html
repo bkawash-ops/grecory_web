@@ -103,7 +103,7 @@ margin-left:10px;
 type="text"
 id="barcodeSearch"
 placeholder="📦 امسح الباركود هنا"
-onkeyup="searchByBarcode()"
+oninput="searchByBarcode()"
 onkeypress="barcodeEnter(event)"
 style="
 width:250px;
@@ -601,7 +601,8 @@ function barcodeEnter(event){
 
         if(select.value){
 
-            document.getElementById("qty").focus();
+            document.getElementById("qty").value = 1;
+            select.form.submit();
 
         }
 
