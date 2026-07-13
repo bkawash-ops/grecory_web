@@ -261,6 +261,10 @@ def stock_movement_report():
     selected_product = None
     current_stock = None
 
+    total_sales = 0
+    total_returns = 0
+    net_movement = 0
+
 
     if request.method == "POST":
 
@@ -302,7 +306,16 @@ def stock_movement_report():
 
 
             movements = cur.fetchall()
+            for m in movements:
 
+                if m["movement_type"] == "SALE":
+                    total_sales += abs(float(m["quantity"]))
+
+                elif m["movement_type"] == "RETURN":
+                    total_returns += float(m["quantity"])
+
+
+            net_movement = total_returns - total_sales
 
 
     cur.close()
@@ -315,6 +328,9 @@ def stock_movement_report():
         movements=movements,
         selected_product=selected_product,
         current_stock=current_stock,
+        total_sales=total_sales,
+        total_returns=total_returns,
+        net_movement=net_movement,
         timedelta=timedelta
     )
 @app.route("/report_sellers", methods=["GET"])
