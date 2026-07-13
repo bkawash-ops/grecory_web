@@ -1775,6 +1775,75 @@ def return_invoice(invoice_number):
         sale=sale,
         items=items
     )
+
+@app.route("/expenses", methods=["GET", "POST"])
+def expenses():
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        amount = request.form["amount"]
+        notes = request.form.get("notes")
+
+        username = session.get("user")
+
+
+        cur.execute("""
+            INSERT INTO expenses
+            (
+                title,
+                amount,
+                notes,
+                username
+            )
+            VALUES (%s,%s,%s,%s)
+        """,
+        (
+            title,
+            amount,
+            notes,
+            username
+        ))
+
+
+        conn.commit()
+
+
+    cur.execute("""
+        SELECT
+            id,
+            expense_date,
+            title,
+            amount,
+            notes,
+            username
+        FROM expenses
+        ORDER BY expense_date DESC
+    """)
+
+    expenses_list = cur.fetchall()
+
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount),0) AS total
+        FROM expenses
+    """)
+
+    total_expenses = cur.fetchone()["total"]
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "expenses.html",
+        expenses=expenses_list,
+        total_expenses=total_expenses
+    )
 @app.route("/logout")
 def logout():
 
