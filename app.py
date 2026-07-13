@@ -1847,7 +1847,58 @@ def expenses():
         total_expenses=total_expenses,
         timedelta=timedelta
     )
+@app.route("/edit_expense/<int:id>", methods=["GET","POST"])
+def edit_expense(id):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    if request.method == "POST":
+
+        cur.execute("""
+            UPDATE expenses
+            SET
+            description=%s,
+            amount=%s,
+            notes=%s
+            WHERE id=%s
+        """,
+        (
+            request.form["description"],
+            request.form["amount"],
+            request.form["notes"],
+            id
+        ))
+
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return redirect("/expenses")
+
+
+    cur.execute("""
+        SELECT *
+        FROM expenses
+        WHERE id=%s
+    """,
+    (id,))
+
+
+    expense = cur.fetchone()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "edit_expense.html",
+        expense=expense
+    )
 @app.route("/delete_expense/<int:id>")
 def delete_expense(id):
 
