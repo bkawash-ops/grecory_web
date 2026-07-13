@@ -34,7 +34,24 @@ def db():
     )
 
     return conn
+@app.route("/check_expenses_columns")
+def check_expenses_columns():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name='expenses'
+    """)
+
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(result)
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
