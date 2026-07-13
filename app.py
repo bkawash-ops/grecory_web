@@ -236,7 +236,74 @@ def reports():
         from_date=from_date,
         to_date=to_date
     )
+@app.route("/stock_movement_report", methods=["GET","POST"])
+def stock_movement_report():
 
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    # جلب الأصناف للقائمة
+    cur.execute("""
+        SELECT id, name
+        FROM products
+        ORDER BY name
+    """)
+
+    products = cur.fetchall()
+
+
+    movements = []
+    selected_product = None
+
+
+    if request.method == "POST":
+
+        product_id = request.form["product_id"]
+
+
+        cur.execute("""
+            SELECT *
+            FROM products
+            WHERE id=%s
+        """,
+        (product_id,))
+
+        selected_product = cur.fetchone()
+
+
+        cur.execute("""
+            SELECT
+                movement_date,
+                movement_type,
+                quantity,
+                reference,
+                username
+            FROM stock_movements
+            WHERE product_id=%s
+            ORDER BY movement_date DESC
+        """,
+        (product_id,))
+
+
+        movements = cur.fetchall()
+
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "stock_movement_report.html",
+        products=products,
+        movements=movements,
+        selected_product=selected_product
+    )
 @app.route("/report_sellers", methods=["GET"])
 def report_sellers():
 
