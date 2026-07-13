@@ -118,7 +118,22 @@ td,th{
     }
 
 }
+@media print {
 
+    .no-print{
+        display:none !important;
+    }
+
+    body{
+        background:white;
+    }
+
+    .card{
+        box-shadow:none;
+        width:100%;
+    }
+
+}
 
 </style>
 
@@ -134,7 +149,7 @@ td,th{
 <h1>
 📊 تقرير المصروفات
 </h1>
-<form method="POST">
+<form method="POST" class="no-print">
 
     <label>
         📅 من تاريخ:
@@ -224,12 +239,15 @@ td,th{
 <br>
 
 
+<div class="no-print">
+
 <button class="print-btn" onclick="window.print()">
 
 🖨️ طباعة التقرير
 
 </button>
 
+</div>
 
 <a class="back" href="/reports_menu">
 
