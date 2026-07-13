@@ -148,7 +148,7 @@ td,th{
 <tr>
 
 <td>
-{{m.movement_date.strftime('%d-%m-%Y %H:%M')}}
+{{ (m.movement_date + timedelta(hours=3)).strftime('%d-%m-%Y %H:%M') }}
 </td>
 
 
