@@ -24,7 +24,7 @@ body{
     margin:auto;
     padding:30px;
     border-radius:15px;
-    box-shadow:0 3px 10px #ccc;
+    box-shadow:0 3px:10px #ccc;
 
 }
 
@@ -32,6 +32,22 @@ body{
 h1{
 
     color:#1f2937;
+
+}
+
+
+.filter{
+
+    margin-bottom:20px;
+
+}
+
+
+input,
+button{
+
+    padding:10px;
+    font-size:16px;
 
 }
 
@@ -70,6 +86,16 @@ td,th{
 }
 
 
+.actions{
+
+    margin-top:25px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+
+}
+
+
 .print-btn{
 
     background:#059669;
@@ -91,49 +117,48 @@ td,th{
     padding:12px 25px;
     border-radius:8px;
     text-decoration:none;
-    margin-right:10px;
+    font-size:18px;
 
 }
+
 
 
 @media print{
 
-    .print-btn,
-    .back{
-
-        display:none;
-
-    }
 
     body{
 
         background:white;
+        padding:0;
 
     }
 
+
     .card{
 
+        width:100%;
         box-shadow:none;
 
     }
 
-}
-@media print {
 
     .no-print{
+
         display:none !important;
+
     }
 
-    body{
-        background:white;
+
+    table{
+
+        font-size:12px;
+
     }
 
-    .card{
-        box-shadow:none;
-        width:100%;
-    }
 
 }
+
+
 
 </style>
 
@@ -149,29 +174,44 @@ td,th{
 <h1>
 📊 تقرير المصروفات
 </h1>
-<form method="POST" class="no-print">
-
-    <label>
-        📅 من تاريخ:
-    </label>
-
-    <input type="date" name="from_date">
 
 
-    <label>
-        📅 إلى تاريخ:
-    </label>
 
-    <input type="date" name="to_date">
+<div class="filter no-print">
 
 
-    <button type="submit">
-        🔍 عرض التقرير
-    </button>
+<form method="POST">
+
+
+<label>
+📅 من تاريخ:
+</label>
+
+
+<input type="date" name="from_date">
+
+
+<label>
+📅 إلى تاريخ:
+</label>
+
+
+<input type="date" name="to_date">
+
+
+<button type="submit">
+
+🔍 عرض التقرير
+
+</button>
+
 
 </form>
 
-<br>
+
+</div>
+
+
 
 <table>
 
@@ -196,9 +236,11 @@ td,th{
 </tr>
 
 
+
 {% for e in expenses %}
 
 <tr>
+
 
 <td>
 {{ (e.expense_date + timedelta(hours=3)).strftime('%d-%m-%Y %H:%M') }}
@@ -222,10 +264,13 @@ td,th{
 
 </tr>
 
+
 {% endfor %}
 
 
+
 </table>
+
 
 
 <div class="total">
@@ -236,10 +281,10 @@ td,th{
 </div>
 
 
-<br>
 
 
-<div class="no-print">
+<div class="actions no-print">
+
 
 <button class="print-btn" onclick="window.print()">
 
@@ -247,13 +292,17 @@ td,th{
 
 </button>
 
-</div>
+
 
 <a class="back" href="/reports_menu">
 
 ⬅ العودة للتقارير
 
 </a>
+
+
+</div>
+
 
 
 </div>
