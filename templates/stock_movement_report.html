@@ -16,6 +16,7 @@ body{
     text-align:center;
 }
 
+
 .card{
 
     background:white;
@@ -59,6 +60,8 @@ td,th{
     border:1px solid #ccc;
 
 }
+
+
 .print-btn{
 
     background:#059669;
@@ -73,11 +76,32 @@ td,th{
 }
 
 
+.back{
+
+    display:inline-block;
+    background:#6b7280;
+    color:white;
+    padding:12px 25px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-top:20px;
+
+}
+
+.actions{
+
+    margin-top:20px;
+
+}
+
 @media print{
 
+
     body{
+
         background:white;
         padding:0;
+
     }
 
 
@@ -89,44 +113,20 @@ td,th{
     }
 
 
-    form,
+    .print-btn,
     .back,
-    .print-btn{
+    .actions,
+    form,
+    h2{
 
-        display:none;
+        display:none !important;
 
     }
 
-}
-<button class="print-btn" onclick="window.print()">
-
-🖨️ طباعة التقرير
-
-</button>
-@media print{
-
-form,
-button,
-a{
-
-display:none;
 
 }
 
-body{
 
-background:white;
-
-}
-
-.card{
-
-box-shadow:none;
-
-}
-
-}
-    
 </style>
 
 </head>
@@ -269,9 +269,13 @@ margin:20px;
 
 🔴 بيع
 
-{% else %}
+{% elif m.movement_type=="RETURN" %}
 
 🟢 مرتجع
+
+{% else %}
+
+📦 تعديل مخزون
 
 {% endif %}
 
@@ -280,7 +284,11 @@ margin:20px;
 
 <td>
 
+{% if m.quantity > 0 %}
++{{m.quantity}}
+{% else %}
 {{m.quantity}}
+{% endif %}
 
 </td>
 
@@ -307,25 +315,25 @@ margin:20px;
 
 
 <br>
-<button onclick="window.print()"
-style="
-background:#059669;
-color:white;
-padding:12px 25px;
-border:none;
-border-radius:8px;
-font-size:18px;
-cursor:pointer;
-">
+
+<div class="actions">
+
+
+<button class="print-btn" onclick="window.print()">
 
 🖨️ طباعة التقرير
 
 </button>
-<a href="/reports">
+
+
+<a class="back" href="/reports">
 
 ⬅ العودة للتقارير
 
 </a>
+
+
+</div>
 
 
 </div>
