@@ -1075,7 +1075,51 @@ def add_to_cart():
 
     return redirect(url_for("seller"))
 
+@app.route("/update_cart_qty", methods=["POST"])
+def update_cart_qty():
 
+    product_id = int(request.form["product_id"])
+    action = request.form["action"]
+
+    cart = session.get("cart", [])
+
+
+    for item in cart:
+
+        if item["id"] == product_id:
+
+
+            if action == "plus":
+
+                item["qty"] += 1
+
+
+            elif action == "minus":
+
+                item["qty"] -= 1
+
+
+                if item["qty"] <= 0:
+
+                    cart.remove(item)
+
+                    break
+
+
+            if item in cart:
+
+                item["total"] = (
+                    item["qty"] *
+                    item["price"]
+                )
+
+
+            break
+
+
+    session["cart"] = cart
+
+    return redirect(url_for("seller"))
 
 # ---------------- عرض السلة ----------------
 
