@@ -263,7 +263,9 @@ margin-top:15px;
 <th style="padding:10px;">
 المجموع
 </th>
-
+<th style="padding:10px;">
+إجراء
+</th>
 </tr>
 
 
@@ -293,7 +295,31 @@ margin-top:15px;
 <td style="padding:10px;border-bottom:1px solid #ddd;">
 {{item.total}} JOD
 </td>
+<td style="padding:10px;border-bottom:1px solid #ddd;">
 
+<form method="POST" action="/remove_from_cart">
+
+<input type="hidden" name="product_id" value="{{item.id}}">
+
+<button
+type="submit"
+style="
+background:#dc2626;
+color:white;
+padding:8px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+"
+>
+
+❌ حذف
+
+</button>
+
+</form>
+
+</td>
 
 </tr>
 
