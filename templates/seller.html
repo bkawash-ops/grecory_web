@@ -402,7 +402,7 @@ border-radius:10px;
 margin-bottom:15px;
 ">
 
-<form method="POST" action="/checkout">
+<form method="POST" action="/checkout" onsubmit="return validateCustomer();">
 
 
 <h3>
@@ -792,6 +792,34 @@ function toggleCustomer(){
     else{
         box.style.display="none";
     }
+
+}   
+
+function validateCustomer(){
+
+    let type = document.querySelector(
+        "input[name='customer_type']:checked"
+    ).value;
+
+
+    if(type == "TRADER"){
+
+        let name = document.getElementById("customer_name").value.trim();
+        let phone = document.getElementById("customer_phone").value.trim();
+        let address = document.getElementById("customer_address").value.trim();
+
+
+        if(name == "" || phone == "" || address == ""){
+
+            alert("⚠️ يرجى إدخال بيانات التاجر كاملة");
+
+            return false;
+        }
+
+    }
+
+
+    return true;
 
 }    
 </script>
