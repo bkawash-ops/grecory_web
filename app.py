@@ -1234,58 +1234,8 @@ def checkout():
     customer_id = None
 
 
-if customer_name:
-
-
-    cur.execute("""
-        SELECT id
-        FROM customers
-        WHERE name=%s
-        LIMIT 1
-    """,
-    (customer_name,))
-
-
-    customer = cur.fetchone()
-
-
-    if customer:
-
-        customer_id = customer[0]
-
-
-    else:
-
-
-        cur.execute("""
-            INSERT INTO customers
-            (
-                name,
-                phone,
-                address
-            )
-            VALUES (%s,%s,%s)
-            RETURNING id
-        """,
-        (
-            customer_name,
-            customer_phone,
-            customer_address
-        ))
-
-
-        customer_id = cur.fetchone()[0]
-
-    # إنشاء رقم فاتورة جديد
-    cur.execute("""
-        SELECT COALESCE(MAX(invoice_number),1000)+1
-        FROM sales
-    """)
-
-    invoice_number = cur.fetchone()[0]
-    customer_id = None
-
     if customer_name:
+
 
         cur.execute("""
             SELECT id
@@ -1294,6 +1244,7 @@ if customer_name:
             LIMIT 1
         """,
         (customer_name,))
+
 
         customer = cur.fetchone()
 
@@ -1304,6 +1255,7 @@ if customer_name:
 
 
         else:
+
 
             cur.execute("""
                 INSERT INTO customers
@@ -1321,8 +1273,56 @@ if customer_name:
                 customer_address
             ))
 
+
             customer_id = cur.fetchone()[0]
-            customer_id = None
+
+        # إنشاء رقم فاتورة جديد
+        cur.execute("""
+            SELECT COALESCE(MAX(invoice_number),1000)+1
+            FROM sales
+        """)
+
+        invoice_number = cur.fetchone()[0]
+        customer_id = None
+
+        if customer_name:
+
+            cur.execute("""
+                SELECT id
+                FROM customers
+                WHERE name=%s
+                LIMIT 1
+            """,
+            (customer_name,))
+
+            customer = cur.fetchone()
+
+
+            if customer:
+
+                customer_id = customer[0]
+
+
+            else:
+
+                cur.execute("""
+                    INSERT INTO customers
+                    (
+                        name,
+                        phone,
+                        address
+                    )
+                    VALUES (%s,%s,%s)
+                    RETURNING id
+                """,
+                (
+                    customer_name,
+                    customer_phone,
+                    customer_address
+                ))
+
+                customer_id = cur.fetchone()[0]
+                customer_id = None
     # حفظ رأس الفاتورة
     cur.execute("""
         INSERT INTO sales
