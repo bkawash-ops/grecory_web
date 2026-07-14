@@ -1263,7 +1263,7 @@ def checkout():
         session.get("user"),
         total,
         sale_time,
-        ustomer_name,
+        customer_name,
         customer_phone,
         customer_address
     ))
