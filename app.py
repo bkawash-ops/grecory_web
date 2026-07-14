@@ -1541,7 +1541,8 @@ def checkout():
         username=session.get("user"),
         customer_name=customer_name,
         customer_phone=customer_phone,
-        customer_address=customer_address
+        customer_address=customer_address,
+        payment_method=payment_method
     )
 @app.route("/add_payment_method_column")
 def add_payment_method_column():
