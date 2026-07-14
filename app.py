@@ -1257,7 +1257,45 @@ def checkout():
     """)
 
     invoice_number = cur.fetchone()[0]
+customer_id = None
 
+if customer_name:
+
+    cur.execute("""
+        SELECT id
+        FROM customers
+        WHERE name=%s
+        LIMIT 1
+    """,
+    (customer_name,))
+
+    customer = cur.fetchone()
+
+
+    if customer:
+
+        customer_id = customer[0]
+
+
+    else:
+
+        cur.execute("""
+            INSERT INTO customers
+            (
+                name,
+                phone,
+                address
+            )
+            VALUES (%s,%s,%s)
+            RETURNING id
+        """,
+        (
+            customer_name,
+            customer_phone,
+            customer_address
+        ))
+
+        customer_id = cur.fetchone()[0]
 
     # حفظ رأس الفاتورة
     cur.execute("""
@@ -1269,9 +1307,10 @@ def checkout():
             sale_date,
             customer_name,
             customer_phone,
-            customer_address
+            customer_address,
+            customer_id
         )
-        VALUES (%s,%s,%s,%s,%s,%s,%s)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
         RETURNING id
     """,
     (
