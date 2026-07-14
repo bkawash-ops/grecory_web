@@ -121,12 +121,16 @@ def customers():
         customers=customers
     )
 
-@app.route("/check_debts")
-def check_debts():
+@app.route("/check_customer")
+def check_customer():
     conn = db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM customer_debts")
+    cur.execute("""
+        SELECT *
+        FROM customers
+        WHERE id = 11
+    """)
 
     data = cur.fetchall()
 
