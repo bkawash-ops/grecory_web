@@ -121,15 +121,31 @@ def customers():
         customers=customers
     )
 
-@app.route("/check_sales_structure")
-def check_sales_structure():
+@app.route("/test_traders")
+def test_traders():
+
     conn = db()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name='sales'
+        SELECT 
+            c.id,
+            c.name,
+            c.phone,
+            SUM(d.amount) AS total_debt,
+            SUM(d.paid) AS total_paid,
+            SUM(d.amount - d.paid) AS remaining
+
+        FROM customers c
+
+        JOIN customer_debts d
+        ON c.id = d.customer_id
+
+        GROUP BY 
+            c.id,
+            c.name,
+            c.phone
+
     """)
 
     data = cur.fetchall()
