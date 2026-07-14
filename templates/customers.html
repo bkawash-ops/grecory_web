@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>العملاء</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f5f5f5;
+    padding:20px;
+}
+
+
+.card{
+
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 8px #ccc;
+    margin-bottom:20px;
+
+}
+
+
+h2{
+
+    color:#1f2937;
+
+}
+
+
+.search-box{
+
+    width:300px;
+    padding:12px;
+    font-size:16px;
+    border-radius:8px;
+    border:1px solid #ccc;
+
+}
+
+
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+
+}
+
+
+th{
+
+    background:#2563eb;
+    color:white;
+    padding:12px;
+
+}
+
+
+td{
+
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+
+}
+
+
+tr:hover{
+
+    background:#f1f5f9;
+
+}
+
+
+.money{
+
+    font-weight:bold;
+    color:#059669;
+
+}
+
+
+.debt{
+
+    font-weight:bold;
+    color:#dc2626;
+
+}
+
+
+
+.btn{
+
+    background:#2563eb;
+    color:white;
+    padding:8px 15px;
+    border-radius:7px;
+    text-decoration:none;
+
+}
+
+
+.back{
+
+    display:inline-block;
+    background:#6b7280;
+    color:white;
+    padding:10px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-bottom:15px;
+
+}
+
+
+.empty{
+
+    text-align:center;
+    padding:30px;
+    color:#666;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<a class="back" href="/seller">
+⬅ العودة للبيع
+</a>
+
+
+
+<div class="card">
+
+
+<h2>
+👥 إدارة العملاء
+</h2>
+
+
+<input
+type="text"
+id="search"
+class="search-box"
+placeholder="🔍 بحث بالاسم أو الهاتف"
+onkeyup="searchCustomers()"
+>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<table id="customersTable">
+
+
+<tr>
+
+<th>
+الاسم
+</th>
+
+
+<th>
+الهاتف
+</th>
+
+
+<th>
+العنوان
+</th>
+
+
+<th>
+عدد الفواتير
+</th>
+
+
+<th>
+إجمالي المبيعات
+</th>
+
+
+<th>
+المدفوع
+</th>
+
+
+<th>
+الذمة
+</th>
+
+
+<th>
+إجراء
+</th>
+
+
+</tr>
+
+
+
+{% for c in customers %}
+
+
+<tr>
+
+
+<td>
+{{c.name}}
+</td>
+
+
+<td>
+{{c.phone or ''}}
+</td>
+
+
+<td>
+{{c.address or ''}}
+</td>
+
+
+<td>
+{{c.invoices}}
+</td>
+
+
+<td class="money">
+
+{{"%.2f"|format(c.sales_total)}} JOD
+
+</td>
+
+
+
+<td class="money">
+
+{{"%.2f"|format(c.paid)}} JOD
+
+</td>
+
+
+<td class="debt">
+
+{{"%.2f"|format(c.sales_total - c.paid)}} JOD
+
+</td>
+
+
+
+<td>
+
+<a class="btn"
+href="/customer/{{c.id}}">
+
+👁️ عرض
+
+</a>
+
+</td>
+
+
+</tr>
+
+
+
+{% else %}
+
+
+<tr>
+
+<td colspan="8" class="empty">
+
+لا يوجد عملاء
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+<script>
+
+
+function searchCustomers(){
+
+
+let input =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+
+
+let rows =
+document
+.getElementById("customersTable")
+.getElementsByTagName("tr");
+
+
+
+for(let i=1;i<rows.length;i++){
+
+
+let text =
+rows[i]
+.innerText
+.toLowerCase();
+
+
+
+if(text.includes(input)){
+
+
+rows[i].style.display="";
+
+
+}
+
+else{
+
+
+rows[i].style.display="none";
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
