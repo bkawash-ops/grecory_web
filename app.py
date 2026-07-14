@@ -1474,7 +1474,7 @@ def invoice_details(invoice_number):
     "invoice_details.html",
     sale=sale,
     items=items,
-    returns=returnsو
+    returns=returns,
     timedelta=timedelta
     )
 
