@@ -1395,33 +1395,33 @@ if customer_name:
         ))
 
         cur.execute("""
-        INSERT INTO stock_movements
+            INSERT INTO stock_movements
+            (
+                product_id,
+                product_name,
+                movement_type,
+                quantity,
+                reference,
+                username
+            )
+            VALUES
+            (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s
+            )
+        """,
         (
-            product_id,
-            product_name,
-            movement_type,
-            quantity,
-            reference,
+            item["id"],
+            item["name"],
+            "SALE",
+            -item["qty"],
+            f"Invoice #{invoice_number}",
             username
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-        )
-    """,
-    (
-        item["id"],
-        item["name"],
-        "SALE",
-        -item["qty"],
-        f"Invoice #{invoice_number}",
-        username
-    ))
+        ))
 
     conn.commit()
 
