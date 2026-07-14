@@ -137,24 +137,6 @@ def customers():
         "customers.html",
         customers=customers
     )
-@app.route("/test_payments")
-def test_payments():
-
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name='customer_payments'
-    """)
-
-    data = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return str(data)
 
 @app.route("/customer/<int:id>")
 def customer_account(id):
@@ -209,7 +191,20 @@ def customer_account(id):
 
 
     debt = cur.fetchone()
+    # دفعات التاجر
+    cur.execute("""
+        SELECT
+            id,
+            amount,
+            payment_date,
+            username,
+            notes
+        FROM customer_payments
+        WHERE customer_id=%s
+        ORDER BY payment_date DESC
+    """, (id,))
 
+    payments = cur.fetchall()
 
     cur.close()
     conn.close()
@@ -219,7 +214,8 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
-        debt=debt
+        debt=debt,
+        payments=payments
     )
 @app.route("/test_sales/<int:id>")
 def test_sales(id):
