@@ -1306,6 +1306,7 @@ def checkout():
     customer_name = request.form.get("customer_name", "").strip()
     customer_phone = request.form.get("customer_phone", "").strip()
     customer_address = request.form.get("customer_address", "").strip()
+    payment_method = request.form.get("payment_method", "CASH")
     print("CHECKOUT CART:")
     print(items)
 
