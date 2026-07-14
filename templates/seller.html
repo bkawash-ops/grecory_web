@@ -395,11 +395,12 @@ border-radius:5px;
 💰 الإجمالي:
 {{"%.2f"|format(total.value)}} JOD
 </h3>
-
-<div style="margin-top:20px;">
-
-<form method="POST" action="/checkout">
-
+<div style="
+background:#f3f4f6;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+">
 
 <h3>
 💳 طريقة الدفع
@@ -408,13 +409,12 @@ border-radius:5px;
 
 <label>
 <input 
-type="radio"
-name="payment_method"
+type="radio" 
+name="payment_method" 
 value="CASH"
 checked>
 
 💵 كاش
-
 </label>
 
 
@@ -423,12 +423,11 @@ checked>
 
 <label>
 <input 
-type="radio"
-name="payment_method"
+type="radio" 
+name="payment_method" 
 value="VISA">
 
 💳 فيزا
-
 </label>
 
 
@@ -437,79 +436,66 @@ value="VISA">
 
 <label>
 <input 
-type="radio"
-name="payment_method"
+type="radio" 
+name="payment_method" 
 value="CREDIT">
 
 📒 ذمم
-
 </label>
 
 
+</div>
 
-<hr>
-
-
-<h3>
-👤 نوع الزبون
-</h3>
+<div style="margin-top:20px;">
 
 
-<label>
+
+<form method="POST" action="/checkout">
+
 
 <input 
-type="radio"
-name="customer_type"
-value="CUSTOMER"
-checked
-onclick="toggleCustomer()">
-
-👤 عميل عادي
-
-</label>
+type="hidden" 
+id="payment_method_input"
+name="payment_method"
+value="CASH">
 
 
-&nbsp;&nbsp;
-
-
-<label>
-
-<input 
-type="radio"
-name="customer_type"
-value="TRADER"
-onclick="toggleCustomer()">
-
-🏪 تاجر
-
-</label>
-
-
-
-<div id="trader_box" 
-style="display:none;margin-top:15px;">
-
+<br>
 
 <input 
 type="text"
 name="customer_name"
-placeholder="👤 اسم التاجر">
+placeholder="👤 اسم العميل (اختياري)"
+style="
+padding:10px;
+width:220px;
+border-radius:6px;
+border:1px solid #ccc;
+">
 
 
 <input 
 type="text"
 name="customer_phone"
-placeholder="📞 رقم الهاتف">
+placeholder="📞 رقم الهاتف"
+style="
+padding:10px;
+width:180px;
+border-radius:6px;
+border:1px solid #ccc;
+">
 
 
 <input 
 type="text"
 name="customer_address"
-placeholder="📍 العنوان">
-
-
-</div>
-
+placeholder="📍 العنوان"
+style="
+padding:10px;
+width:180px;
+border-radius:6px;
+border:1px solid #ccc;
+">
 
 
 <br><br>
@@ -521,8 +507,10 @@ style="
 background:#059669;
 color:white;
 padding:12px 25px;
+border:none;
 border-radius:8px;
 font-size:16px;
+cursor:pointer;
 ">
 
 🧾 إصدار الفاتورة
@@ -531,9 +519,8 @@ font-size:16px;
 
 
 </form>
+
 <form method="POST" action="/clear_cart" style="display:inline;">
-
-
 
 <button
 type="submit"
@@ -760,24 +747,9 @@ function barcodeEnter(event){
     }
 
 }
+document.querySelector("form[action='/checkout']")
+.addEventListener("submit", function(){
 
-function toggleCustomer(){
-
-    let type = document.querySelector(
-    "input[name='customer_type']:checked"
-    ).value;
-
-    let box = document.getElementById("trader_box");
-
-    if(type=="TRADER"){
-        box.style.display="block";
-    }
-    else{
-        box.style.display="none";
-    }
-
-}
-    
     let method =
     document.querySelector(
     "input[name='payment_method']:checked"
@@ -790,26 +762,6 @@ function toggleCustomer(){
 
 
 });
-
-function toggleCustomer(){
-
-    let type = document.querySelector(
-    "input[name='customer_type']:checked"
-    ).value;
-
-
-    let box = document.getElementById("trader_box");
-
-
-    if(type=="TRADER"){
-        box.style.display="block";
-    }
-    else{
-        box.style.display="none";
-    }
-
-}
-    
 </script>
 
 
