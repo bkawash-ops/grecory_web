@@ -51,29 +51,7 @@ def check_expenses_columns():
     conn.close()
 
     return str(result)
-@app.route("/create_customers_table")
-def create_customers_table():
 
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS customers
-        (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            phone VARCHAR(30),
-            address TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return "Customers table created successfully"
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
