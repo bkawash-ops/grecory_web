@@ -1613,25 +1613,31 @@ def create_customer_payments():
 
     return "customer_payments created successfully"
 
-@app.route("/check_debts_table")
-def check_debts_table():
+@app.route("/create_customer_debts_table")
+def create_customer_debts_table():
 
     conn = db()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT EXISTS (
-            SELECT FROM information_schema.tables
-            WHERE table_name = 'customer_debts'
-        );
+        CREATE TABLE IF NOT EXISTS customer_debts
+        (
+            id SERIAL PRIMARY KEY,
+            customer_id INTEGER,
+            invoice_id INTEGER,
+            amount NUMERIC(10,2),
+            paid NUMERIC(10,2) DEFAULT 0,
+            status VARCHAR(20) DEFAULT 'OPEN',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
     """)
 
-    result = cur.fetchone()[0]
+    conn.commit()
 
     cur.close()
     conn.close()
 
-    return str(result)
+    return "customer_debts created successfully"
 @app.route("/check_customers")
 def check_customers():
 
