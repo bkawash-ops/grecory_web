@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<title>كشف حساب</title>
+</head>
+
+<body>
+
+<h2>
+كشف حساب التاجر
+</h2>
+
+
+<h3>
+{{customer.name}}
+</h3>
+
+<p>
+📞 {{customer.phone}}
+</p>
+
+<p>
+📍 {{customer.address}}
+</p>
+
+
+<hr>
+
+
+<h3>
+💰 إجمالي الذمة:
+{{"%.2f"|format(debt.debt)}} JOD
+</h3>
+
+
+<table border="1" width="100%">
+
+<tr>
+<th>رقم الفاتورة</th>
+<th>التاريخ</th>
+<th>المبلغ</th>
+<th>الدفع</th>
+</tr>
+
+
+{% for i in invoices %}
+
+<tr>
+
+<td>
+{{i.invoice_number}}
+</td>
+
+<td>
+{{i.sale_date}}
+</td>
+
+<td>
+{{i.total}} JOD
+</td>
+
+<td>
+{{i.payment_method}}
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+</table>
+
+
+<br>
+
+<a href="/customers">
+⬅ العودة للعملاء
+</a>
+
+
+</body>
+
+</html>
