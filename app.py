@@ -1253,7 +1253,50 @@ def remove_from_cart():
     session["cart"] = cart
 
     return redirect(url_for("seller"))
+@app.route("/customer/<int:id>")
+def customer_details(id):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+
+    cur.execute("""
+        SELECT *
+        FROM customers
+        WHERE id=%s
+    """,
+    (id,))
+
+    customer = cur.fetchone()
+
+
+    if not customer:
+        return "العميل غير موجود"
+
+
+    cur.execute("""
+        SELECT
+            invoice_number,
+            sale_date,
+            total
+        FROM sales
+        WHERE customer_id=%s
+        ORDER BY id DESC
+    """,
+    (id,))
+
+    invoices = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "customer_details.html",
+        customer=customer,
+        invoices=invoices
+    )
 # ---------------- إتمام البيع وطباعة الفاتورة ----------------
 
 @app.route("/checkout", methods=["POST"])
