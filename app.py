@@ -52,26 +52,6 @@ def check_expenses_columns():
 
     return str(result)
 
-@app.route("/add_customer_columns")
-def add_customer_columns():
-
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        ALTER TABLE sales
-        ADD COLUMN IF NOT EXISTS customer_name VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS customer_phone VARCHAR(30),
-        ADD COLUMN IF NOT EXISTS customer_address TEXT
-    """)
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return "Customer columns added successfully"
-
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
