@@ -51,6 +51,57 @@ def check_expenses_columns():
     conn.close()
 
     return str(result)
+
+@app.route("/customers")
+def customers():
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+
+        SELECT
+
+            c.id,
+            c.name,
+            c.phone,
+            c.address,
+
+            COUNT(DISTINCT s.id) AS invoices,
+
+            COALESCE(SUM(s.total),0) AS sales_total,
+
+            COALESCE(
+                (
+                    SELECT SUM(amount)
+                    FROM customer_payments p
+                    WHERE p.customer_id=c.id
+                ),
+                0
+            ) AS paid
+
+        FROM customers c
+
+        LEFT JOIN sales s
+            ON s.customer_id=c.id
+
+        GROUP BY
+            c.id
+
+        ORDER BY
+            c.name
+
+    """)
+
+    customers = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "customers.html",
+        customers=customers
+    )
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
