@@ -69,7 +69,7 @@ def customers():
 
             COUNT(DISTINCT s.id) AS invoices,
 
-            COALESCE(SUM(s.total),0) AS sales_total,
+            COALESCE(SUM(s.total),0)::numeric AS sales_total,
 
             COALESCE(
                 (
@@ -78,7 +78,7 @@ def customers():
                     WHERE p.customer_id=c.id
                 ),
                 0
-            ) AS paid
+            )::numeric AS paid
 
         FROM customers c
 
