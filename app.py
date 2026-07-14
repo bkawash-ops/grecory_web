@@ -51,7 +51,25 @@ def check_expenses_columns():
     conn.close()
 
     return str(result)
+@app.route("/check_payment_column")
+def check_payment_column():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT invoice_number, customer_name, payment_method
+        FROM sales
+        ORDER BY id DESC
+        LIMIT 10
+    """)
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/customers")
 def customers():
 
