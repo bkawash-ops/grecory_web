@@ -400,7 +400,47 @@ border-radius:5px;
 <div style="margin-top:20px;">
 
 
-<form method="POST" action="/checkout" style="display:inline;">
+<form method="POST" action="/checkout">
+
+<h4>
+👤 بيانات العميل (اختياري)
+</h4>
+
+<input
+type="text"
+name="customer_name"
+placeholder="اسم العميل"
+style="
+width:250px;
+padding:10px;
+margin:5px;
+">
+
+
+<input
+type="text"
+name="customer_phone"
+placeholder="رقم الهاتف"
+style="
+width:250px;
+padding:10px;
+margin:5px;
+">
+
+
+<input
+type="text"
+name="customer_address"
+placeholder="العنوان"
+style="
+width:250px;
+padding:10px;
+margin:5px;
+">
+
+
+<br><br>
+
 
 <button
 type="submit"
@@ -419,8 +459,8 @@ margin-left:10px;
 
 </button>
 
-</form>
 
+</form>
 
 
 <form method="POST" action="/clear_cart" style="display:inline;">
