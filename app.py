@@ -1474,7 +1474,8 @@ def invoice_details(invoice_number):
     "invoice_details.html",
     sale=sale,
     items=items,
-    returns=returns
+    returns=returnsو
+    timedelta=timedelta
     )
 
 @app.route("/reports/pdf")
