@@ -137,6 +137,25 @@ def customers():
         "customers.html",
         customers=customers
     )
+@app.route("/test_payments")
+def test_payments():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name='customer_payments'
+    """)
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
+
 @app.route("/customer/<int:id>")
 def customer_account(id):
 
