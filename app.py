@@ -120,6 +120,20 @@ def customers():
         "customers.html",
         customers=customers
     )
+
+@app.route("/check_debts")
+def check_debts():
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM customer_debts")
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
