@@ -171,9 +171,14 @@ def customer_account(id):
         ORDER BY sale_date DESC
     """, (id,))
 
-
+    from zoneinfo import ZoneInfo
     invoices = cur.fetchall()
-
+    amman = ZoneInfo("Asia/Amman")
+    for inv in invoices:
+        if inv["sale_date"]:
+           inv["sale_date"] = inv["sale_date"].replace(
+               tzinfo=ZoneInfo("UTC")
+           ).astimezone(amman)
 
     # إجمالي الذمة
     cur.execute("""
