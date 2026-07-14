@@ -1378,7 +1378,8 @@ def invoices():
 
     return render_template(
         "invoices.html",
-        invoices=invoices
+        invoices=invoices,
+        timedelta=timedelta
     )
 
 @app.route("/seller")
