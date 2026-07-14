@@ -51,7 +51,23 @@ def check_expenses_columns():
     conn.close()
 
     return str(result)
+@app.route("/add_customer_id_column")
+def add_customer_id_column():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        ALTER TABLE sales
+        ADD COLUMN IF NOT EXISTS customer_id INTEGER
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "customer_id column added successfully"
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
