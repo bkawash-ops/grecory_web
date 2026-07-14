@@ -103,6 +103,7 @@ def customers():
                     SELECT SUM(amount - paid)
                     FROM customer_debts d
                     WHERE d.customer_id=c.id
+                    AND d.status='OPEN'
                 ),
                 0
             )::numeric AS debt
