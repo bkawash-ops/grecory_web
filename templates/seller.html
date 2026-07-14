@@ -534,95 +534,6 @@ font-size:16px;
 <form method="POST" action="/clear_cart" style="display:inline;">
 
 
-<form method="POST" action="/checkout">
-
-
-<input 
-type="hidden" 
-id="payment_method_input"
-name="payment_method"
-value="CASH">
-
-
-<!-- هنا نضع اختيار نوع الزبون -->
-
-<div style="margin-top:15px;">
-
-<h3>
-👤 نوع الزبون
-</h3>
-
-<label>
-<input 
-type="radio"
-name="customer_type"
-value="CUSTOMER"
-checked
-onclick="toggleCustomer()">
-
-👤 عميل عادي
-
-</label>
-
-
-&nbsp;&nbsp;
-
-
-<label>
-
-<input 
-type="radio"
-name="customer_type"
-value="TRADER"
-onclick="toggleCustomer()">
-
-🏪 تاجر
-
-</label>
-
-</div>
-
-
-<!-- هنا خانات التاجر -->
-
-<div id="trader_box" style="display:none;margin-top:15px;">
-
-
-<input 
-type="text"
-name="customer_name"
-placeholder="👤 اسم التاجر">
-
-
-<input 
-type="text"
-name="customer_phone"
-placeholder="📞 رقم الهاتف">
-
-
-<input 
-type="text"
-name="customer_address"
-placeholder="📍 العنوان">
-
-
-</div>
-
-
-
-<button
-type="submit">
-
-🧾 إصدار الفاتورة
-
-</button>
-
-
-</form>
-
-
-
-<form method="POST" action="/clear_cart" style="display:inline;">
 
 <button
 type="submit"
@@ -849,9 +760,24 @@ function barcodeEnter(event){
     }
 
 }
-document.querySelector("form[action='/checkout']")
-.addEventListener("submit", function(){
 
+function toggleCustomer(){
+
+    let type = document.querySelector(
+    "input[name='customer_type']:checked"
+    ).value;
+
+    let box = document.getElementById("trader_box");
+
+    if(type=="TRADER"){
+        box.style.display="block";
+    }
+    else{
+        box.style.display="none";
+    }
+
+}
+    
     let method =
     document.querySelector(
     "input[name='payment_method']:checked"
