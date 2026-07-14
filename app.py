@@ -1463,6 +1463,29 @@ def check_customers():
     conn.close()
 
     return str(data)
+
+@app.route("/check_sales_customer")
+def check_sales_customer():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            invoice_number,
+            customer_name,
+            customer_id
+        FROM sales
+        ORDER BY id DESC
+        LIMIT 5
+    """)
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/invoices")
 def invoices():
 
