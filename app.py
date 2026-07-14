@@ -1202,23 +1202,7 @@ def remove_from_cart():
     session["cart"] = cart
 
     return redirect(url_for("seller"))
-@app.route("/add_customer_id_column")
-def add_customer_id_column():
 
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        ALTER TABLE sales
-        ADD COLUMN IF NOT EXISTS customer_id INTEGER
-    """)
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return "customer_id added"    
 # ---------------- إتمام البيع وطباعة الفاتورة ----------------
 
 @app.route("/checkout", methods=["POST"])
