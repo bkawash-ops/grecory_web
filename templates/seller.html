@@ -449,67 +449,7 @@ value="CREDIT">
 <div style="margin-top:20px;">
 
 
-<form method="POST" action="/checkout">
-
-<h4>
-👤 بيانات العميل (اختياري)
-</h4>
-
-<input
-type="text"
-name="customer_name"
-placeholder="اسم العميل"
-style="
-width:250px;
-padding:10px;
-margin:5px;
-">
-
-
-<input
-type="text"
-name="customer_phone"
-placeholder="رقم الهاتف"
-style="
-width:250px;
-padding:10px;
-margin:5px;
-">
-
-
-<input
-type="text"
-name="customer_address"
-placeholder="العنوان"
-style="
-width:250px;
-padding:10px;
-margin:5px;
-">
-
-
-<br><br>
-
-
-<button
-type="submit"
-style="
-background:#059669;
-color:white;
-padding:12px 25px;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-margin-left:10px;
-">
-
-🧾 إصدار الفاتورة
-
-</button>
-
-
-</form>
+ إصدار الفاتورة
 
 
 <form method="POST" action="/clear_cart" style="display:inline;">
@@ -739,7 +679,21 @@ function barcodeEnter(event){
     }
 
 }
+document.querySelector("form[action='/checkout']")
+.addEventListener("submit", function(){
 
+    let method =
+    document.querySelector(
+    "input[name='payment_method']:checked"
+    ).value;
+
+
+    document.getElementById(
+    "payment_method_input"
+    ).value = method;
+
+
+});
 </script>
 
 
