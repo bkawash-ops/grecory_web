@@ -1561,7 +1561,8 @@ def checkout():
             customer_name,
             customer_phone,
             customer_address,
-            customer_id
+            customer_id,
+            payment_method
         )
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
         RETURNING id
@@ -1574,7 +1575,8 @@ def checkout():
         customer_name,
         customer_phone,
         customer_address,
-        customer_id
+        customer_id,
+        payment_method
     ))
 
 
