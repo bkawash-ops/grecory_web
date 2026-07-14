@@ -1471,7 +1471,7 @@ def checkout():
 
     sale_id = cur.fetchone()[0]
 
-        if payment_method == "CREDIT" and customer_id:
+    if payment_method == "CREDIT" and customer_id:
 
         cur.execute("""
             INSERT INTO customer_debts
@@ -1487,10 +1487,10 @@ def checkout():
             sale_id,
             total
         ))
+
     # حفظ تفاصيل الفاتورة + خصم المخزون
 
     for item in items:
-
 
         cur.execute("""
             INSERT INTO sale_items
