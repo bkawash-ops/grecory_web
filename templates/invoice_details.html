@@ -149,7 +149,7 @@ td,th{
 <p><strong>👤 المستخدم:</strong> {{ sale["username"] }}</p>
 
 <p><strong>📅 التاريخ:</strong>
-{{ sale["sale_date"].strftime('%d-%m-%Y %H:%M') }}
+{{ (sale["sale_date"] + timedelta(hours=3)).strftime('%d-%m-%Y %H:%M') }}
 </p>
 
 </div>
