@@ -195,7 +195,30 @@ ZAD AL BAYT MARKET
 <hr>
 
 {% endif %}
+<hr>
 
+<p>
+<strong>💳 طريقة الدفع:</strong>
+
+{% if payment_method == "CASH" %}
+
+💵 كاش
+
+{% elif payment_method == "VISA" %}
+
+💳 فيزا
+
+{% elif payment_method == "CREDIT" %}
+
+📒 ذمم
+
+{% else %}
+
+غير محدد
+
+{% endif %}
+
+</p>
 </div>
 
 
