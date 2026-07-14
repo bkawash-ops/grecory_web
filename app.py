@@ -108,10 +108,10 @@ def customers():
             ,
             COALESCE(
                 (
-                    SELECT SUM(amount - paid)
+                    SELECT SUM(d.amount - d.paid)
                     FROM customer_debts d
                     WHERE d.customer_id=c.id
-                    AND d.status='OPEN'
+                   
                 ),
                 0
             )::numeric AS debt
@@ -137,27 +137,6 @@ def customers():
         "customers.html",
         customers=customers
     )
-@app.route("/check_debts")
-def check_debts():
-
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT 
-            customer_id,
-            amount,
-            paid,
-            status
-        FROM customer_debts
-    """)
-
-    data = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return str(data)
 
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
