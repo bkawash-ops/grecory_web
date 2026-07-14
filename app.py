@@ -121,8 +121,8 @@ def customers():
         customers=customers
     )
 
-@app.route("/test_traders")
-def test_traders():
+@app.route("/traders")
+def traders():
 
     conn = db()
     cur = conn.cursor()
@@ -141,19 +141,23 @@ def test_traders():
         JOIN customer_debts d
         ON c.id = d.customer_id
 
-        GROUP BY 
+        GROUP BY
             c.id,
             c.name,
             c.phone
 
+        ORDER BY c.name
     """)
 
-    data = cur.fetchall()
+    traders = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return str(data)
+    return render_template(
+        "traders.html",
+        traders=traders
+    )
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
