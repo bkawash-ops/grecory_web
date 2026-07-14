@@ -1210,7 +1210,9 @@ def remove_from_cart():
 def checkout():
     username = session.get("user")
     items = session.get("cart", [])
-
+    customer_name = request.form.get("customer_name", "").strip()
+    customer_phone = request.form.get("customer_phone", "").strip()
+    customer_address = request.form.get("customer_address", "").strip()
     print("CHECKOUT CART:")
     print(items)
 
@@ -1248,16 +1250,22 @@ def checkout():
             invoice_number,
             username,
             total,
-            sale_date
+            sale_date,
+            customer_name,
+            customer_phone,
+            customer_address
         )
-        VALUES (%s,%s,%s,%s)
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
         RETURNING id
     """,
     (
         invoice_number,
         session.get("user"),
         total,
-        sale_time
+        sale_time,
+        ustomer_name,
+        customer_phone,
+        customer_address
     ))
 
 
@@ -1350,7 +1358,10 @@ def checkout():
         total=total,
         time=datetime.now(ZoneInfo("Asia/Amman")),
         invoice_number=invoice_number,
-        username=session.get("user")
+        username=session.get("user"),
+        customer_name=customer_name,
+        customer_phone=customer_phone,
+        customer_address=customer_address
     )
 
 @app.route("/invoices")
