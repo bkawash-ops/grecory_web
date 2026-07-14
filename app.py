@@ -1296,7 +1296,7 @@ def checkout():
             ))
 
             customer_id = cur.fetchone()[0]
-
+            customer_id = None
     # حفظ رأس الفاتورة
     cur.execute("""
         INSERT INTO sales
@@ -1320,7 +1320,8 @@ def checkout():
         sale_time,
         customer_name,
         customer_phone,
-        customer_address
+        customer_address,
+        customer_id
     ))
 
 
