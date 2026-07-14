@@ -97,7 +97,15 @@ def customers():
                 ),
                 0
             )::numeric AS paid
-
+            ,
+            COALESCE(
+                (
+                    SELECT SUM(amount - paid)
+                    FROM customer_debts d
+                    WHERE d.customer_id=c.id
+                ),
+                0
+            )::numeric AS debt
         FROM customers c
 
         LEFT JOIN sales s
@@ -121,43 +129,7 @@ def customers():
         customers=customers
     )
 
-@app.route("/traders")
-def traders():
 
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT 
-            c.id,
-            c.name,
-            c.phone,
-            SUM(d.amount) AS total_debt,
-            SUM(d.paid) AS total_paid,
-            SUM(d.amount - d.paid) AS remaining
-
-        FROM customers c
-
-        JOIN customer_debts d
-        ON c.id = d.customer_id
-
-        GROUP BY
-            c.id,
-            c.name,
-            c.phone
-
-        ORDER BY c.name
-    """)
-
-    traders = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return render_template(
-        "traders.html",
-        traders=traders
-    )
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
