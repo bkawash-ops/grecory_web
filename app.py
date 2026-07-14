@@ -1325,6 +1325,7 @@ def checkout():
     customer_phone = request.form.get("customer_phone", "").strip()
     customer_address = request.form.get("customer_address", "").strip()
     payment_method = request.form.get("payment_method", "CASH")
+    print("PAYMENT METHOD =", payment_method)
     print("CHECKOUT CART:")
     print(items)
 
@@ -1613,31 +1614,7 @@ def create_customer_payments():
 
     return "customer_payments created successfully"
 
-@app.route("/create_customer_debts_table")
-def create_customer_debts_table():
 
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS customer_debts
-        (
-            id SERIAL PRIMARY KEY,
-            customer_id INTEGER,
-            invoice_id INTEGER,
-            amount NUMERIC(10,2),
-            paid NUMERIC(10,2) DEFAULT 0,
-            status VARCHAR(20) DEFAULT 'OPEN',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return "customer_debts created successfully"
 @app.route("/check_customers")
 def check_customers():
 
