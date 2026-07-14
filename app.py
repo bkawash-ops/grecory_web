@@ -121,15 +121,15 @@ def customers():
         customers=customers
     )
 
-@app.route("/check_debts_structure")
-def check_debts_structure():
+@app.route("/check_sales_structure")
+def check_sales_structure():
     conn = db()
     cur = conn.cursor()
 
     cur.execute("""
         SELECT column_name
         FROM information_schema.columns
-        WHERE table_name='customer_debts'
+        WHERE table_name='sales'
     """)
 
     data = cur.fetchall()
