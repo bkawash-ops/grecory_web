@@ -449,8 +449,36 @@ value="CREDIT">
 <div style="margin-top:20px;">
 
 
- إصدار الفاتورة
+<div style="margin-top:20px;">
 
+
+<form method="POST" action="/checkout" style="display:inline;">
+
+<input 
+type="hidden" 
+id="payment_method_input"
+name="payment_method"
+value="CASH">
+
+
+<button
+type="submit"
+style="
+background:#059669;
+color:white;
+padding:12px 25px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+margin-left:10px;
+">
+
+🧾 إصدار الفاتورة
+
+</button>
+
+</form>
 
 <form method="POST" action="/clear_cart" style="display:inline;">
 
