@@ -402,19 +402,24 @@ border-radius:10px;
 margin-bottom:15px;
 ">
 
+<form method="POST" action="/checkout">
+
+
 <h3>
-💳 طريقة الدفع
+👤 نوع الزبون
 </h3>
 
 
 <label>
 <input 
-type="radio" 
-name="payment_method" 
-value="CASH"
-checked>
+type="radio"
+name="customer_type"
+value="CUSTOMER"
+checked
+onclick="toggleCustomer()">
 
-💵 كاش
+👤 عميل عادي
+
 </label>
 
 
@@ -423,41 +428,18 @@ checked>
 
 <label>
 <input 
-type="radio" 
-name="payment_method" 
-value="VISA">
+type="radio"
+name="customer_type"
+value="TRADER"
+onclick="toggleCustomer()">
 
-💳 فيزا
+🏪 تاجر
+
 </label>
 
 
-&nbsp;&nbsp;
 
-
-<label>
-<input 
-type="radio" 
-name="payment_method" 
-value="CREDIT">
-
-📒 ذمم
-</label>
-
-
-</div>
-
-<div style="margin-top:20px;">
-
-
-
-<form method="POST" action="/checkout">
-
-
-<input 
-type="hidden" 
-id="payment_method_input"
-name="payment_method"
-value="CASH">
+<div id="trader_box" style="display:none;">
 
 
 <br>
@@ -465,37 +447,68 @@ value="CASH">
 <input 
 type="text"
 name="customer_name"
-placeholder="👤 اسم العميل (اختياري)"
-style="
-padding:10px;
-width:220px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="👤 اسم التاجر">
 
 
 <input 
 type="text"
 name="customer_phone"
-placeholder="📞 رقم الهاتف"
-style="
-padding:10px;
-width:180px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="📞 رقم الهاتف">
 
 
 <input 
 type="text"
 name="customer_address"
-placeholder="📍 العنوان"
-style="
-padding:10px;
-width:180px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="📍 العنوان">
+
+
+<h3>
+💳 طريقة الدفع
+</h3>
+
+
+<label>
+<input 
+type="radio"
+name="payment_method"
+value="CASH"
+checked>
+
+💵 كاش
+
+</label>
+
+
+&nbsp;&nbsp;
+
+
+<label>
+<input 
+type="radio"
+name="payment_method"
+value="VISA">
+
+💳 فيزا
+
+</label>
+
+
+&nbsp;&nbsp;
+
+
+<label>
+<input 
+type="radio"
+name="payment_method"
+value="CREDIT">
+
+📒 ذمم
+
+</label>
+
+
+</div>
+
 
 
 <br><br>
@@ -507,10 +520,8 @@ style="
 background:#059669;
 color:white;
 padding:12px 25px;
-border:none;
 border-radius:8px;
 font-size:16px;
-cursor:pointer;
 ">
 
 🧾 إصدار الفاتورة
@@ -519,7 +530,6 @@ cursor:pointer;
 
 
 </form>
-
 <form method="POST" action="/clear_cart" style="display:inline;">
 
 <button
@@ -762,6 +772,25 @@ document.querySelector("form[action='/checkout']")
 
 
 });
+
+function toggleCustomer(){
+
+    let type=document.querySelector(
+    "input[name='customer_type']:checked"
+    ).value;
+
+
+    let box=document.getElementById("trader_box");
+
+
+    if(type=="TRADER"){
+        box.style.display="block";
+    }
+    else{
+        box.style.display="none";
+    }
+
+}    
 </script>
 
 
