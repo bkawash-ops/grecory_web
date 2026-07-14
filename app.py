@@ -1445,7 +1445,24 @@ def checkout():
         customer_phone=customer_phone,
         customer_address=customer_address
     )
+@app.route("/check_customers")
+def check_customers():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT *
+        FROM customers
+        ORDER BY id DESC
+    """)
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/invoices")
 def invoices():
 
