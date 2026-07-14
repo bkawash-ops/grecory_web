@@ -451,14 +451,69 @@ value="CREDIT">
 
 <div style="margin-top:20px;">
 
+<input 
+type="text"
+name="customer_name"
+placeholder="اسم العميل">
 
-<form method="POST" action="/checkout" style="display:inline;">
+<input 
+type="text"
+name="customer_phone"
+placeholder="الهاتف">
+
+<input 
+type="text"
+name="customer_address"
+placeholder="العنوان">
+<form method="POST" action="/checkout">
+
 
 <input 
 type="hidden" 
 id="payment_method_input"
 name="payment_method"
 value="CASH">
+
+
+<br>
+
+<input 
+type="text"
+name="customer_name"
+placeholder="👤 اسم العميل (اختياري)"
+style="
+padding:10px;
+width:220px;
+border-radius:6px;
+border:1px solid #ccc;
+">
+
+
+<input 
+type="text"
+name="customer_phone"
+placeholder="📞 رقم الهاتف"
+style="
+padding:10px;
+width:180px;
+border-radius:6px;
+border:1px solid #ccc;
+">
+
+
+<input 
+type="text"
+name="customer_address"
+placeholder="📍 العنوان"
+style="
+padding:10px;
+width:180px;
+border-radius:6px;
+border:1px solid #ccc;
+">
+
+
+<br><br>
 
 
 <button
@@ -471,12 +526,12 @@ border:none;
 border-radius:8px;
 font-size:16px;
 cursor:pointer;
-margin-left:10px;
 ">
 
 🧾 إصدار الفاتورة
 
 </button>
+
 
 </form>
 
