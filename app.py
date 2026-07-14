@@ -1445,6 +1445,32 @@ def checkout():
         customer_phone=customer_phone,
         customer_address=customer_address
     )
+
+@app.route("/create_customer_payments")
+def create_customer_payments():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS customer_payments
+        (
+            id SERIAL PRIMARY KEY,
+            customer_id INTEGER NOT NULL,
+            payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            amount NUMERIC(10,2) NOT NULL,
+            notes TEXT,
+            username VARCHAR(50),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "customer_payments created successfully"
 @app.route("/check_customers")
 def check_customers():
 
