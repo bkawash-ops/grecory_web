@@ -1539,7 +1539,30 @@ def checkout():
         customer_phone=customer_phone,
         customer_address=customer_address
     )
+@app.route("/add_payment_method_column")
+def add_payment_method_column():
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        ALTER TABLE sales
+        ADD COLUMN IF NOT EXISTS payment_method VARCHAR(20)
+    """)
+
+    # جعل الفواتير القديمة كاش حتى لا تظهر كذمم
+    cur.execute("""
+        UPDATE sales
+        SET payment_method='CASH'
+        WHERE payment_method IS NULL
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "payment_method column added successfully"
 @app.route("/create_customer_payments")
 def create_customer_payments():
 
