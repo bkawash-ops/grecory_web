@@ -262,7 +262,7 @@ onkeyup="searchCustomers()"
 
 <td class="debt">
 
-{{"%.2f"|format(c.sales_total - c.paid)}} JOD
+{{"%.2f"|format(c.sales_total|float - c.paid|float)}} JOD
 
 </td>
 
