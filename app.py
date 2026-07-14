@@ -197,7 +197,29 @@ def customer_account(id):
         invoices=invoices,
         debt=debt
     )
-    
+  @app.route("/test_sales/<int:id>")
+def test_sales(id):
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT 
+            id,
+            invoice_number,
+            customer_id,
+            total,
+            payment_method
+        FROM sales
+        WHERE customer_id=%s
+    """, (id,))
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)  
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
