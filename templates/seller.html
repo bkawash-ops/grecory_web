@@ -460,46 +460,91 @@ name="payment_method"
 value="CASH">
 
 
-<br>
+<form method="POST" action="/checkout">
+
+
+<input 
+type="hidden" 
+id="payment_method_input"
+name="payment_method"
+value="CASH">
+
+
+<!-- هنا نضع اختيار نوع الزبون -->
+
+<div style="margin-top:15px;">
+
+<h3>
+👤 نوع الزبون
+</h3>
+
+<label>
+<input 
+type="radio"
+name="customer_type"
+value="CUSTOMER"
+checked
+onclick="toggleCustomer()">
+
+👤 عميل عادي
+
+</label>
+
+
+&nbsp;&nbsp;
+
+
+<label>
+
+<input 
+type="radio"
+name="customer_type"
+value="TRADER"
+onclick="toggleCustomer()">
+
+🏪 تاجر
+
+</label>
+
+</div>
+
+
+<!-- هنا خانات التاجر -->
+
+<div id="trader_box" style="display:none;margin-top:15px;">
+
 
 <input 
 type="text"
 name="customer_name"
-placeholder="👤 اسم العميل (اختياري)"
-style="
-padding:10px;
-width:220px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="👤 اسم التاجر">
 
 
 <input 
 type="text"
 name="customer_phone"
-placeholder="📞 رقم الهاتف"
-style="
-padding:10px;
-width:180px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="📞 رقم الهاتف">
 
 
 <input 
 type="text"
 name="customer_address"
-placeholder="📍 العنوان"
-style="
-padding:10px;
-width:180px;
-border-radius:6px;
-border:1px solid #ccc;
-">
+placeholder="📍 العنوان">
 
 
-<br><br>
+</div>
 
+
+
+<button
+type="submit">
+
+🧾 إصدار الفاتورة
+
+</button>
+
+
+</form>
 
 <button
 type="submit"
