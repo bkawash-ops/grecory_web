@@ -137,7 +137,67 @@ def customers():
         "customers.html",
         customers=customers
     )
+@app.route("/customer/<int:id>")
+def customer_account(id):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    # بيانات العميل
+    cur.execute("""
+        SELECT *
+        FROM customers
+        WHERE id=%s
+    """, (id,))
+
+    customer = cur.fetchone()
+
+
+    if not customer:
+        return "العميل غير موجود"
+
+
+    # فواتير الذمم فقط CREDIT
+    cur.execute("""
+        SELECT
+            id,
+            invoice_number,
+            sale_date,
+            total,
+            payment_method
+        FROM sales
+        WHERE customer_id=%s
+        AND payment_method='CREDIT'
+        ORDER BY sale_date DESC
+    """, (id,))
+
+
+    invoices = cur.fetchall()
+
+
+    # إجمالي الذمة
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS debt
+        FROM customer_debts
+        WHERE customer_id=%s
+    """, (id,))
+
+
+    debt = cur.fetchone()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "customer.html",
+        customer=customer,
+        invoices=invoices,
+        debt=debt
+    )
+    
 @app.route("/expense_report", methods=["GET", "POST"])
 def expense_report():
     from_date = request.form.get("from_date", "")
