@@ -351,6 +351,16 @@ def reports():
             SELECT
                 COUNT(*) AS invoices_count,
                 COALESCE(SUM(total),0) AS total_sales
+                ,
+                COALESCE(
+                    (
+                        SELECT SUM(amount - paid)
+                        FROM customer_debts d
+                        WHERE d.customer_id=c.id
+                        AND d.status='OPEN'
+                    ),
+                    0
+                )::numeric AS debt
             FROM sales
             WHERE DATE(
                 sale_date AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Amman'
