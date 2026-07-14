@@ -395,12 +395,11 @@ border-radius:5px;
 💰 الإجمالي:
 {{"%.2f"|format(total.value)}} JOD
 </h3>
-<div style="
-background:#f3f4f6;
-padding:15px;
-border-radius:10px;
-margin-bottom:15px;
-">
+
+<div style="margin-top:20px;">
+
+<form method="POST" action="/checkout">
+
 
 <h3>
 💳 طريقة الدفع
@@ -409,12 +408,13 @@ margin-bottom:15px;
 
 <label>
 <input 
-type="radio" 
-name="payment_method" 
+type="radio"
+name="payment_method"
 value="CASH"
 checked>
 
 💵 كاش
+
 </label>
 
 
@@ -423,11 +423,12 @@ checked>
 
 <label>
 <input 
-type="radio" 
-name="payment_method" 
+type="radio"
+name="payment_method"
 value="VISA">
 
 💳 فيزا
+
 </label>
 
 
@@ -436,18 +437,101 @@ value="VISA">
 
 <label>
 <input 
-type="radio" 
-name="payment_method" 
+type="radio"
+name="payment_method"
 value="CREDIT">
 
 📒 ذمم
+
 </label>
+
+
+
+<hr>
+
+
+<h3>
+👤 نوع الزبون
+</h3>
+
+
+<label>
+
+<input 
+type="radio"
+name="customer_type"
+value="CUSTOMER"
+checked
+onclick="toggleCustomer()">
+
+👤 عميل عادي
+
+</label>
+
+
+&nbsp;&nbsp;
+
+
+<label>
+
+<input 
+type="radio"
+name="customer_type"
+value="TRADER"
+onclick="toggleCustomer()">
+
+🏪 تاجر
+
+</label>
+
+
+
+<div id="trader_box" 
+style="display:none;margin-top:15px;">
+
+
+<input 
+type="text"
+name="customer_name"
+placeholder="👤 اسم التاجر">
+
+
+<input 
+type="text"
+name="customer_phone"
+placeholder="📞 رقم الهاتف">
+
+
+<input 
+type="text"
+name="customer_address"
+placeholder="📍 العنوان">
 
 
 </div>
 
-<div style="margin-top:20px;">
 
+
+<br><br>
+
+
+<button
+type="submit"
+style="
+background:#059669;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+font-size:16px;
+">
+
+🧾 إصدار الفاتورة
+
+</button>
+
+
+</form>
+<form method="POST" action="/clear_cart" style="display:inline;">
 
 
 <form method="POST" action="/checkout">
@@ -536,24 +620,7 @@ type="submit">
 
 </form>
 
-<button
-type="submit"
-style="
-background:#059669;
-color:white;
-padding:12px 25px;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-">
 
-🧾 إصدار الفاتورة
-
-</button>
-
-
-</form>
 
 <form method="POST" action="/clear_cart" style="display:inline;">
 
@@ -797,6 +864,26 @@ document.querySelector("form[action='/checkout']")
 
 
 });
+
+function toggleCustomer(){
+
+    let type = document.querySelector(
+    "input[name='customer_type']:checked"
+    ).value;
+
+
+    let box = document.getElementById("trader_box");
+
+
+    if(type=="TRADER"){
+        box.style.display="block";
+    }
+    else{
+        box.style.display="none";
+    }
+
+}
+    
 </script>
 
 
