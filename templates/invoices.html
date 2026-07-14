@@ -72,7 +72,7 @@ font-size:16px;
 </td>
 
 <td>
-{{ inv[4].strftime('%d-%m-%Y %H:%M') }}
+{{ (inv[4] + timedelta(hours=3)).strftime('%d-%m-%Y %H:%M') }}
 </td>
 
 <td>
