@@ -1325,7 +1325,17 @@ def checkout():
     conn = db()
 
     cur = conn.cursor()
+
     customer_id = None
+
+
+    # إنشاء رقم فاتورة جديد
+    cur.execute("""
+        SELECT COALESCE(MAX(invoice_number),1000)+1
+        FROM sales
+    """)
+
+    invoice_number = cur.fetchone()[0]
 
 
     if customer_name:
@@ -1370,13 +1380,7 @@ def checkout():
 
             customer_id = cur.fetchone()[0]
 
-        # إنشاء رقم فاتورة جديد
-        cur.execute("""
-            SELECT COALESCE(MAX(invoice_number),1000)+1
-            FROM sales
-        """)
-
-        invoice_number = cur.fetchone()[0]
+        
         customer_id = None
 
         if customer_name:
