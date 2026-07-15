@@ -102,7 +102,7 @@ def customers():
                     WHERE p.customer_id=c.id
                 ),
                 0
-            )::numeric AS paid
+            )::numeric AS paid,
             GREATEST(
                 (
                     COALESCE(
