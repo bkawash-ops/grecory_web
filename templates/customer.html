@@ -171,7 +171,61 @@ body{
 
 
 </table>
+<hr>
 
+<h3>
+💵 سجل الدفعات
+</h3>
+
+
+<table>
+
+<tr>
+<th>التاريخ</th>
+<th>المبلغ</th>
+<th>المستخدم</th>
+<th>ملاحظات</th>
+</tr>
+
+
+{% for p in payments %}
+
+<tr>
+
+<td dir="ltr">
+{{p.payment_date.strftime("%Y-%m-%d %H:%M")}}
+</td>
+
+
+<td>
+{{"%.2f"|format(p.amount)}} JOD
+</td>
+
+
+<td>
+{{p.username}}
+</td>
+
+
+<td>
+{{p.notes or ""}}
+</td>
+
+
+</tr>
+
+{% else %}
+
+<tr>
+<td colspan="4">
+لا توجد دفعات
+</td>
+</tr>
+
+{% endfor %}
+
+
+</table>
 
 <br>
 
