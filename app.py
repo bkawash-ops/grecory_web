@@ -203,60 +203,7 @@ def customers():
         "customers.html",
         customers=customers
     )
-@app.route("/test_customer/<int:id>")
-def test_customer(id):
 
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    cur.execute("""
-        SELECT 
-            id,
-            name,
-            customer_code
-        FROM customers
-        WHERE id=%s
-    """, (id,))
-
-    customer = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    return str(customer)
-
-@app.route("/fix_customer_codes")
-def fix_customer_codes():
-
-    conn = db()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT id
-        FROM customers
-        WHERE customer_code IS NULL
-        ORDER BY id
-    """)
-
-    customers = cur.fetchall()
-
-    for row in customers:
-        cid = row[0]
-
-        code = f"CUS-{cid:05d}"
-
-        cur.execute("""
-            UPDATE customers
-            SET customer_code=%s
-            WHERE id=%s
-        """,(code,cid))
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return "DONE"
 @app.route("/customer/<int:id>")
 def customer_account(id):
 
