@@ -123,7 +123,7 @@ def customers():
                     0
                 )
             )::numeric AS debt,
-            ,
+            
             CASE
                 WHEN
                     (
