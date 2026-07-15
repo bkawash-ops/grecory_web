@@ -475,7 +475,9 @@ def add_payment(id):
 
 
         balance = float(current_debt) - float(current_paid)
-
+            # إذا كان لديه رصيد دائن لا يوجد عليه ذمة
+        if balance <= 0:
+            balance = 0
 
         if float(amount) > balance:
             cur.close()
