@@ -252,7 +252,7 @@ def customer_account(id):
 def add_payment(id):
 
     conn = db()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
         SELECT *
         FROM customers
