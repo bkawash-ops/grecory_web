@@ -327,7 +327,7 @@ def customer_account(id):
         WHERE customer_id=%s
     """,(id,))
 
-   total_debt = cur.fetchone()
+    total_debt = cur.fetchone()
     
     # مجموع الدفعات
     cur.execute("""
