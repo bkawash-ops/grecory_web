@@ -108,14 +108,24 @@ def customers():
                 0
             )::numeric AS paid
             ,
-            COALESCE(
-                (
-                    SELECT SUM(d.amount - d.paid)
-                    FROM customer_debts d
-                    WHERE d.customer_id=c.id
-                   
-                ),
-                0
+            (
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_debts d
+                        WHERE d.customer_id=c.id
+                    ),
+                    0
+                )
+                -
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_payments p
+                        WHERE p.customer_id=c.id
+                    ),
+                    0
+                )
             )::numeric AS debt
         FROM customers c
 
