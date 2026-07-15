@@ -139,9 +139,23 @@ display:inline-block;
 
 
 <h3>
-💰 إجمالي الذمة:
+💰 إجمالي الفواتير الآجلة:
 {{"%.2f"|format(debt.debt)}} JOD
 </h3>
+
+
+<h3>
+💵 إجمالي الدفعات:
+{{"%.2f"|format(total_paid.total_paid)}} JOD
+</h3>
+
+
+<h2 style="color:red">
+
+الرصيد الحالي:
+{{"%.2f"|format(debt.debt|float - total_paid.total_paid|float)}} JOD
+
+</h2>
 
 
 <table>
