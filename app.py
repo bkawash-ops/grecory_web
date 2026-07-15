@@ -240,6 +240,7 @@ def add_payment(id):
         amount = request.form.get("amount")
         notes = request.form.get("notes")
         amman_time = datetime.now(ZoneInfo("Asia/Amman"))
+        print("AMMAN TIME =", amman_time)
         cur.execute("""
             INSERT INTO customer_payments
             (
