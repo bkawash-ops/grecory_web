@@ -127,7 +127,7 @@ placeholder="مثال: دفعة نقدية">
 <br>
 
 
-<a href="/customer/{{customer.id}}">
+<a href="{{ url_for('customer_account', id=customer.id) }}">
 ⬅ العودة لكشف الحساب
 </a>
 
