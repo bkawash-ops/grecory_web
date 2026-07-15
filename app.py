@@ -33,6 +33,24 @@ def db():
     )
 
     return conn
+
+@app.route("/add_customer_code")
+def add_customer_code():
+
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        ALTER TABLE customers
+        ADD COLUMN IF NOT EXISTS customer_code VARCHAR(20);
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "DONE"
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
