@@ -203,7 +203,27 @@ def customers():
         "customers.html",
         customers=customers
     )
+@app.route("/test_customer/<int:id>")
+def test_customer(id):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT 
+            id,
+            name,
+            customer_code
+        FROM customers
+        WHERE id=%s
+    """, (id,))
+
+    customer = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return str(customer)
 @app.route("/customer/<int:id>")
 def customer_account(id):
 
