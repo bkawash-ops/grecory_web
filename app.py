@@ -214,7 +214,7 @@ def customers():
                             ),
                             0
                         )
-                    ) > 0.009
+                    ) < -0.009
                 THEN ABS(
                     (
                         COALESCE(
@@ -239,10 +239,60 @@ def customers():
                     )
                 )
                 ELSE 0
-            END::numeric AS credit_balance
-            ,
+             END::numeric AS credit_balance,
 
             CASE
+                WHEN
+                    (
+                        COALESCE(
+                            SUM(
+                                CASE 
+                                    WHEN s.payment_method='CREDIT'
+                                    THEN s.total
+                                    ELSE 0
+                                END
+                            ),
+                            0
+                        )
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_payments p
+                                WHERE p.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) > 0.009
+                THEN 'عليه ذمة'
+
+                WHEN
+                    (
+                        COALESCE(
+                            SUM(
+                                CASE 
+                                    WHEN s.payment_method='CREDIT'
+                                    THEN s.total
+                                    ELSE 0
+                                END
+                            ),
+                            0
+                        )
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_payments p
+                                WHERE p.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) BETWEEN -0.009 AND 0.009
+                THEN 'مسدد'
+
+                ELSE 'رصيد دائن'
+            END AS status
+
         FROM customers c
 
         LEFT JOIN sales s
