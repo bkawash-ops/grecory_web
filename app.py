@@ -152,13 +152,11 @@ def customers():
             COUNT(DISTINCT s.id) AS invoices,
 
             COALESCE(
-                SUM(
-                    CASE 
-                        WHEN s.payment_method='CREDIT'
-                        THEN s.total
-                        ELSE 0
-                    END
-                ),
+            (
+                SELECT SUM(amount)
+                FROM customer_debts d
+                WHERE d.customer_id = c.id
+            ),
             0)::numeric AS total_debt,
 
             COALESCE(
@@ -172,12 +170,10 @@ def customers():
             ,
             (
                 COALESCE(
-                    SUM(
-                        CASE 
-                            WHEN s.payment_method='CREDIT'
-                            THEN s.total
-                            ELSE 0
-                        END
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_debts d
+                        WHERE d.customer_id=c.id
                     ),
                     0
                 )
@@ -190,7 +186,7 @@ def customers():
                     ),
                     0
                 )
-            )::numeric AS debt
+            )::numeric AS debt,
             ,
             CASE
                 WHEN
