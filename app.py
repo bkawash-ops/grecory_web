@@ -316,9 +316,9 @@ def customer_account(id):
             ) AS balance
     """, (id,id))
 
-    balance_row = cur.fetchone()
+    balance = cur.fetchone()
     
-    current_balance = round(float(balance_row["balance"]),2)
+    current_balance = round(float(balance["balance"]),2)
     # إجمالي الفواتير الآجلة
     cur.execute("""
         SELECT
@@ -378,7 +378,7 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
-        balance=current_balance,
+        balance=balance,
         total_debt=total_debt,
         payments=payments,
         total_paid=total_paid
