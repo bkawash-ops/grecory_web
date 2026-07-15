@@ -127,6 +127,54 @@ def customers():
                     0
                 )
             )::numeric AS debt
+            ,
+            CASE
+                WHEN
+                    (
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
+                            ),
+                            0
+                        )
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_payments p
+                                WHERE p.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) > 0
+                THEN 'عليه ذمة'
+
+                WHEN
+                    (
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
+                            ),
+                            0
+                        )
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_payments p
+                                WHERE p.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) = 0
+                THEN 'مسدد'
+
+                ELSE 'رصيد دائن'
+            END AS status
         FROM customers c
 
         LEFT JOIN sales s
