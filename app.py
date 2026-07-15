@@ -461,7 +461,7 @@ def add_payment(id):
                 WHERE customer_id=%s
         """,(id,))
 
-        current_debt = cur.fetchone()["debt"]
+        current_debt = cur.fetchone()["total_debt"]
 
 
         cur.execute("""
