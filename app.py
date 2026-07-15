@@ -159,7 +159,7 @@ def customers():
                         ELSE 0
                     END
                 ),
-            0)::numeric AS credit_total,
+            0)::numeric AS total_debt,
 
             COALESCE(
                 (
