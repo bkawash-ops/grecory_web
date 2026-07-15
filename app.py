@@ -280,7 +280,7 @@ def add_payment(id):
 
         cur.execute("""
             SELECT
-                COALESCE(SUM(amount),0)
+                COALESCE(SUM(amount),0) AS total_paid
                 FROM customer_payments
                 WHERE customer_id=%s
         """,(id,))
