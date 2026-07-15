@@ -214,7 +214,7 @@ def customers():
                             ),
                             0
                         )
-                    ) > 0
+                    ) > 0.009
                 THEN 'عليه ذمة'
 
                 WHEN
@@ -238,7 +238,7 @@ def customers():
                             ),
                             0
                         )
-                    ) = 0
+                    ) BETWEEN -0.009 AND 0.009
                 THEN 'مسدد'
 
                 ELSE 'رصيد دائن'
