@@ -380,11 +380,11 @@ def customer_account(id):
                     ),
                     0
                 )
-            ) AS debt
+            ) AS balance
     """, (id,id))
 
 
-    debt = cur.fetchone()
+    balance  = cur.fetchone()
 
 
     
@@ -429,7 +429,8 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
-        debt=debt,
+        total_debt=total_debt,
+        balance=balance,
         payments=payments,
         total_paid=total_paid
     )
@@ -455,7 +456,7 @@ def add_payment(id):
 
         cur.execute("""
             SELECT
-                COALESCE(SUM(amount),0) AS debt
+                COALESCE(SUM(amount),0) AS total_debt
                 FROM customer_debts
                 WHERE customer_id=%s
         """,(id,))
