@@ -429,8 +429,10 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
+        debt=debt,
         payments=payments,
         total_paid=total_paid
+       
     )
 @app.route("/add_payment/<int:id>", methods=["GET","POST"])
 def add_payment(id):
