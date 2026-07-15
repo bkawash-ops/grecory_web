@@ -218,14 +218,9 @@ onkeyup="searchCustomers()"
 </th>
 
 
-<th>
-الذمة
-</th>
-
-
-<th>
-إجراء
-</th>
+<th>الذمة</th>
+<th>الحالة</th>
+<th>إجراء</th>
 
 
 </tr>
@@ -280,7 +275,29 @@ onkeyup="searchCustomers()"
 {{"%.2f"|format(c.debt|float)}} JOD
 
 </td>
+<td>
 
+{% if c.status == 'عليه ذمة' %}
+
+<span style="color:red;font-weight:bold;">
+🔴 عليه ذمة
+</span>
+
+{% elif c.status == 'مسدد' %}
+
+<span style="color:green;font-weight:bold;">
+🟢 مسدد
+</span>
+
+{% else %}
+
+<span style="color:blue;font-weight:bold;">
+🟡 رصيد دائن
+</span>
+
+{% endif %}
+
+</td>
 
 
 <td>
