@@ -58,7 +58,21 @@ button{
 <h2>
 💵 تسجيل دفعة
 </h2>
+{% if error %}
 
+<p style="
+color:red;
+font-weight:bold;
+background:#fee2e2;
+padding:10px;
+border-radius:8px;
+">
+
+{{error}}
+
+</p>
+
+{% endif %}
 
 <h3>
 {{customer.name}}
