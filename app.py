@@ -316,8 +316,10 @@ def customer_account(id):
             ) AS balance
     """, (id,id))
 
-    balance  = cur.fetchone()
-    current_balance = round(float(balance["balance"]),2)
+    balance_row = cur.fetchone()
+    
+    current_balance = round(float(balance_row["balance"]),2)
+    # إجمالي الفواتير الآجلة
     cur.execute("""
         SELECT
             COALESCE(SUM(amount),0) AS total_debt
@@ -326,6 +328,14 @@ def customer_account(id):
     """,(id,))
 
     total_debt = cur.fetchone()
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(amount),0) AS total_debt
+            FROM customer_debts
+            WHERE customer_id=%s
+        """,(id,))
+
+        total_debt = cur.fetchone()
     
     # مجموع الدفعات
     cur.execute("""
