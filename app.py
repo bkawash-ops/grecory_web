@@ -219,6 +219,61 @@ def customer_account(id):
         debt=debt,
         payments=payments
     )
+@app.route("/add_payment/<int:id>", methods=["GET","POST"])
+def add_payment(id):
+
+    conn = db()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+
+        amount = request.form.get("amount")
+        notes = request.form.get("notes")
+
+        cur.execute("""
+            INSERT INTO customer_payments
+            (
+                customer_id,
+                amount,
+                payment_date,
+                username,
+                notes
+            )
+            VALUES (%s,%s,NOW(),%s,%s)
+        """,
+        (
+            id,
+            amount,
+            session.get("user"),
+            notes
+        ))
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return redirect(f"/customer/{id}")
+
+
+    cur.execute("""
+        SELECT *
+        FROM customers
+        WHERE id=%s
+    """,(id,))
+
+    customer = cur.fetchone()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "add_payment.html",
+        customer=customer
+    )
+
 @app.route("/test_sales/<int:id>")
 def test_sales(id):
 
