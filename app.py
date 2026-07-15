@@ -110,10 +110,12 @@ def customers():
             ,
             (
                 COALESCE(
-                    (
-                        SELECT SUM(amount)
-                        FROM customer_debts d
-                        WHERE d.customer_id=c.id
+                    SUM(
+                        CASE 
+                            WHEN s.payment_method='CREDIT'
+                            THEN s.total
+                            ELSE 0
+                        END
                     ),
                     0
                 )
@@ -132,10 +134,12 @@ def customers():
                 WHEN
                     (
                         COALESCE(
-                            (
-                                SELECT SUM(amount)
-                                FROM customer_debts d
-                                WHERE d.customer_id=c.id
+                            SUM(
+                                CASE 
+                                    WHEN s.payment_method='CREDIT'
+                                    THEN s.total
+                                    ELSE 0
+                                END
                             ),
                             0
                         )
@@ -154,10 +158,12 @@ def customers():
                 WHEN
                     (
                         COALESCE(
-                            (
-                                SELECT SUM(amount)
-                                FROM customer_debts d
-                                WHERE d.customer_id=c.id
+                            SUM(
+                                CASE 
+                                    WHEN s.payment_method='CREDIT'
+                                    HEN s.total
+                                    ELSE 0
+                                END
                             ),
                             0
                         )
