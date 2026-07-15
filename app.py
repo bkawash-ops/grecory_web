@@ -161,7 +161,7 @@ def customers():
                             SUM(
                                 CASE 
                                     WHEN s.payment_method='CREDIT'
-                                    HEN s.total
+                                    THEN s.total
                                     ELSE 0
                                 END
                             ),
