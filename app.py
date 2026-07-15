@@ -429,7 +429,7 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
-        debt=debt,
+        balance=balance,
         payments=payments,
         total_paid=total_paid
        
