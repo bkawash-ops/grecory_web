@@ -253,7 +253,13 @@ def add_payment(id):
 
     conn = db()
     cur = conn.cursor()
+    cur.execute("""
+        SELECT *
+        FROM customers
+        WHERE id=%s
+    """,(id,))
 
+    customer = cur.fetchone()
     if request.method == "POST":
 
         amount = request.form.get("amount")
