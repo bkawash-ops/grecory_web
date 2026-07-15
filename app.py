@@ -239,7 +239,7 @@ def add_payment(id):
 
         amount = request.form.get("amount")
         notes = request.form.get("notes")
-
+        amman_time = datetime.now(ZoneInfo("Asia/Amman"))
         cur.execute("""
             INSERT INTO customer_payments
             (
@@ -249,11 +249,12 @@ def add_payment(id):
                 username,
                 notes
             )
-            VALUES (%s,%s,NOW(),%s,%s)
+            VALUES (%s,%s,%s,%s,%s)
         """,
         (
             id,
             amount,
+            amman_time,
             session.get("user"),
             notes
         ))
