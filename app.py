@@ -193,6 +193,15 @@ def customer_account(id):
 
 
     debt = cur.fetchone()
+    # مجموع الدفعات
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS total_paid
+        FROM customer_payments
+        WHERE customer_id=%s
+    """,(id,))
+
+    total_paid = cur.fetchone()
     # دفعات التاجر
     cur.execute("""
         SELECT
@@ -217,7 +226,8 @@ def customer_account(id):
         customer=customer,
         invoices=invoices,
         debt=debt,
-        payments=payments
+        payments=payments,
+        total_paid=total_paid
     )
 @app.route("/add_payment/<int:id>", methods=["GET","POST"])
 def add_payment(id):
