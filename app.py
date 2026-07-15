@@ -128,17 +128,6 @@ def customers():
                 WHEN
                     (
                         COALESCE(
-                            SUM(
-                                CASE 
-                                    WHEN s.payment_method='CREDIT'
-                                    THEN s.total
-                                    ELSE 0
-                                END
-                            ),
-                            0
-                        )
-                        -
-                        COALESCE(
                             (
                                 SELECT SUM(amount)
                                 FROM customer_payments p
@@ -146,16 +135,24 @@ def customers():
                             ),
                             0
                         )
-                    ) < -0.009
-                THEN ABS(
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) > 0.009
+
+                THEN
                     (
                         COALESCE(
-                            SUM(
-                                CASE 
-                                    WHEN s.payment_method='CREDIT'
-                                    THEN s.total
-                                    ELSE 0
-                                END
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_payments p
+                                WHERE p.customer_id=c.id
                             ),
                             0
                         )
@@ -163,15 +160,15 @@ def customers():
                         COALESCE(
                             (
                                 SELECT SUM(amount)
-                                FROM customer_payments p
-                                WHERE p.customer_id=c.id
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
                             ),
                             0
                         )
                     )
-                )
+
                 ELSE 0
-             END::numeric AS credit_balance,
+            END::numeric AS credit_balance,
 
             CASE
                 WHEN
