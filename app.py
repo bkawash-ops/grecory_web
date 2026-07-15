@@ -387,7 +387,7 @@ def customer_account(id):
     debt = cur.fetchone()
 
 
-    debt = cur.fetchone()
+    
     # مجموع الدفعات
     cur.execute("""
         SELECT
