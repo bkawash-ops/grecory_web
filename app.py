@@ -173,15 +173,14 @@ def customers():
             END::numeric AS credit_balance,
 
             CASE
+
                 WHEN
                     (
                         COALESCE(
-                            SUM(
-                                CASE 
-                                    WHEN s.payment_method='CREDIT'
-                                    THEN s.total
-                                    ELSE 0
-                                END
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
                             ),
                             0
                         )
@@ -197,19 +196,9 @@ def customers():
                     ) > 0.009
                 THEN 'عليه ذمة'
 
+
                 WHEN
                     (
-                        COALESCE(
-                            SUM(
-                                CASE 
-                                    WHEN s.payment_method='CREDIT'
-                                    THEN s.total
-                                    ELSE 0
-                                END
-                            ),
-                            0
-                        )
-                        -
                         COALESCE(
                             (
                                 SELECT SUM(amount)
@@ -218,10 +207,21 @@ def customers():
                             ),
                             0
                         )
-                    ) BETWEEN -0.009 AND 0.009
-                THEN 'مسدد'
+                        -
+                        COALESCE(
+                            (
+                                SELECT SUM(amount)
+                                FROM customer_debts d
+                                WHERE d.customer_id=c.id
+                            ),
+                            0
+                        )
+                    ) > 0.009
+                THEN 'رصيد دائن'
 
-                ELSE 'رصيد دائن'
+
+                ELSE 'مسدد'
+
             END AS status
 
         FROM customers c
