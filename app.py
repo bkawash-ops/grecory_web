@@ -34,24 +34,6 @@ def db():
 
     return conn
 
-@app.route("/check_debts/<int:id>")
-def check_debts(id):
-
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    cur.execute("""
-        SELECT *
-        FROM customer_debts
-        WHERE customer_id=%s
-    """,(id,))
-
-    data = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return str(data)
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
@@ -336,7 +318,14 @@ def customer_account(id):
 
     balance  = cur.fetchone()
     current_balance = round(float(balance["balance"]),2)
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS total_debt
+        FROM customer_debts
+        WHERE customer_id=%s
+    """,(id,))
 
+    total_debt = cur.fetchone()
     
     # مجموع الدفعات
     cur.execute("""
@@ -380,6 +369,7 @@ def customer_account(id):
         customer=customer,
         invoices=invoices,
         balance=balance,
+        total_debt=total_debt,
         payments=payments,
         total_paid=total_paid
        
