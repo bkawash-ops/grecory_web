@@ -46,7 +46,6 @@ def check_expenses_columns():
     """)
 
     result = cur.fetchall()
-
     cur.close()
     conn.close()
 
