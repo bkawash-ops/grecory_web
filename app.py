@@ -34,23 +34,37 @@ def db():
 
     return conn
 
-@app.route("/add_customer_code")
-def add_customer_code():
+@app.route("/generate_customer_codes")
+def generate_customer_codes():
 
     conn = db()
     cur = conn.cursor()
 
     cur.execute("""
-        ALTER TABLE customers
-        ADD COLUMN IF NOT EXISTS customer_code VARCHAR(20);
+        SELECT id
+        FROM customers
+        ORDER BY id
     """)
+
+    customers = cur.fetchall()
+
+    for row in customers:
+        customer_id = row[0]
+
+        code = f"CUS-{customer_id:05d}"
+
+        cur.execute("""
+            UPDATE customers
+            SET customer_code=%s
+            WHERE id=%s
+        """, (code, customer_id))
 
     conn.commit()
 
     cur.close()
     conn.close()
 
-    return "DONE"
+    return "Customer codes generated successfully."
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
