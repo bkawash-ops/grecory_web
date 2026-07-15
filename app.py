@@ -33,6 +33,25 @@ def db():
     )
 
     return conn
+
+@app.route("/check_debts/<int:id>")
+def check_debts(id):
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT *
+        FROM customer_debts
+        WHERE customer_id=%s
+    """,(id,))
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
