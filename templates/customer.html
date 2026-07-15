@@ -7,26 +7,90 @@
 
 <style>
 
-button,
-a {
+body{
     font-family: Arial;
+    background:#fff;
+    padding:30px;
 }
 
 
-@media print {
+h2{
+    text-align:center;
+    color:#2563eb;
+}
 
-button,
-a {
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    font-size:16px;
+}
+
+
+th{
+    background:#2563eb;
+    color:white;
+    padding:12px;
+    border:1px solid #ddd;
+}
+
+
+td{
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+
+tr:nth-child(even){
+    background:#f8fafc;
+}
+
+
+.info-box{
+    background:#f3f4f6;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+
+.print-btn{
+    background:#2563eb;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#64748b;
+    color:white;
+    padding:10px 20px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+
+@media print{
+
+.print-btn,
+.back-btn{
     display:none;
 }
 
-body {
-    background:white;
+body{
+    padding:10px;
 }
 
 }
 
-</style>  
+</style> 
 </head>
 
 <body>
@@ -52,21 +116,8 @@ body {
 </p>
 
 
-<button
-onclick="window.print()"
-style="
-background:#2563eb;
-color:white;
-padding:10px 20px;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-margin:10px;
-">
-
+<button class="print-btn" onclick="window.print()">
 🖨️ طباعة كشف الحساب
-
 </button>
 
 
@@ -124,7 +175,7 @@ margin:10px;
 
 <br>
 
-<a href="/customers">
+<a class="back-btn" href="/customers">
 ⬅ العودة للعملاء
 </a>
 
