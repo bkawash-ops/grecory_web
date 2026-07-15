@@ -128,7 +128,7 @@ body{
 
 <h3>
 💰 إجمالي الفواتير الآجلة:
-{{"%.2f"|format(balance.balance)}} JOD
+{{ "%.2f"|format(total_debt.total_debt|float) }} JOD
 </h3>
 
 
@@ -138,12 +138,11 @@ body{
 </h3>
 
 
-<h2 style="color:red">
-
+<h2>
 الرصيد الحالي:
 
 {% if balance.balance|float > 0 %}
-{{"%.2f"|format(balance.balance|float)}} JOD
+{{ "%.2f"|format(balance.balance|float) }} JOD
 {% else %}
 0.00 JOD
 {% endif %}
@@ -156,7 +155,7 @@ body{
 💳 الرصيد الدائن:
 
 {% if balance.balance|float < 0 %}
-{{"%.2f"|format((balance.balance|float) * -1)}} JOD
+{{ "%.2f"|format((balance.balance|float) * -1) }} JOD
 {% else %}
 0.00 JOD
 {% endif %}
