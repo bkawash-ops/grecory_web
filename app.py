@@ -328,14 +328,14 @@ def customer_account(id):
     """,(id,))
 
     total_debt = cur.fetchone()
-        cur.execute("""
-            SELECT
-                COALESCE(SUM(amount),0) AS total_debt
-            FROM customer_debts
-            WHERE customer_id=%s
-        """,(id,))
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS total_debt
+        FROM customer_debts
+        WHERE customer_id=%s
+    """,(id,))
 
-        total_debt = cur.fetchone()
+    total_debt = cur.fetchone()
     
     # مجموع الدفعات
     cur.execute("""
