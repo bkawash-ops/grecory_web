@@ -316,7 +316,7 @@ def customer_account(id):
 
 
     balance  = cur.fetchone()
-
+    current_balance = float(balance["balance"])
 
     
     # مجموع الدفعات
