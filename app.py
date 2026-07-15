@@ -33,69 +33,6 @@ def db():
     )
 
     return conn
-@app.route("/test_debt/<int:id>")
-def test_debt(id):
-
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    cur.execute("""
-        SELECT
-        COALESCE(
-        (
-            SELECT SUM(total)
-            FROM sales
-            WHERE customer_id=%s
-            AND payment_method='CREDIT'
-        ),0) AS sales_total,
-
-        COALESCE(
-        (
-            SELECT SUM(amount)
-            FROM customer_payments
-            WHERE customer_id=%s
-        ),0) AS paid_total
-    """,(id,id))
-
-    result = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    return str(result)
-
-@app.route("/test_status/<int:id>")
-def test_status(id):
-
-    conn = db()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    cur.execute("""
-        SELECT
-        (
-            COALESCE(
-            (
-                SELECT SUM(total)
-                FROM sales
-                WHERE customer_id=%s
-                AND payment_method='CREDIT'
-            ),0)
-            -
-            COALESCE(
-            (
-                SELECT SUM(amount)
-                FROM customer_payments
-                WHERE customer_id=%s
-            ),0)
-        ) AS debt
-    """,(id,id))
-
-    result = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    return str(result)
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
