@@ -216,7 +216,16 @@ def customer_account(id):
     """, (id,))
 
     payments = cur.fetchall()
+    print(payments)
+    from zoneinfo import ZoneInfo
 
+    amman = ZoneInfo("Asia/Amman")
+    
+    for p in payments:
+        if p["payment_date"]:
+            p["payment_date"] = p["payment_date"].replace(
+                tzinfo=ZoneInfo("UTC")
+            ).astimezone(amman)
     cur.close()
     conn.close()
 
