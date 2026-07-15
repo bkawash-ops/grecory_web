@@ -250,6 +250,35 @@ def add_payment(id):
         notes = request.form.get("notes")
         amman_time = datetime.now(ZoneInfo("Asia/Amman"))
         print("AMMAN TIME =", amman_time)
+        # فحص الرصيد الحالي
+
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(amount),0) AS debt
+                FROM customer_debts
+                WHERE customer_id=%s
+        """,(id,))
+
+        current_debt = cur.fetchone()[0]
+
+
+        cur.execute("""
+            SELECT
+                COALESCE(SUM(amount),0)
+                FROM customer_payments
+                WHERE customer_id=%s
+        """,(id,))
+
+        current_paid = cur.fetchone()[0]
+
+
+        balance = float(current_debt) - float(current_paid)
+
+
+        if float(amount) > balance:
+            cur.close()
+            conn.close()
+            return f"لا يمكن تسجيل دفعة أكبر من الذمة الحالية ({balance:.2f} JOD)"
         cur.execute("""
             INSERT INTO customer_payments
             (
