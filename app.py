@@ -215,9 +215,7 @@ def customers():
                             0
                         )
                     ) > 0.009
-                THEN 'عليه ذمة'
-
-                WHEN
+                THEN ABS(
                     (
                         COALESCE(
                             SUM(
@@ -238,11 +236,13 @@ def customers():
                             ),
                             0
                         )
-                    ) BETWEEN -0.009 AND 0.009
-                THEN 'مسدد'
+                    )
+                )
+                ELSE 0
+            END::numeric AS credit_balance
+            ,
 
-                ELSE 'رصيد دائن'
-            END AS status
+            CASE
         FROM customers c
 
         LEFT JOIN sales s
