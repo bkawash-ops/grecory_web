@@ -290,15 +290,16 @@ def customer_account(id):
                tzinfo=ZoneInfo("UTC")
            ).astimezone(amman)
 
-    # الرصيد الحالي = الذمم - الدفعات
+    # الرصيد الحالي = فواتير CREDIT - الدفعات
     cur.execute("""
         SELECT
             (
                 COALESCE(
                     (
-                        SELECT SUM(amount)
-                        FROM customer_debts
+                        SELECT SUM(total)
+                        FROM sales
                         WHERE customer_id=%s
+                        AND payment_method='CREDIT'
                     ),
                     0
                 )
@@ -314,9 +315,8 @@ def customer_account(id):
             ) AS balance
     """, (id,id))
 
-
     balance  = cur.fetchone()
-    current_balance = float(balance["balance"])
+    current_balance = round(float(balance["balance"]),2)
 
     
     # مجموع الدفعات
