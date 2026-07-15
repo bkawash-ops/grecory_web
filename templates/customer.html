@@ -4,6 +4,29 @@
 <head>
 <meta charset="UTF-8">
 <title>كشف حساب</title>
+
+<style>
+
+button,
+a {
+    font-family: Arial;
+}
+
+
+@media print {
+
+button,
+a {
+    display:none;
+}
+
+body {
+    background:white;
+}
+
+}
+
+</style>  
 </head>
 
 <body>
@@ -16,7 +39,10 @@
 <h3>
 {{customer.name}}
 </h3>
-
+<p>
+🔢 رقم العميل:
+<b>{{customer.customer_code}}</b>
+</p>
 <p>
 📞 {{customer.phone}}
 </p>
@@ -24,6 +50,24 @@
 <p>
 📍 {{customer.address}}
 </p>
+
+
+<button
+onclick="window.print()"
+style="
+background:#2563eb;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+margin:10px;
+">
+
+🖨️ طباعة كشف الحساب
+
+</button>
 
 
 <hr>
