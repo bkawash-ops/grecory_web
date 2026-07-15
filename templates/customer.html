@@ -141,9 +141,25 @@ body{
 <h2 style="color:red">
 
 الرصيد الحالي:
-{{"%.2f"|format(debt.debt|float - total_paid.total_paid|float)}} JOD
+{% if debt.debt|float > 0 %}
+{{"%.2f"|format(debt.debt|float)}} JOD
+{% else %}
+0.00 JOD
+{% endif %}
 
 </h2>
+
+
+<h3 style="color:green">
+
+💳 الرصيد الدائن:
+{% if debt.debt|float < 0 %}
+{{"%.2f"|format((debt.debt|float) * -1)}} JOD
+{% else %}
+0.00 JOD
+{% endif %}
+
+</h3>
 
 
 <table>
