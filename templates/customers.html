@@ -215,6 +215,7 @@ onkeyup="searchCustomers()"
 
 
 <th>الذمة</th>
+<th>الرصيد الدائن</th>
 <th>الحالة</th>
 <th>إجراء</th>
 
@@ -261,6 +262,11 @@ onkeyup="searchCustomers()"
 <td class="debt">
 
 {{"%.2f"|format(c.debt|float)}} JOD
+
+</td>
+<td class="money">
+
+{{"%.2f"|format(c.credit_balance|float)}} JOD
 
 </td>
 <td>
