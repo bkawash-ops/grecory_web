@@ -35,9 +35,10 @@
 </h3>
 
 
-<table border="1" width="100%">
+<table>
 
 <tr>
+<th>#</th>
 <th>رقم الفاتورة</th>
 <th>التاريخ</th>
 <th>المبلغ</th>
@@ -50,15 +51,19 @@
 <tr>
 
 <td>
+{{ loop.index }}
+</td>
+
+<td>
 {{i.invoice_number}}
 </td>
 
 <td>
-{{ i.sale_date.strftime("%Y-%m-%d %H:%M") }}
+{{i.sale_date.strftime("%Y-%m-%d %H:%M")}}
 </td>
 
 <td>
-{{i.total}} JOD
+{{"%.2f"|format(i.total)}} JOD
 </td>
 
 <td>
@@ -66,7 +71,6 @@
 </td>
 
 </tr>
-
 
 {% endfor %}
 
