@@ -288,7 +288,12 @@ def add_payment(id):
         if float(amount) > balance:
             cur.close()
             conn.close()
-            return f"لا يمكن تسجيل دفعة أكبر من الذمة الحالية ({balance:.2f} JOD)"
+
+            return render_template(
+                "add_payment.html",
+                customer=customer,
+                error=f"لا يمكن تسجيل دفعة أكبر من الذمة الحالية ({balance:.2f} JOD)"
+            )
         cur.execute("""
             INSERT INTO customer_payments
             (
