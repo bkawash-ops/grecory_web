@@ -359,13 +359,32 @@ def customer_account(id):
                tzinfo=ZoneInfo("UTC")
            ).astimezone(amman)
 
-    # إجمالي الذمة
+    # الرصيد الحالي = الذمم - الدفعات
     cur.execute("""
         SELECT
-            COALESCE(SUM(amount),0) AS debt
-        FROM customer_debts
-        WHERE customer_id=%s
-    """, (id,))
+            (
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_debts
+                        WHERE customer_id=%s
+                    ),
+                    0
+                )
+                -
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_payments
+                        WHERE customer_id=%s
+                    ),
+                    0
+                )
+            ) AS debt
+    """, (id,id))
+
+
+    debt = cur.fetchone()
 
 
     debt = cur.fetchone()
