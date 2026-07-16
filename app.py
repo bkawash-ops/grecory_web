@@ -291,34 +291,34 @@ def customer_account(id):
                tzinfo=ZoneInfo("UTC")
            ).astimezone(amman)
 
-    # الرصيد الحالي = فواتير CREDIT - الدفعات
+    # إجمالي الذمم من customer_debts
     cur.execute("""
         SELECT
-            (
-                COALESCE(
-                    (
-                        SELECT SUM(total)
-                        FROM sales
-                        WHERE customer_id=%s
-                        AND payment_method='CREDIT'
-                    ),
-                    0
-                )
-                -
-                COALESCE(
-                    (
-                        SELECT SUM(amount)
-                        FROM customer_payments
-                        WHERE customer_id=%s
-                    ),
-                    0
-                )
-            ) AS balance
-    """, (id,id))
+            COALESCE(SUM(amount),0) AS total_debt
+        FROM customer_debts
+        WHERE customer_id=%s
+    """, (id,))
 
-    balance = cur.fetchone()
-    
-    current_balance = round(float(balance["balance"]),2)
+    total_debt = cur.fetchone()
+
+    # إجمالي الدفعات
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS total_paid
+        FROM customer_payments
+        WHERE customer_id=%s
+    """, (id,))
+
+    total_paid = cur.fetchone()
+
+    # الرصيد النهائي
+    current_balance = round(
+        float(total_debt["total_debt"]) - float(total_paid["total_paid"]),
+        2
+    )
+
+    due_balance = current_balance if current_balance > 0 else 0
+    credit_balance = abs(current_balance) if current_balance < 0 else 0
     # إجمالي الفواتير الآجلة
     cur.execute("""
         SELECT
@@ -370,11 +370,12 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
-        balance=balance,
         total_debt=total_debt,
-        payments=payments,
-        total_paid=total_paid
-       
+        total_paid=total_paid,
+        due_balance=due_balance,
+        credit_balance=credit_balance,
+        payments=payments
+      
     )
 @app.route("/add_payment/<int:id>", methods=["GET","POST"])
 def add_payment(id):
