@@ -33,7 +33,29 @@ def db():
     )
 
     return conn
+@app.route("/check_customer_sales/<int:id>")
+def check_customer_sales(id):
 
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT 
+            id,
+            invoice_number,
+            total,
+            payment_method
+        FROM sales
+        WHERE customer_id=%s
+        ORDER BY id
+    """,(id,))
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return str(data)
 @app.route("/check_expenses_columns")
 def check_expenses_columns():
 
