@@ -449,6 +449,12 @@ placeholder="👤 اسم التاجر"
 list="customers_list"
 autocomplete="off">
 <datalist id="customers_list">
+{% for c in customers %}
+<option
+    value="{{ c.name }}"
+    data-phone="{{ c.phone }}"
+    data-address="{{ c.address }}">
+{% endfor %}
 </datalist>
 <input
 id="customer_phone"
@@ -822,7 +828,28 @@ function validateCustomer(){
 }    
 </script>
 
+<script>
+const customerInput = document.getElementById("customer_name");
+const phoneInput = document.getElementById("customer_phone");
+const addressInput = document.getElementById("customer_address");
 
+customerInput.addEventListener("input", function(){
+
+    const options = document.querySelectorAll("#customers_list option");
+
+    options.forEach(function(opt){
+
+        if(opt.value === customerInput.value){
+
+            phoneInput.value = opt.dataset.phone;
+            addressInput.value = opt.dataset.address;
+
+        }
+
+    });
+
+});
+</script>
 
 </body>
 
