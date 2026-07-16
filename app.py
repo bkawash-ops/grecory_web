@@ -1796,29 +1796,7 @@ def checkout():
 
         else:
 
-
-            cur.execute("""
-                INSERT INTO customers
-                (
-                    name,
-                    phone,
-                    address
-                )
-                VALUES (%s,%s,%s)
-                RETURNING id
-            """,
-            (
-                customer_name,
-                customer_phone,
-                customer_address
-            ))
-
-
-            customer_id = cur.fetchone()[0]
-
-        
-        customer_id = None
-
+      
         if customer_name:
 
             cur.execute("""
