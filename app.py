@@ -86,7 +86,11 @@ def customers():
             c.phone,
             c.address,
 
-            COUNT(DISTINCT s.id) AS invoices,
+            (
+                SELECT COUNT(*)
+                FROM customer_debts d
+                WHERE d.customer_id=c.id
+            ) AS invoices,
 
             COALESCE(
             (
@@ -227,9 +231,7 @@ def customers():
 
         FROM customers c
 
-        LEFT JOIN sales s
-            ON s.customer_id=c.id
-
+        
         GROUP BY
             c.id
 
