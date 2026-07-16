@@ -336,13 +336,12 @@ def customer_account(id):
             inv["sale_date"] = inv["sale_date"].replace(
                 tzinfo=ZoneInfo("UTC")
             ).astimezone(amman)
-    # إجمالي الفواتير الآجلة من sales
+    # إجمالي الفواتير الآجلة من customer_debts
     cur.execute("""
         SELECT
-            COALESCE(SUM(total),0) AS total_debt
-        FROM sales
+            COALESCE(SUM(amount),0) AS total_debt
+        FROM customer_debts
         WHERE customer_id=%s
-        AND payment_method='CREDIT'
     """, (id,))
 
     total_debt = cur.fetchone()
