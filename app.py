@@ -2136,13 +2136,25 @@ def seller():
     """)
 
     products = cur.fetchall()
+    cur.execute("""
+        SELECT
+            id,
+            customer_code,
+            name,
+            phone,
+            address
+        FROM customers
+        ORDER BY name
+    """)
 
+    customers = cur.fetchall()
     cur.close()
     conn.close()
 
     return render_template(
         "seller.html",
-        products=products
+        products=products,
+        customers=customers
     )
 
 @app.route("/invoice/<int:invoice_number>")
