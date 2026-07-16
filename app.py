@@ -305,7 +305,7 @@ def customer_account(id):
     """, (id,))
 
     total_debt = cur.fetchone()
-
+    print("TOTAL DEBT:", total_debt)
     # إجمالي الدفعات
     cur.execute("""
         SELECT
