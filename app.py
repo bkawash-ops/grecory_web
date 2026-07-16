@@ -319,25 +319,8 @@ def customer_account(id):
 
     due_balance = current_balance if current_balance > 0 else 0
     credit_balance = abs(current_balance) if current_balance < 0 else 0
-    # إجمالي الفواتير الآجلة
-    cur.execute("""
-        SELECT
-            COALESCE(SUM(amount),0) AS total_debt
-        FROM customer_debts
-        WHERE customer_id=%s
-    """,(id,))
-
-    total_debt = cur.fetchone()
-    
-    # مجموع الدفعات
-    cur.execute("""
-        SELECT
-            COALESCE(SUM(amount),0) AS total_paid
-        FROM customer_payments
-        WHERE customer_id=%s
-    """,(id,))
-
-    total_paid = cur.fetchone()
+        
+   
     # دفعات التاجر
     cur.execute("""
         SELECT
