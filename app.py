@@ -1838,25 +1838,35 @@ def checkout():
 
 
             else:
+                # توليد رقم العميل
+                cur.execute("""
+                    SELECT COUNT(*) 
+                    FROM customers
+                """)
 
+                count = cur.fetchone()[0] + 1
+
+                customer_code = f"CUS-{count:05d}"
                 cur.execute("""
                     INSERT INTO customers
                     (
+                        customer_code,
                         name,
                         phone,
                         address
                     )
-                    VALUES (%s,%s,%s)
+                    VALUES (%s,%s,%s,%s)
                     RETURNING id
                 """,
                 (
+                    customer_code,
                     customer_name,
                     customer_phone,
                     customer_address
                 ))
 
                 customer_id = cur.fetchone()[0]
-                customer_id = None
+                
     # حفظ رأس الفاتورة
     cur.execute("""
         INSERT INTO sales
