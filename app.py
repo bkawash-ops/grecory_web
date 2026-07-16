@@ -277,7 +277,7 @@ def customers():
             c.id
 
         ORDER BY
-            c.name
+            c.id
 
     """)
 
