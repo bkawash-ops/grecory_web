@@ -1797,17 +1797,17 @@ def checkout():
         else:
 
       
-        if customer_name:
+            if customer_name:
 
-            cur.execute("""
-                SELECT id
-                FROM customers
-                WHERE name=%s
-                LIMIT 1
-            """,
-            (customer_name,))
+                cur.execute("""
+                    SELECT id
+                    FROM customers
+                    WHERE name=%s
+                    LIMIT 1
+                """,
+                (customer_name,))
 
-            customer = cur.fetchone()
+                customer = cur.fetchone()
 
 
             if customer:
