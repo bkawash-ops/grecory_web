@@ -142,7 +142,11 @@ body{
 
 الرصيد الحالي:
 
-{{ "%.2f"|format(due_balance) }} JOD
+{% if balance.balance|float > 0 %}
+{{ "%.2f"|format(balance.balance|float) }} JOD
+{% else %}
+0.00 JOD
+{% endif %}
 
 </h2>
 
@@ -151,7 +155,11 @@ body{
 
 💳 الرصيد الدائن:
 
-{{ "%.2f"|format(credit_balance) }} JOD
+{% if balance.balance|float < 0 %}
+{{ "%.2f"|format((balance.balance|float) * -1) }} JOD
+{% else %}
+0.00 JOD
+{% endif %}
 
 </h3>
 
