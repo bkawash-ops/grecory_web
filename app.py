@@ -2885,6 +2885,47 @@ def delete_expense(id):
     conn.close()
 
     return redirect("/expenses")
+
+@app.route("/fix_customer_codes")
+def fix_customer_codes():
+
+    conn = db()
+    cur = conn.cursor()
+
+    # جلب كل العملاء بالترتيب
+    cur.execute("""
+        SELECT id, name
+        FROM customers
+        ORDER BY id
+    """)
+
+    customers = cur.fetchall()
+
+    counter = 1
+
+    for customer in customers:
+
+        new_code = f"CUS-{counter:05d}"
+
+        cur.execute("""
+            UPDATE customers
+            SET customer_code=%s
+            WHERE id=%s
+        """,
+        (
+            new_code,
+            customer[0]
+        ))
+
+        counter += 1
+
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return "تم إعادة ترقيم العملاء بنجاح"
 @app.route("/logout")
 def logout():
 
