@@ -270,29 +270,31 @@ def customer_account(id):
         return "العميل غير موجود"
 
 
-    # فواتير الذمم فقط CREDIT
+   # فواتير الذمم
     cur.execute("""
         SELECT
-            id,
-            invoice_number,
-            sale_date,
-            total,
-            payment_method
-        FROM sales
-        WHERE customer_id=%s
-        AND payment_method='CREDIT'
-        ORDER BY sale_date DESC
+            d.id,
+            d.invoice_id AS invoice_number,
+            d.created_at AS sale_date,
+            d.amount AS total,
+            'CREDIT' AS payment_method
+        FROM customer_debts d
+        WHERE d.customer_id=%s
+        ORDER BY d.created_at DESC
     """, (id,))
 
+
     from zoneinfo import ZoneInfo
+
     invoices = cur.fetchall()
+
     amman = ZoneInfo("Asia/Amman")
+
     for inv in invoices:
         if inv["sale_date"]:
-           inv["sale_date"] = inv["sale_date"].replace(
-               tzinfo=ZoneInfo("UTC")
-           ).astimezone(amman)
-
+            inv["sale_date"] = inv["sale_date"].replace(
+                tzinfo=ZoneInfo("UTC")
+            ).astimezone(amman)
     # إجمالي الذمم من customer_debts
     cur.execute("""
         SELECT
