@@ -1818,13 +1818,21 @@ def checkout():
             else:
                 # توليد رقم العميل
                 cur.execute("""
-                    SELECT COUNT(*) 
+                    SELECT customer_code
                     FROM customers
+                    WHERE customer_code IS NOT NULL
+                    ORDER BY id DESC
+                    LIMIT 1
                 """)
-
-                count = cur.fetchone()[0] + 1
-
-                customer_code = f"CUS-{count:05d}"
+                last_code = cur.fetchone()
+                if last_code and last_code[0]:
+                    last_number = int(last_code[0].replace("CUS-", ""))
+                else:
+                    last_number = 0
+                customer_code = f"CUS-{last_number + 1:05d}"
+                    
+                
+               
                 cur.execute("""
                     INSERT INTO customers
                     (
