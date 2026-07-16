@@ -358,6 +358,7 @@ def customer_account(id):
         "customer.html",
         customer=customer,
         invoices=invoices,
+        balance=balance,
         total_debt=total_debt,
         total_paid=total_paid,
         due_balance=due_balance,
