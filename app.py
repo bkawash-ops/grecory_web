@@ -674,7 +674,22 @@ def index():
         WHERE quantity <= 5
     """)
 
-    low_stock_count = cur.fetchone()["low_stock_count"]
+   low_stock_count = cur.fetchone()["low_stock_count"]
+
+
+    # 💰 مبيعات اليوم
+    cur.execute("""
+        SELECT COALESCE(SUM(total),0) AS today_sales
+        FROM sales
+        WHERE DATE(
+            sale_date AT TIME ZONE 'UTC'
+            AT TIME ZONE 'Asia/Amman'
+        ) = CURRENT_DATE
+    """)
+
+    today_sales = cur.fetchone()["today_sales"]
+
+
     cur.close()
     conn.close()
     notification_count = 0
@@ -686,6 +701,7 @@ def index():
         products=products,
         low_stock_count=low_stock_count,
         notification_count=notification_count
+        today_sales=today_sales
     )
 @app.route("/reports_menu")
 def reports_menu():
