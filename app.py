@@ -103,6 +103,51 @@ def test_debts():
     الرصيد:
     {debts_table['debts_balance']} JOD
     """
+
+@app.route("/test_customer_debts")
+def test_customer_debts():
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT
+            c.customer_code,
+            c.name,
+
+            COALESCE(SUM(s.total),0) AS credit_sales,
+
+            COALESCE((
+                SELECT SUM(p.amount)
+                FROM customer_payments p
+                WHERE p.customer_id=c.id
+            ),0) AS payments
+
+        FROM customers c
+
+        LEFT JOIN sales s
+        ON s.customer_id=c.id
+        AND s.payment_method='CREDIT'
+
+        GROUP BY c.id
+
+        ORDER BY c.id
+    """)
+
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return "<br>".join([
+        f"""
+        {x['customer_code']} - {x['name']}
+        | فواتير: {x['credit_sales']}
+        | دفعات: {x['payments']}
+        | الرصيد: {float(x['credit_sales'])-float(x['payments'])}
+        """
+        for x in data
+    ])
 @app.route("/check_customer_sales/<int:id>")
 def check_customer_sales(id):
 
