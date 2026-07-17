@@ -33,6 +33,76 @@ def db():
     )
 
     return conn
+
+@app.route("/test_debts")
+def test_debts():
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    # كل الفواتير الآجلة
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(total),0) AS credit_sales
+        FROM sales
+        WHERE payment_method='CREDIT'
+    """)
+
+    credit_sales = cur.fetchone()
+
+
+    # كل الدفعات
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS payments
+        FROM customer_payments
+    """)
+
+    payments = cur.fetchone()
+
+
+    # جدول الذمم الحالي
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount),0) AS debts_amount,
+            COALESCE(SUM(paid),0) AS debts_paid,
+            COALESCE(SUM(amount-paid),0) AS debts_balance
+        FROM customer_debts
+        WHERE status='OPEN'
+    """)
+
+    debts_table = cur.fetchone()
+
+
+    cur.close()
+    conn.close()
+
+
+    return f"""
+    <h2>🔍 فحص الذمم</h2>
+
+    <h3>من جدول sales</h3>
+    الفواتير الآجلة:
+    {credit_sales['credit_sales']} JOD
+
+    <hr>
+
+    <h3>من جدول customer_payments</h3>
+    الدفعات:
+    {payments['payments']} JOD
+
+    <hr>
+
+    <h3>من جدول customer_debts</h3>
+    إجمالي الذمم:
+    {debts_table['debts_amount']} JOD
+    <br>
+    المدفوع:
+    {debts_table['debts_paid']} JOD
+    <br>
+    الرصيد:
+    {debts_table['debts_balance']} JOD
+    """
 @app.route("/check_customer_sales/<int:id>")
 def check_customer_sales(id):
 
