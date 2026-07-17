@@ -847,12 +847,37 @@ def index():
     """)
 
     products_count = cur.fetchone()["products_count"]
-    # 💳 إجمالي الذمم
+    # 💳 إجمالي الذمم (الرصيد الحقيقي للعملاء)
     cur.execute("""
         SELECT
-            COALESCE(SUM(amount - paid),0) AS total_debts
-        FROM customer_debts
-        WHERE status='OPEN'
+            COALESCE(SUM(balance),0) AS total_debts
+        FROM
+        (
+            SELECT
+                c.id,
+
+                COALESCE(SUM(s.total),0)
+                -
+                COALESCE(
+                    (
+                        SELECT SUM(p.amount)
+                        FROM customer_payments p
+                        WHERE p.customer_id = c.id
+                    ),
+                    0
+                ) AS balance
+
+            FROM customers c
+
+            LEFT JOIN sales s
+            ON s.customer_id = c.id
+            AND s.payment_method = 'CREDIT'
+
+            GROUP BY c.id
+
+        ) x
+
+        WHERE balance > 0
     """)
 
     total_debts = cur.fetchone()["total_debts"]
