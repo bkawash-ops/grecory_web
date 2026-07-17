@@ -700,7 +700,7 @@ def index():
         "index.html",
         products=products,
         low_stock_count=low_stock_count,
-        notification_count=notification_count
+        notification_count=notification_count,
         today_sales=today_sales
     )
 @app.route("/reports_menu")
