@@ -226,6 +226,7 @@ flex-wrap:wrap;
 margin-bottom:25px;
 ">
 
+<!-- كرت مبيعات اليوم -->
 <div style="
 background:white;
 padding:25px;
@@ -242,6 +243,11 @@ text-align:center;
 <h2 style="color:#16a34a;">
 {{ "%.2f"|format(today_sales) }} JOD
 </h2>
+
+</div>
+
+
+<!-- كرت ربح اليوم -->
 <div style="
 background:white;
 padding:25px;
@@ -258,9 +264,6 @@ text-align:center;
 <h2 style="color:#2563eb;">
 {{ "%.2f"|format(today_profit) }} JOD
 </h2>
-
-</div>
-</div>
 
 </div>
 {% if low_stock_count > 0 %}
