@@ -674,7 +674,7 @@ def index():
         WHERE quantity <= 5
     """)
 
-   low_stock_count = cur.fetchone()["low_stock_count"]
+    low_stock_count = cur.fetchone()["low_stock_count"]
 
 
     # 💰 مبيعات اليوم
