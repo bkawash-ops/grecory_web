@@ -881,6 +881,41 @@ def index():
     """)
 
     total_debts = cur.fetchone()["total_debts"]
+    # 💚 إجمالي الأرصدة الدائنة
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(ABS(balance)),0) AS total_credit
+
+        FROM
+        (
+            SELECT
+                c.id,
+
+                COALESCE(SUM(s.total),0)
+                -
+                COALESCE(
+                    (
+                        SELECT SUM(p.amount)
+                        FROM customer_payments p
+                        WHERE p.customer_id = c.id
+                    ),
+                    0
+                ) AS balance
+
+            FROM customers c
+
+            LEFT JOIN sales s
+            ON s.customer_id = c.id
+            AND s.payment_method = 'CREDIT'
+
+            GROUP BY c.id
+
+        ) x
+
+        WHERE balance < 0
+    """)
+
+    total_credit = cur.fetchone()["total_credit"]
     cur.close()
     conn.close()
     notification_count = 0
@@ -897,7 +932,8 @@ def index():
         today_invoices=today_invoices,
         customers_count=customers_count,
         products_count=products_count,
-        total_debts=total_debts
+        total_debts=total_debts,
+        total_credit=total_credit
     )
 @app.route("/reports_menu")
 def reports_menu():
