@@ -688,7 +688,25 @@ def index():
     """)
 
     today_sales = cur.fetchone()["today_sales"]
+    # 📈 ربح اليوم
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(
+                (si.sale_price - si.purchase_price) * si.quantity
+            ),0) AS today_profit
 
+        FROM sale_items si
+
+        JOIN sales s
+        ON si.sale_id = s.id
+
+        WHERE DATE(
+            s.sale_date AT TIME ZONE 'UTC'
+            AT TIME ZONE 'Asia/Amman'
+        ) = CURRENT_DATE
+    """)
+
+    today_profit = cur.fetchone()["today_profit"]
 
     cur.close()
     conn.close()
@@ -701,7 +719,8 @@ def index():
         products=products,
         low_stock_count=low_stock_count,
         notification_count=notification_count,
-        today_sales=today_sales
+        today_sales=today_sales,
+        today_profit=today_profit
     )
 @app.route("/reports_menu")
 def reports_menu():
