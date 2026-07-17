@@ -732,6 +732,15 @@ def index():
     """)
 
     products_count = cur.fetchone()["products_count"]
+    # 💳 إجمالي الذمم
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(amount - paid),0) AS total_debts
+        FROM customer_debts
+        WHERE status='OPEN'
+    """)
+
+    total_debts = cur.fetchone()["total_debts"]
     cur.close()
     conn.close()
     notification_count = 0
@@ -747,7 +756,8 @@ def index():
         today_profit=today_profit,
         today_invoices=today_invoices,
         customers_count=customers_count,
-        products_count=products_count
+        products_count=products_count,
+        total_debts=total_debts
     )
 @app.route("/reports_menu")
 def reports_menu():
