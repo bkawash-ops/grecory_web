@@ -405,7 +405,90 @@ def customers():
         "customers.html",
         customers=customers
     )
+@app.route("/credit_customers")
+def credit_customers():
 
+    if session.get("user") != "admin":
+        return redirect(url_for("login"))
+
+    conn = db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+
+        SELECT
+
+            c.customer_code,
+            c.name,
+            c.phone,
+            c.address,
+
+            (
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_payments p
+                        WHERE p.customer_id=c.id
+                    ),
+                    0
+                )
+                -
+                COALESCE(
+                    (
+                        SELECT SUM(amount)
+                        FROM customer_debts d
+                        WHERE d.customer_id=c.id
+                    ),
+                    0
+                )
+            )::numeric AS credit_balance
+
+
+        FROM customers c
+
+
+        GROUP BY c.id
+
+
+        HAVING
+
+        (
+            COALESCE(
+                (
+                    SELECT SUM(amount)
+                    FROM customer_payments p
+                    WHERE p.customer_id=c.id
+                ),
+                0
+            )
+            -
+            COALESCE(
+                (
+                    SELECT SUM(amount)
+                    FROM customer_debts d
+                    WHERE d.customer_id=c.id
+                ),
+                0
+            )
+        ) > 0.009
+
+
+        ORDER BY credit_balance DESC
+
+
+    """)
+
+
+    customers = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "credit_customers.html",
+        customers=customers
+    )
 @app.route("/customer/<int:id>")
 def customer_account(id):
 
