@@ -215,6 +215,37 @@ h2{
 <h3>
 ⚙️ لوحة الإدارة
 </h3>
+
+<!-- Dashboard Cards -->
+
+<div style="
+display:flex;
+gap:20px;
+justify-content:center;
+flex-wrap:wrap;
+margin-bottom:25px;
+">
+
+<div style="
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 6px #ccc;
+width:220px;
+text-align:center;
+">
+
+<h3>
+💰 مبيعات اليوم
+</h3>
+
+<h2 style="color:#16a34a;">
+{{ "%.2f"|format(today_sales) }} JOD
+</h2>
+
+</div>
+
+</div>
 {% if low_stock_count > 0 %}
 
 <div style="
