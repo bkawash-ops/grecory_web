@@ -707,7 +707,17 @@ def index():
     """)
 
     today_profit = cur.fetchone()["today_profit"]
+    # 🛒 عدد فواتير اليوم
+    cur.execute("""
+        SELECT COUNT(*) AS today_invoices
+        FROM sales
+        WHERE DATE(
+            sale_date AT TIME ZONE 'UTC'
+            AT TIME ZONE 'Asia/Amman'
+        ) = CURRENT_DATE
+    """)
 
+    today_invoices = cur.fetchone()["today_invoices"]
     cur.close()
     conn.close()
     notification_count = 0
@@ -720,7 +730,8 @@ def index():
         low_stock_count=low_stock_count,
         notification_count=notification_count,
         today_sales=today_sales,
-        today_profit=today_profit
+        today_profit=today_profit,
+        today_invoices=today_invoices
     )
 @app.route("/reports_menu")
 def reports_menu():
