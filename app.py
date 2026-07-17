@@ -725,6 +725,13 @@ def index():
     """)
 
     customers_count = cur.fetchone()["customers_count"]
+    # 📦 عدد المنتجات
+    cur.execute("""
+        SELECT COUNT(*) AS products_count
+        FROM products
+    """)
+
+    products_count = cur.fetchone()["products_count"]
     cur.close()
     conn.close()
     notification_count = 0
@@ -739,7 +746,8 @@ def index():
         today_sales=today_sales,
         today_profit=today_profit,
         today_invoices=today_invoices,
-        customers_count=customers_count
+        customers_count=customers_count,
+        products_count=products_count
     )
 @app.route("/reports_menu")
 def reports_menu():
