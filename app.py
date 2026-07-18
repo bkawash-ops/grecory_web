@@ -1859,7 +1859,7 @@ def delete_product(id):
 @app.route("/add_product", methods=["POST"])
 def add_product():
 
-    name = request.form["name"]
+    name = request.form["name"].strip()
 
     purchase_price = float(
         request.form["purchase_price"]
@@ -1880,23 +1880,62 @@ def add_product():
 
     cur = conn.cursor()
 
+
+    # البحث عن المنتج الموجود بنفس الاسم
     cur.execute("""
-        INSERT INTO products
-        (name, purchase_price, sale_price, quantity, barcode)
-        VALUES (%s, %s, %s, %s, %s)
-    """,
-    (
-        name,
-        purchase_price,
-        sale_price,
-        qty,
-        barcode
-    ))
+        SELECT id, quantity
+        FROM products
+        WHERE name = %s
+    """, (name,))
+
+
+    product = cur.fetchone()
+
+
+    if product:
+        # المنتج موجود --> إضافة الكمية وتحديث الأسعار
+
+        new_quantity = (product[1] or 0) + qty
+
+        cur.execute("""
+            UPDATE products
+            SET
+                purchase_price = %s,
+                sale_price = %s,
+                quantity = %s,
+                barcode = %s
+            WHERE id = %s
+        """,
+        (
+            purchase_price,
+            sale_price,
+            new_quantity,
+            barcode,
+            product[0]
+        ))
+
+    else:
+        # منتج جديد
+
+        cur.execute("""
+            INSERT INTO products
+            (name, purchase_price, sale_price, quantity, barcode)
+            VALUES (%s, %s, %s, %s, %s)
+        """,
+        (
+            name,
+            purchase_price,
+            sale_price,
+            qty,
+            barcode
+        ))
+
 
     conn.commit()
 
     cur.close()
     conn.close()
+
 
     return redirect(url_for("products"))
 
