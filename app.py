@@ -113,7 +113,7 @@ def import_products():
 
         df = pd.read_excel(file)
 
-        conn = get_db()
+        conn = db()
         cur = conn.cursor()
 
         for _, row in df.iterrows():
