@@ -1,5 +1,6 @@
 import os 
 import subprocess
+import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from io import BytesIO
 from flask import send_file
@@ -103,7 +104,41 @@ def test_debts():
     الرصيد:
     {debts_table['debts_balance']} JOD
     """
+@app.route('/import_products', methods=['GET','POST'])
+def import_products():
 
+    if request.method == 'POST':
+
+        file = request.files['file']
+
+        df = pd.read_excel(file)
+
+        conn = get_db()
+        cur = conn.cursor()
+
+        for _, row in df.iterrows():
+
+            cur.execute("""
+                INSERT INTO products
+                (name, purchase_price, sale_price, quantity, barcode)
+                VALUES (%s,%s,%s,%s,%s)
+            """,
+            (
+                row['name'],
+                row['purchase_price'],
+                row['sale_price'],
+                row['quantity'],
+                row['barcode']
+            ))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return redirect('/products')
+
+
+    return render_template('import_products.html')
 @app.route("/test_customer_debts")
 def test_customer_debts():
 
