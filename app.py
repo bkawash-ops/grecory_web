@@ -111,31 +111,97 @@ def import_products():
 
         file = request.files['file']
 
+        if not file:
+            return "لم يتم اختيار ملف"
+
         df = pd.read_excel(file)
 
         conn = db()
         cur = conn.cursor()
 
+        added = 0
+        updated = 0
+
         for _, row in df.iterrows():
 
+            name = str(row['name']).strip()
+
+            purchase_price = float(row['purchase_price'])
+            sale_price = float(row['sale_price'])
+            quantity = float(row['quantity'])
+
+            barcode = str(row['barcode']) if not pd.isna(row['barcode']) else ""
+
+
+            # البحث عن المنتج بالاسم
             cur.execute("""
-                INSERT INTO products
-                (name, purchase_price, sale_price, quantity, barcode)
-                VALUES (%s,%s,%s,%s,%s)
-            """,
-            (
-                row['name'],
-                row['purchase_price'],
-                row['sale_price'],
-                row['quantity'],
-                row['barcode']
-            ))
+                SELECT id, quantity
+                FROM products
+                WHERE name = %s
+            """, (name,))
+
+            product = cur.fetchone()
+
+
+            if product:
+                # المنتج موجود --> إضافة الكمية للتوريد
+                old_quantity = product[1] or 0
+                new_quantity = old_quantity + quantity
+
+                cur.execute("""
+                    UPDATE products
+                    SET
+                        purchase_price = %s,
+                        sale_price = %s,
+                        quantity = %s
+                    WHERE id = %s
+                """,
+                (
+                    purchase_price,
+                    sale_price,
+                    new_quantity,
+                    product[0]
+                ))
+
+                updated += 1
+
+
+            else:
+                # منتج جديد
+                cur.execute("""
+                    INSERT INTO products
+                    (
+                        name,
+                        purchase_price,
+                        sale_price,
+                        quantity,
+                        barcode
+                    )
+                    VALUES (%s,%s,%s,%s,%s)
+                """,
+                (
+                    name,
+                    purchase_price,
+                    sale_price,
+                    quantity,
+                    barcode
+                ))
+
+                added += 1
+
 
         conn.commit()
+
         cur.close()
         conn.close()
 
-        return redirect('/products')
+
+        return f"""
+        ✅ تم الاستيراد بنجاح<br><br>
+        🆕 منتجات جديدة: {added}<br>
+        🔄 منتجات تم تحديثها: {updated}<br><br>
+        <a href="/products">العودة للمنتجات</a>
+        """
 
 
     return render_template('import_products.html')
