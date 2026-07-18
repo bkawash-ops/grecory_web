@@ -527,7 +527,31 @@ function searchProduct() {
 }
 </script>
 
+<script>
 
+function uploadExcel(file){
+
+    if(!file) return;
+
+    let formData = new FormData();
+    formData.append("file",file);
+
+    fetch("/import_products",{
+        method:"POST",
+        body:formData
+    })
+    .then(r=>r.text())
+    .then(data=>{
+        alert("✅ تم استيراد المنتجات بنجاح");
+        location.reload();
+    })
+    .catch(()=>{
+        alert("حدث خطأ أثناء الاستيراد");
+    });
+
+}
+
+</script>
 
 
 </body>
