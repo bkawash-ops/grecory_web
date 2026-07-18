@@ -247,24 +247,29 @@ display:inline-block;
 <div class="card no-print">
 
 
-<h3>
-➕ إضافة منتج جديد
-</h3>
-<form action="/import_products" method="POST" enctype="multipart/form-data" style="display:inline;">
+<div class="product-actions">
 
-    <input 
-        type="file" 
-        id="excelUpload"
-        name="file"
-        accept=".xlsx"
-        style="display:none"
-        onchange="this.form.submit()">
+    <a href="/add_product" class="btn btn-primary">
+        ➕ إضافة منتج جديد
+    </a>
 
-    <label for="excelUpload" class="btn btn-success">
-        📥 استيراد Excel
-    </label>
+    <form action="/import_products" method="POST" enctype="multipart/form-data" style="display:inline;">
 
-</form>
+        <input 
+            type="file" 
+            id="excelUpload"
+            name="file"
+            accept=".xlsx"
+            style="display:none"
+            onchange="this.form.submit()">
+
+        <label for="excelUpload" class="btn btn-success">
+            📥 استيراد Excel
+        </label>
+
+    </form>
+
+</div>
 
 
 <form method="POST" action="/add_product">
