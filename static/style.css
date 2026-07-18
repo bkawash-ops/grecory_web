@@ -8,3 +8,13 @@ input, button {
     padding: 8px;
     margin: 5px;
 }
+.product-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product-actions .btn {
+    display: inline-block;
+}
