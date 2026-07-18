@@ -243,33 +243,6 @@ display:inline-block;
 </a>
 
 </div>
-<div class="product-actions">
-
-    <!-- زر إضافة المنتج الأصلي -->
-    <div class="btn btn-primary">
-        ➕ إضافة منتج جديد
-    </div>
-
-
-    <!-- زر استيراد Excel -->
-    <form action="/import_products" method="POST" enctype="multipart/form-data" style="display:inline;">
-
-        <input 
-            type="file" 
-            id="excelUpload"
-            name="file"
-            accept=".xlsx"
-            style="display:none"
-            onchange="this.form.submit()">
-
-        <label for="excelUpload" class="btn btn-success">
-            📥 استيراد Excel
-        </label>
-
-    </form>
-
-</div>
-
 
 <form method="POST" action="/add_product">
 
@@ -335,11 +308,33 @@ placeholder="الباركود (اختياري)">
 
 
 
-<button class="add">
+<div style="display:flex; gap:10px; align-items:center; margin-top:10px;">
 
-➕ إضافة
+    <button type="submit" class="add">
+        ➕ إضافة
+    </button>
 
-</button>
+    <label for="excelUpload"
+        style="
+        background:#2563eb;
+        color:white;
+        padding:10px 20px;
+        border-radius:6px;
+        cursor:pointer;
+        display:inline-block;
+        ">
+        📥 استيراد Excel
+    </label>
+
+</div>
+
+<input
+    type="file"
+    id="excelUpload"
+    name="file"
+    accept=".xlsx"
+    style="display:none"
+    onchange="uploadExcel(this.files[0])">
 
 
 
